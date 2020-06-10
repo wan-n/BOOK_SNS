@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.instabook.Activity.Pre.LoginActivity;
 import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
@@ -82,9 +84,10 @@ public class InfoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //유저 아이디, UID 가져오기
+        //유저 아이디, UID, 닉네임 가져오기
         final String userid = sp.getUserName(getActivity());
         final int useruid = sp.getUserUid(getActivity());
+        final String usernickname = sp.getUserNickname(getActivity());
 
 
         info_pimg = getView().findViewById(R.id.info_pimg);
@@ -95,61 +98,19 @@ public class InfoFragment extends Fragment {
 
 
         //상단 프로필 이미지 불러오기
-        Retrofit retro_imgFirst = new Retrofit.Builder()
-                .baseUrl(retroBaseApiService.Base_URL)
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        retroBaseApiService = retro_imgFirst.create(RetroBaseApiService.class);
+        String string_profile = sp.getUserImage(getActivity());
+        Bitmap bitmap_profile = StringToBitMap(string_profile);
 
-        retroBaseApiService.getImage(useruid).enqueue(new Callback<ResponseBody>() {
-
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                //서버에서 받아온 이미지 비트맵으로 변환
-                InputStream is = response.body().byteStream();
-                Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
-
-                    //이미지뷰에 표시
-                    info_pimg.setImageBitmap(bitmap_profile);
-
-                    //이미지 동그랗게 보이기
-                    info_pimg.setBackground(new ShapeDrawable(new OvalShape()));
-                    info_pimg.setClipToOutline(true);
-
-
-                    //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getActivity(), "실패", Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        //이미지뷰에 표시
+        info_pimg.setImageBitmap(bitmap_profile);
+        //이미지 동그랗게 보이기
+        info_pimg.setBackground(new ShapeDrawable(new OvalShape()));
+        info_pimg.setClipToOutline(true);
 
 
         //닉네임, 아이디 표시해주기
-        Retrofit retro_name = new Retrofit.Builder()
-                .baseUrl(retroBaseApiService.Base_URL)
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        retroBaseApiService = retro_name.create(RetroBaseApiService.class);
-
-        retroBaseApiService.getUsername(userid).enqueue(new Callback<List<ResponseGet>>() {
-            @Override
-            public void onResponse(Call<List<ResponseGet>> call, Response<List<ResponseGet>> response) {
-                //유저 아이디 표시해주기
-                info_id.setText(userid);
-
-                //유저 닉네임 표시해주기
-                List<ResponseGet> get_name = response.body();
-                info_nickname.setText(get_name.get(0).getNickName());
-            }
-            @Override
-            public void onFailure(Call<List<ResponseGet>> call, Throwable t) {
-                Toast.makeText(getActivity(), "페이지를 다시 로드해주세요.", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
+        info_id.setText(userid);
+        info_nickname.setText(usernickname);
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -216,8 +177,17 @@ public class InfoFragment extends Fragment {
                                 retroBaseApiService.delImage(useruid).enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                                        //서버에서 받아온 기본 이미지 비트맵으로 변환
+                                        InputStream is = response.body().byteStream();
+                                        Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
+
+                                        //비트맵을 문자열로 변환하여 sharedpreference에 저장
+                                        String string_profile = bitMapToString(bitmap_profile);
+                                        sp.setUserImage(getActivity(), string_profile);
+
                                         //기본 이미지로 변경
-                                        info_pimg.setImageResource(R.drawable.default_img);
+                                        info_pimg.setImageBitmap(bitmap_profile);
                                         //테두리 투명
                                         info_pimg.setBackgroundColor(00000000);
                                         dialog.dismiss();
@@ -244,6 +214,27 @@ public class InfoFragment extends Fragment {
 
         info_pimg.setOnClickListener(listener);
         info_editname.setOnClickListener(listener);
+    }
+
+    //프로필 이미지 문자열에서 비트맵으로 변환하기
+    public Bitmap StringToBitMap(String encodedString){
+        try {
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        }catch (Exception e){
+            e.getMessage();
+            return null;
+        }
+    }
+
+    //프로필 이미지를 문자열로 Sharedpreference에 저장
+    public String bitMapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte [] b = baos.toByteArray();
+        String temp = Base64.encodeToString(b,Base64.DEFAULT);
+        return temp;
     }
 
     // 앨범에서 이미지 가져오기
@@ -362,6 +353,12 @@ public class InfoFragment extends Fragment {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.code() == 200) {
+
+                    //비트맵을 문자열로 변환하여 sharedpreference에 저장
+                    String string_profile = bitMapToString(photo_bitmap);
+                    sp.setUserImage(getActivity(), string_profile);
+
+
                     // 레이아웃의 이미지칸에 CROP된 BITMAP을 보여줌
                     info_pimg.setImageBitmap(photo_bitmap);
 
@@ -417,6 +414,7 @@ public class InfoFragment extends Fragment {
             @Override
             public void onResponse(Call<ResponseGet> call, Response<ResponseGet> response) {
                 info_nickname.setText(name);
+                sp.setUserNickName(getActivity(), name);
                 Toast.makeText(getActivity(), "변경이 완료되었습니다.", Toast.LENGTH_SHORT).show();
 
             }

@@ -151,7 +151,7 @@ public class SettingMenuActivity extends AppCompatActivity {
                         logout.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //로그아웃시 쉐어드 프리퍼런스에서 유저아이디 지움
+                                //로그아웃시 쉐어드 프리퍼런스에서 유저 정보 지움
                                 sp.clearUserName(SettingMenuActivity.this);
                                 Toast.makeText(getApplicationContext(), "로그아웃 완료", Toast.LENGTH_SHORT).show();
 
@@ -195,8 +195,7 @@ public class SettingMenuActivity extends AppCompatActivity {
                                             }
                                         });
 
-
-
+                                        //sharedpreference 회원정보 제거
                                         sp.clearUserName(SettingMenuActivity.this);
                                         //로그인 화면으로 되돌아감
                                         intent = new Intent(getApplicationContext(), LoginActivity.class);

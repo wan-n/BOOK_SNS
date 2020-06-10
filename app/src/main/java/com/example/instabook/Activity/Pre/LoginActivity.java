@@ -4,15 +4,24 @@ import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.R;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,15 +85,46 @@ public class LoginActivity extends AppCompatActivity {
 
                                         List<ResponseGet> userdatas = response.body();
                                         int uid = userdatas.get(0).getUserUID();
+                                        String email = userdatas.get(0).getEmail();
+                                        String nickname = userdatas.get(0).getNickName();
 
                                         if (id.equals(userdatas.get(0).getUserId()) && pwd.equals(userdatas.get(0).getPassword())) {
                                             //로그인 완료
                                             Toast.makeText(getApplicationContext(), "로그인이 완료되었습니다.", Toast.LENGTH_SHORT).show();
 
-                                            //쉐어드프리퍼런스에 유저아이디, 유저UID 저장(이후엔 자동로그인)
-                                            SaveSharedPreference.setUserName(LoginActivity.this, id, uid);
+                                            //쉐어드프리퍼런스에 유저아이디, 유저UID, email 저장(이후엔 자동로그인)
+                                            SaveSharedPreference.setUserName(LoginActivity.this, id, uid, email, nickname);
 
-                                            //홈탭으로 이동한다.
+                                            //프로필 이미지도 저장
+                                            Retrofit retro_img = new Retrofit.Builder()
+                                                    .baseUrl(retroBaseApiService.Base_URL)
+                                                    .addConverterFactory(GsonConverterFactory.create()).build();
+                                            retroBaseApiService = retro_img.create(RetroBaseApiService.class);
+
+                                            retroBaseApiService.getImage(uid).enqueue(new Callback<ResponseBody>() {
+
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    //서버에서 받아온 이미지 비트맵으로 변환
+                                                    InputStream is = response.body().byteStream();
+                                                    Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
+
+                                                    //비트맵을 문자열로 변환
+                                                    String string_profile = bitMapToString(bitmap_profile);
+
+                                                    //쉐어드프리퍼런스에 저장
+                                                    SaveSharedPreference.setUserImage(LoginActivity.this, string_profile);
+
+                                                    //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    //Toast.makeText(getApplicationContext(), "불러올 이미지 없음", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+
+                                           //홈탭으로 이동한다.
                                             Intent Success = new Intent(getApplicationContext(), MainActivity.class);
                                             startActivity(Success);
 
@@ -133,6 +173,16 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
         //lastTimeBackPressed에 '뒤로'버튼이 눌린 시간을 기록
         lastTimeBackPressed = System.currentTimeMillis();
+    }
+
+
+    //프로필 이미지를 문자열로 Sharedpreference에 저장
+    public String bitMapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte [] b = baos.toByteArray();
+        String temp = Base64.encodeToString(b,Base64.DEFAULT);
+        return temp;
     }
 
 
