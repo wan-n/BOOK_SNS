@@ -2,36 +2,19 @@ package com.example.instabook.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.instabook.Activity.Pre.ChangePwdActivity;
-import com.example.instabook.Activity.Pre.ResponseGet;
-import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Adapter.FriendsPagerAdapter;
 import com.example.instabook.R;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 public class FriendsActivity extends AppCompatActivity {
 
-    RetroBaseApiService retroBaseApiService;
-
     ImageView fr_back, fr_add;
-    TextView fr_search;
+    EditText fr_search;
 
 
     @Override
@@ -43,6 +26,8 @@ public class FriendsActivity extends AppCompatActivity {
         fr_back = findViewById(R.id.fr_back);
         fr_add = findViewById(R.id.fr_add);
         fr_search = findViewById(R.id.fr_search);
+
+        fr_search.requestFocus();
 
 
         View.OnClickListener listener = new View.OnClickListener() {

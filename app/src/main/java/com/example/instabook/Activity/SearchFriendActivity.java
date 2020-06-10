@@ -10,6 +10,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,7 +47,7 @@ public class SearchFriendActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchfriend);
 
-        final TextView sf_search;
+        final EditText sf_search;
         ImageView sf_add, sf_back;
 
 
@@ -87,6 +88,8 @@ public class SearchFriendActivity extends AppCompatActivity {
     void retroGet(String search){
         final String search_str = search.trim();
         if(search_str.length() <= 0){
+            items.clear();
+            sfAdapter.notifyDataSetChanged();
             Toast.makeText(getApplicationContext(), "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
         }else{
             //유저 아이디, UID 가져오기
@@ -142,11 +145,15 @@ public class SearchFriendActivity extends AppCompatActivity {
                     myList = findViewById(R.id.sf_list);
                     myList.setAdapter(sfAdapter);
 
+                    //결과 화면 불러오기
+                    sfAdapter.notifyDataSetChanged();
                     
                 }
 
                 @Override
                 public void onFailure(Call<List<ResponseGet>> call, Throwable t) {
+                    items.clear();
+                    sfAdapter.notifyDataSetChanged();
                     Toast.makeText(getApplicationContext(), "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show();
                 }
             });

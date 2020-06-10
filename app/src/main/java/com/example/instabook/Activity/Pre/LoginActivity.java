@@ -106,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                     //서버에서 받아온 이미지 비트맵으로 변환
+                                                    assert response.body() != null;
                                                     InputStream is = response.body().byteStream();
                                                     Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
 

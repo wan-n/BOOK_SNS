@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBase"
+    android:padding="5dp"
+    tools:context=".Activity.ForReview.ReviewActivity">
+
+    <!--네이게이션 바(뒤로가기) 넣기-->
+
+    <LinearLayout
+        android:id="@+id/ratingbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="86dp"
+            android:layout_height="match_parent"
+            android:text="별점주기"
+            android:textColor="@color/colorText"
+            android:textSize="22dp" />
+
+        <RatingBar
+            android:id="@+id/ratingbarSmall"
+            style="?android:attr/ratingBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:isIndicator="false"
+            android:numStars="5"
+            android:rating="5"
+            android:stepSize="0.5"
+            android:theme="@style/RatingBar"
+            tools:layout_editor_absoluteX="85dp"
+            tools:layout_editor_absoluteY="80dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ratingbox"
+        android:gravity="left"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textreview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="22dp"
+            android:textColor="@color/colorText"
+            android:text="후기 작성" />
+
+
+        <EditText
+            android:id="@+id/edit_review"
+            android:layout_width="match_parent"
+            android:layout_height="340dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="내용을 입력하세요"
+            android:inputType="textMultiLine"
+            android:maxLength="500"
+            android:scrollHorizontally="false"
+            android:textColor="@color/colorText" />
+
+        <TextView
+            android:id="@+id/texttag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="22dp"
+            android:textColor="@color/colorText"
+            android:text="태그추가" />
+
+
+        <EditText
+            android:id="@+id/book_tag"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:hint="#..."
+            android:inputType="textAutoComplete"
+            android:textColor="@color/colorText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.868"
+            tools:ignore="MissingConstraints" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/push_review"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/book_tag"
+                    android:text="게시하기"
+                    android:textSize="22dp"
+                    android:textColor="#FFFFFF"
+                    android:background="@color/colorButton"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.104"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.976" />
+
+                <Button
+                    android:id="@+id/share_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="39dp"
+                    android:background="#FFFFFF"
+                    android:textSize="22dp"
+                    android:textColor="@color/colorText"
+                    android:layout_toEndOf="@+id/push_review"
+                    android:text="SNS 공유하기" />
+
+             </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

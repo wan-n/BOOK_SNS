@@ -75,15 +75,15 @@ public class BookListAdapter extends BaseAdapter {
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
         ImageView iconImageView = (ImageView) convertView.findViewById(R.id.img_book) ;
         TextView titleTextView = (TextView) convertView.findViewById(R.id.text_title) ;
-        TextView authorTextView = (TextView) convertView.findViewById(R.id.text_author) ;
-        TextView pubTextView = (TextView) convertView.findViewById(R.id.text_publisher) ;
+        TextView isbnTextView = (TextView) convertView.findViewById(R.id.text_isbn) ;
+        TextView pubTextView = (TextView) convertView.findViewById(R.id.text_pub) ;
         Button btn = (Button)convertView.findViewById(R.id.pick_btn);
 
         SearchBookItem searchBookItem = getItem(position);
 
         iconImageView.setImageResource(books.get(position).iconDrawable);
         titleTextView.setText(searchBookItem.getTitle());
-        authorTextView.setText(searchBookItem.getAuthor());
+        isbnTextView.setText(searchBookItem.getIsbn());
         pubTextView.setText(searchBookItem.getPublisher());
 
         btn.setOnClickListener(new Button.OnClickListener() {
@@ -99,7 +99,9 @@ public class BookListAdapter extends BaseAdapter {
                         .addConverterFactory(GsonConverterFactory.create()).build();
                 retroService = retro_name.create(RetroBaseApiService.class);
 
-                //retroService.
+                /**TODO 선택 도서 리뷰 작성 화면으로 연결
+                 //retroService.
+                 */
             }
         });
 
@@ -108,7 +110,7 @@ public class BookListAdapter extends BaseAdapter {
 
     public void addItem(String title, String author, String publisher) {
         ArrayList<SearchBookItem> books = new ArrayList<>();
-        SearchBookItem mItem = new SearchBookItem(title,author,publisher);
+        SearchBookItem mItem = new SearchBookItem(title, author, publisher);
 
         books.add(mItem);
     }

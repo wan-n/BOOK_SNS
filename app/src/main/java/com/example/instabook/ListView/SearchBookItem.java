@@ -3,12 +3,13 @@ package com.example.instabook.ListView;
 public class SearchBookItem {
     public int iconDrawable;
     public String title;
-    public String author;
+    public String isbn;
     public String publisher;
+    public String author;
 
-    public SearchBookItem(String t, String a, String p){
+    public SearchBookItem(String t, String is, String p){
         this.title = t;
-        this.author = a;
+        this.isbn = is;
         this.publisher = p;
     }
 
@@ -16,7 +17,8 @@ public class SearchBookItem {
         iconDrawable = icon ;
     }
     public void setTitle(String title) { this.title = title ; }
-    public void setAuthor(String author) { this.author = author; }
+    public void setIsbn(String isbn) { this.isbn = isbn; }
+    public void setAuthor(String author) {this.author = author; }
     public void setPublisher(String publisher) { this.publisher = publisher; }
 
     public int getIcon() {
@@ -25,10 +27,7 @@ public class SearchBookItem {
     public String getTitle() {
         return this.title ;
     }
-    public String getAuthor() {
-        return this.author ;
-    }
-    public String getPublisher() {
-        return this.publisher ;
-    }
+    public String getAuthor() {return this.author;}
+    public String getIsbn() {return this.isbn ; }
+    public String getPublisher() { return this.publisher ;}
 }

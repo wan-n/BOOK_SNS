@@ -2,8 +2,7 @@ package com.example.instabook.Activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 public class SaveSharedPreference {
 
@@ -14,7 +13,7 @@ public class SaveSharedPreference {
     static final String USER_IMAGE = "userimage";
     static final String USER_NICKNAME = "usernickname";
 
-    static SharedPreferences getSharedPreferences(Context ctx){
+    private static SharedPreferences getSharedPreferences(Context ctx){
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 
@@ -62,7 +61,7 @@ public class SaveSharedPreference {
 
 
 
-    // 로그아웃
+    // 로그아웃 OR 회원탈퇴
     public static void clearUserName(Context ctx) {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
         editor.clear();

@@ -1,6 +1,6 @@
 package com.example.instabook.Fragment.Friends;
 
-import android.content.Context;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,15 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.instabook.Activity.FriendsActivity;
 import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
-import com.example.instabook.Activity.SearchFriendActivity;
 import com.example.instabook.Adapter.RequestFriendAdapter;
-import com.example.instabook.Adapter.SearchFriendAdapter;
 import com.example.instabook.ListView.SearchFriendItem;
 import com.example.instabook.R;
 
@@ -42,6 +38,7 @@ public class FRequestFragment extends Fragment {
     RetroBaseApiService retroBaseApiService;
     SearchFriendItem mi;
     SaveSharedPreference sp;
+    RequestFriendAdapter rfAdapter;
 
     public FRequestFragment() {
         // Required empty public constructor
@@ -100,16 +97,11 @@ public class FRequestFragment extends Fragment {
                     });
                 }
 
-                RequestFriendAdapter rfAdapter = new RequestFriendAdapter(getActivity(), R.layout.listview_requestfriend, items);
+                rfAdapter = new RequestFriendAdapter(getActivity(), R.layout.listview_requestfriend, items);
 
                 ListView myList;
                 myList = (ListView) getView().findViewById(R.id.fr_list);
                 myList.setAdapter(rfAdapter);
-
-
-
-
-
 
             }
 

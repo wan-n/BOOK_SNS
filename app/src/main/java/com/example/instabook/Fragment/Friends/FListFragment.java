@@ -16,9 +16,7 @@ import android.widget.Toast;
 import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
-import com.example.instabook.Activity.SearchFriendActivity;
 import com.example.instabook.Adapter.FriendListAdapter;
-import com.example.instabook.Adapter.RequestFriendAdapter;
 import com.example.instabook.ListView.SearchFriendItem;
 import com.example.instabook.R;
 
@@ -40,6 +38,7 @@ public class FListFragment extends Fragment {
     RetroBaseApiService retroBaseApiService;
     SearchFriendItem mi;
     SaveSharedPreference sp;
+    FriendListAdapter flAdapter;
 
 
     public FListFragment() {
@@ -100,7 +99,7 @@ public class FListFragment extends Fragment {
                     });
                 }
 
-                FriendListAdapter flAdapter = new FriendListAdapter(getActivity(), R.layout.listview_friendlist, items);
+                flAdapter = new FriendListAdapter(getActivity(), R.layout.listview_friendlist, items);
 
                 ListView myList;
                 myList = (ListView) getView().findViewById(R.id.fl_list);

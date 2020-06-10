@@ -58,7 +58,6 @@ import static android.app.Activity.RESULT_OK;
 
 public class InfoFragment extends Fragment {
 
-    SaveSharedPreference sp;
     RetroBaseApiService retroBaseApiService;
     private ImageView info_pimg, info_editname;
     private TextView info_nickname, info_id;
@@ -85,9 +84,9 @@ public class InfoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //유저 아이디, UID, 닉네임 가져오기
-        final String userid = sp.getUserName(getActivity());
-        final int useruid = sp.getUserUid(getActivity());
-        final String usernickname = sp.getUserNickname(getActivity());
+        final String userid = SaveSharedPreference.getUserName(getActivity());
+        final int useruid = SaveSharedPreference.getUserUid(getActivity());
+        final String usernickname = SaveSharedPreference.getUserNickname(getActivity());
 
 
         info_pimg = getView().findViewById(R.id.info_pimg);
@@ -98,7 +97,7 @@ public class InfoFragment extends Fragment {
 
 
         //상단 프로필 이미지 불러오기
-        String string_profile = sp.getUserImage(getActivity());
+        String string_profile = SaveSharedPreference.getUserImage(getActivity());
         Bitmap bitmap_profile = StringToBitMap(string_profile);
 
         //이미지뷰에 표시
@@ -179,18 +178,16 @@ public class InfoFragment extends Fragment {
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                                         //서버에서 받아온 기본 이미지 비트맵으로 변환
+                                        assert response.body() != null;
                                         InputStream is = response.body().byteStream();
                                         Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
 
                                         //비트맵을 문자열로 변환하여 sharedpreference에 저장
                                         String string_profile = bitMapToString(bitmap_profile);
-                                        sp.setUserImage(getActivity(), string_profile);
+                                        SaveSharedPreference.setUserImage(getActivity(), string_profile);
 
                                         //기본 이미지로 변경
                                         info_pimg.setImageBitmap(bitmap_profile);
-                                        //테두리 투명
-                                        info_pimg.setBackgroundColor(00000000);
-                                        dialog.dismiss();
                                     }
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -251,7 +248,7 @@ public class InfoFragment extends Fragment {
         super.onActivityResult(requestCode,resultCode,data);
 
         //유저 UID 가져오기
-        final int useruid = sp.getUserUid(getActivity());
+        final int useruid = SaveSharedPreference.getUserUid(getActivity());
 
         if(resultCode != RESULT_OK)
             return;
@@ -356,7 +353,7 @@ public class InfoFragment extends Fragment {
 
                     //비트맵을 문자열로 변환하여 sharedpreference에 저장
                     String string_profile = bitMapToString(photo_bitmap);
-                    sp.setUserImage(getActivity(), string_profile);
+                    SaveSharedPreference.setUserImage(getActivity(), string_profile);
 
 
                     // 레이아웃의 이미지칸에 CROP된 BITMAP을 보여줌
@@ -414,7 +411,7 @@ public class InfoFragment extends Fragment {
             @Override
             public void onResponse(Call<ResponseGet> call, Response<ResponseGet> response) {
                 info_nickname.setText(name);
-                sp.setUserNickName(getActivity(), name);
+                SaveSharedPreference.setUserNickName(getActivity(), name);
                 Toast.makeText(getActivity(), "변경이 완료되었습니다.", Toast.LENGTH_SHORT).show();
 
             }
