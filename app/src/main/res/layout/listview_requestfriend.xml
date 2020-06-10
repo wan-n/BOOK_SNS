@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="108dp"
+    android:background="@drawable/corner_shape_friend"
+    android:orientation="horizontal"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <com.example.instabook.Activity.CircularImageView
+        android:id="@+id/rf_icon"
+        android:layout_centerVertical="true"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:srcCompat="@drawable/default_img">
+    </com.example.instabook.Activity.CircularImageView>
+
+    <TextView
+        android:id="@+id/rf_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@+id/rf_icon"
+        android:layout_toRightOf="@+id/rf_icon"
+        android:hint="닉네임"
+        android:textColor="#000000"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/rf_accept"
+        android:background="@drawable/custum_button_friend"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toStartOf="@+id/rf_refuse"
+        android:layout_toLeftOf="@+id/rf_refuse"
+        android:text="수락"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/rf_refuse"
+        android:background="@drawable/custum_button_friend"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="거절"
+        android:textSize="12sp" />
+
+
+</RelativeLayout>

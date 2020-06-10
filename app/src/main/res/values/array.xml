@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+    <string-array name="questions">
+        <item>내 보물 1호는?</item>
+        <item>내 별명은?</item>
+        <item>가장 기억에 남는 물건은?</item>
+    </string-array>
+</resources>

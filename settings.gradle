@@ -1,0 +1,2 @@
+rootProject.name='instarbook'
+include ':app'

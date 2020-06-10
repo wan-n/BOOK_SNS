@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragment.InfoFragment"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:id="@+id/rel_info"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#26354A" >
+
+        <ImageView
+            android:id="@+id/info_pimg"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/default_img"
+            />
+
+        <LinearLayout
+            android:id="@+id/info_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="33dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/info_pimg">
+
+
+            <TextView
+                android:id="@+id/info_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+            <ImageView
+                android:id="@+id/info_editname"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/edit_white" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/info_id"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_below="@+id/info_sort"
+            android:layout_marginStart="22dp"
+            android:layout_toEndOf="@+id/info_pimg"
+            android:hint="user_id"
+            android:textColor="#B8B6B6"
+            android:textSize="12sp" />
+
+
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rel_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+
+
+
+    </RelativeLayout>
+</LinearLayout>
