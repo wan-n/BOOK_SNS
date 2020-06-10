@@ -1,6 +1,5 @@
 package com.example.instabook.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.instabook.Activity.ReviewActivity;
 import com.example.instabook.R;
 
 
@@ -68,19 +66,8 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        b = (Button) rootView.findViewById(R.id.goPage);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ReviewActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        return rootView;
         // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
 }

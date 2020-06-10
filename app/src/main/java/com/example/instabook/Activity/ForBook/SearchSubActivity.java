@@ -41,7 +41,7 @@ public class SearchSubActivity extends AppCompatActivity {
                     Intent intent = getIntent(); //데이터 수신
                     keyword = intent.getStringExtra("keyword"); //intent 값을 String 타입으로 변환
 
-                    getNaverSearch(keyword);
+                    //getNaverSearch(keyword);
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -62,6 +62,7 @@ public class SearchSubActivity extends AppCompatActivity {
         }); thread.start();
     }
 
+    /**
     public void getNaverSearch(String keyword) {
         final String clientId = "q9rD74qm2NEUevZOZ0HA";
         final String clientSecret = "KVrwN1NIGi";
@@ -109,6 +110,7 @@ public class SearchSubActivity extends AppCompatActivity {
                             case XmlPullParser.START_DOCUMENT:
                                 booklist = new ArrayList<>();
                                 break;
+
 
                             case XmlPullParser.START_TAG: {//START_TAG : 태그의 시작, 시작 태그를 만나면 이름을 봐서 저장한다.
                                 tag = xpp.getName(); //태그 이름 얻어오기, 저장한 tag값을 확인하여 적절한 변수에 값을 넣아야함
@@ -182,6 +184,8 @@ public class SearchSubActivity extends AppCompatActivity {
                         }
                     });
 
+
+
                 } catch (Exception e) {
                     Log.d(tag, "error : " + e);
                 }
@@ -202,4 +206,5 @@ public class SearchSubActivity extends AppCompatActivity {
 
         listview.setAdapter(bladapter);
     }
+     */
 }
