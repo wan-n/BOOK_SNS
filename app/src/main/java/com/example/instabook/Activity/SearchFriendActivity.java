@@ -11,6 +11,7 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -49,6 +50,7 @@ public class SearchFriendActivity extends AppCompatActivity {
 
         final EditText sf_search;
         ImageView sf_add, sf_back;
+        FrameLayout sf_fr_back;
 
 
         //이전화면에서 입력된 검색값 받아오기
@@ -58,6 +60,7 @@ public class SearchFriendActivity extends AppCompatActivity {
         sf_search = findViewById(R.id.sf_search);
         sf_add = findViewById(R.id.sf_add);
         sf_back = findViewById(R.id.sf_back);
+        sf_fr_back = findViewById(R.id.sf_fr_back);
 
         sf_search.setText(search);
         retroGet(search);
@@ -68,7 +71,7 @@ public class SearchFriendActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     //뒤로가기
-                    case R.id.sf_back:
+                    case R.id.sf_fr_back:
                         onBackPressed();
                         break;
                     case R.id.sf_add:
@@ -80,7 +83,7 @@ public class SearchFriendActivity extends AppCompatActivity {
             }
         };
 
-        sf_back.setOnClickListener(listener);
+        sf_fr_back.setOnClickListener(listener);
         sf_add.setOnClickListener(listener);
 
     }

@@ -8,29 +8,35 @@
     tools:context=".Activity.MyInfoActivity">
 
 
+    <FrameLayout
+        android:id="@+id/minfo_fr_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="19dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
     <ImageView
         android:id="@+id/minfo_back"
-        android:layout_width="30dp"
-        android:layout_height="22dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
         app:srcCompat="@drawable/back_white" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/textView14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="17dp"
         android:text="내 정보"
         android:textColor="#FFFFFF"
         android:textSize="20dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/minfo_back"
+        app:layout_constraintStart_toEndOf="@+id/minfo_fr_back"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -47,46 +53,64 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
-    <TextView
-        android:id="@+id/minfo_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="15dp"
-        android:hint="user ID"
-        android:textColor="#FFFFFF"
-        android:textSize="15dp"
+    <FrameLayout
+        android:id="@+id/minfo_Fr_id"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/corner_shape_myinfo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+        app:layout_constraintTop_toBottomOf="@+id/textView15">
+
+        <TextView
+            android:id="@+id/minfo_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="user ID"
+            android:textColor="#000"
+            android:textSize="15dp"
+             />
+
+    </FrameLayout>
+
 
     <TextView
         android:id="@+id/textView17"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:text="등록된 이메일"
         android:textColor="#FFFFFF"
         android:textSize="15dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/minfo_id" />
+        app:layout_constraintTop_toBottomOf="@+id/minfo_Fr_id" />
+
+    <FrameLayout
+        android:id="@+id/minfo_fr_email"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/corner_shape_myinfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView17">
 
     <TextView
         android:id="@+id/minfo_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="15dp"
         android:hint="user email"
-        android:textColor="#FFFFFF"
+        android:textColor="#000"
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="412dp"
@@ -96,8 +120,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/minfo_email">
+        app:layout_constraintTop_toBottomOf="@+id/minfo_fr_email">
 
+        <Button
+            android:id="@+id/minfo_share"
+            android:layout_width="65dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="50dp"
+            android:text="share"
+            android:textSize="12sp"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

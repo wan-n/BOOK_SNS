@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class SettingMenuActivity extends AppCompatActivity {
     private ImageView set_back;
     private TextView set_info, set_friends, set_logout, set_withdrawal;
     private Switch set_pub;
+    FrameLayout set_fr_info, set_fr_friends, set_fr_logout, set_fr_withdrawal, set_fr_back;
 
     RetroBaseApiService retroBaseApiService;
     SaveSharedPreference sp;
@@ -46,6 +48,12 @@ public class SettingMenuActivity extends AppCompatActivity {
         set_logout = findViewById(R.id.set_logout);
         set_withdrawal = findViewById(R.id.set_withdrawal);
         set_pub = findViewById(R.id.set_pub);
+        set_fr_info = findViewById(R.id.set_fr_info);
+        set_fr_friends = findViewById(R.id.set_fr_friends);
+        set_fr_logout = findViewById(R.id.set_fr_logout);
+        set_fr_withdrawal = findViewById(R.id.set_fr_withdrawal);
+        set_fr_back = findViewById(R.id.set_fr_back);
+
 
         //유저 아이디, UID 가져오기
         final String userid = sp.getUserName(SettingMenuActivity.this);
@@ -129,21 +137,21 @@ public class SettingMenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     //뒤로가기
-                    case R.id.set_back:
+                    case R.id.set_fr_back:
                         onBackPressed();
                         break;
                     //내정보
-                    case R.id.set_info:
+                    case R.id.set_fr_info:
                         intent = new Intent(getApplicationContext(), MyInfoActivity.class);
                         startActivity(intent);
                         break;
                     //친구 관리
-                    case R.id.set_friends:
+                    case R.id.set_fr_friends:
                         intent = new Intent(getApplicationContext(), FriendsActivity.class);
                         startActivity(intent);
                         break;
                     //로그아웃
-                    case R.id.set_logout:
+                    case R.id.set_fr_logout:
                         AlertDialog.Builder logout = new AlertDialog.Builder(SettingMenuActivity.this);
                         logout.setTitle("알림");
                         logout.setMessage("정말 로그아웃 하시겠습니까?");
@@ -163,7 +171,7 @@ public class SettingMenuActivity extends AppCompatActivity {
                         logout.create().show();
                         break;
                     //회원탈퇴
-                    case R.id.set_withdrawal:
+                    case R.id.set_fr_withdrawal:
                         AlertDialog.Builder withdrawal = new AlertDialog.Builder(SettingMenuActivity.this);
                         withdrawal.setTitle("회원 탈퇴");
                         withdrawal.setMessage("계정을 비활성화 하시겠습니까?");
@@ -215,11 +223,11 @@ public class SettingMenuActivity extends AppCompatActivity {
             }
         };
 
-        set_back.setOnClickListener(listener);
-        set_info.setOnClickListener(listener);
-        set_friends.setOnClickListener(listener);
-        set_logout.setOnClickListener(listener);
-        set_withdrawal.setOnClickListener(listener);
+        set_fr_back.setOnClickListener(listener);
+        set_fr_info.setOnClickListener(listener);
+        set_fr_friends.setOnClickListener(listener);
+        set_fr_logout.setOnClickListener(listener);
+        set_fr_withdrawal.setOnClickListener(listener);
     }
 
     //뒤로가기

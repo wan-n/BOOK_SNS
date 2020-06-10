@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,8 @@ public class MyInfoActivity extends AppCompatActivity {
 
     TextView minfo_id, minfo_email;
     ImageView minfo_back;
+    Button minfo_share;
+    FrameLayout minfo_fr_back;
 
     RetroBaseApiService retroBaseApiService;
     SaveSharedPreference sp;
@@ -42,6 +46,8 @@ public class MyInfoActivity extends AppCompatActivity {
         minfo_back = findViewById(R.id.minfo_back);
         minfo_id = findViewById(R.id.minfo_id);
         minfo_email = findViewById(R.id.minfo_email);
+        minfo_share = findViewById(R.id.minfo_share);
+        minfo_fr_back = findViewById(R.id.minfo_fr_back);
 
         //화면에 유저정보 출력
         minfo_id.setText(userid);
@@ -54,14 +60,19 @@ public class MyInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     //뒤로가기
-                    case R.id.minfo_back:
+                    case R.id.minfo_fr_back:
                         onBackPressed();
+                        break;
+                    case R.id.minfo_share:
+                        Intent intent = new Intent(getApplicationContext(), ShareActivity.class);
+                        startActivity(intent);
                         break;
                 }
             }
         };
 
-        minfo_back.setOnClickListener(listener);
+        minfo_fr_back.setOnClickListener(listener);
+        minfo_share.setOnClickListener(listener);
     }
 
     //뒤로가기

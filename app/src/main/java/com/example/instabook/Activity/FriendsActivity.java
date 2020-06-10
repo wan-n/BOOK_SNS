@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import com.example.instabook.Adapter.FriendsPagerAdapter;
 import com.example.instabook.R;
 import com.google.android.material.tabs.TabLayout;
@@ -15,6 +18,7 @@ public class FriendsActivity extends AppCompatActivity {
 
     ImageView fr_back, fr_add;
     EditText fr_search;
+    FrameLayout fr_fr_back;
 
 
     @Override
@@ -26,6 +30,7 @@ public class FriendsActivity extends AppCompatActivity {
         fr_back = findViewById(R.id.fr_back);
         fr_add = findViewById(R.id.fr_add);
         fr_search = findViewById(R.id.fr_search);
+        fr_fr_back = findViewById(R.id.fr_fr_back);
 
         fr_search.requestFocus();
 
@@ -35,22 +40,28 @@ public class FriendsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     //뒤로가기
-                    case R.id.fr_back:
+                    case R.id.fr_fr_back:
                         onBackPressed();
                         break;
                     case R.id.fr_add:
                         String search = fr_search.getText().toString();
                         final String get_name = search.trim();
-                        Intent get_tv = new Intent(getApplicationContext(), SearchFriendActivity.class);
-                        get_tv.putExtra("search", get_name);
-                        startActivity(get_tv);
+
+                        if(get_name.length() <= 0){
+                            Toast.makeText(getApplicationContext(), "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                        }else {
+
+                            Intent get_tv = new Intent(getApplicationContext(), SearchFriendActivity.class);
+                            get_tv.putExtra("search", get_name);
+                            startActivity(get_tv);
+                        }
                         break;
                 }
 
             }
         };
 
-        fr_back.setOnClickListener(listener);
+        fr_fr_back.setOnClickListener(listener);
         fr_add.setOnClickListener(listener);
 
 
