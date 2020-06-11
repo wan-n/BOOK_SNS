@@ -1,6 +1,7 @@
 package com.example.instabook.Activity.Pre;
 
 import com.example.instabook.Activity.ForBook.BookData;
+import com.example.instabook.Activity.ForReview.ReviewData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,17 +37,19 @@ public interface RetroBaseApiService {
     @POST("/instabook/users/flist")
     Call<ResponseGet> postFrd(@Body HashMap<String, Object> parameters);
 
-    @POST("/instabook/books/title")
-    Call<BookData> postBook(@Body HashMap<String, Object> parameters);
+    @POST("/instabook/review")
+    Call<ReviewData> postReview(@Body HashMap<String, Object> parameters);
 
+    /**TODO 리뷰데이터 서버 올리기
     @POST("/instabook/books/tag")
-    Call<BookData> postTag(@Query("tag") String tag);
+    Call<ReviewData> postTag(@Body HashMap<String, Object> parameters);
+    */
 
     @GET("/instabook/books/info")
     Call<List<BookData>> getBook(@Query("keyword") String keyword);
 
     @GET("/instabook/books/author")
-    Call<BookData> getAuthor(@Query("isbn") String isbn);
+    Call<List<BookData>> getAuthor(@Query("isbn") String isbn);
 
     @GET("/image/getimg")
     Call<ResponseBody> getImage(@Query("useruid") int useruid);

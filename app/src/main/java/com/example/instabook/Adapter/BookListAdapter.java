@@ -1,6 +1,8 @@
 package com.example.instabook.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.instabook.Activity.ForReview.ReviewActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.ListView.SearchBookItem;
@@ -16,13 +19,10 @@ import com.example.instabook.R;
 
 import java.util.ArrayList;
 
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 public class BookListAdapter extends BaseAdapter {
     RetroBaseApiService retroService;
     SaveSharedPreference sp;
-
+    private static final String TAG = "BookListAdapter";
     int layout;
     Context context;
     LayoutInflater inflater;
@@ -79,29 +79,25 @@ public class BookListAdapter extends BaseAdapter {
         TextView pubTextView = (TextView) convertView.findViewById(R.id.text_pub) ;
         Button btn = (Button)convertView.findViewById(R.id.pick_btn);
 
-        SearchBookItem searchBookItem = getItem(position);
+        SearchBookItem searchBookItem = getItem(pos);
 
-        iconImageView.setImageResource(books.get(position).iconDrawable);
+        iconImageView.setImageResource(books.get(pos).iconDrawable);
         titleTextView.setText(searchBookItem.getTitle());
         isbnTextView.setText(searchBookItem.getIsbn());
         pubTextView.setText(searchBookItem.getPublisher());
 
         btn.setOnClickListener(new Button.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                String t = books.get(pos).title;
+                String t = books.get(pos).getTitle();
+                String is = books.get(pos).getIsbn();
 
-                //유저 아이디 가져오기
-                final String userid = sp.getUserName(context);
-
-                Retrofit retro_name = new Retrofit.Builder()
-                        .baseUrl(retroService.Base_URL)
-                        .addConverterFactory(GsonConverterFactory.create()).build();
-                retroService = retro_name.create(RetroBaseApiService.class);
-
-                /**TODO 선택 도서 리뷰 작성 화면으로 연결
-                 //retroService.
-                 */
+                Intent intent = new Intent(v.getContext(), ReviewActivity.class);
+                intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+                intent.putExtra("isbn", is);
+                Log.d(TAG,"선택된 제목: " + t);
+                context.startActivity(intent);
             }
         });
 

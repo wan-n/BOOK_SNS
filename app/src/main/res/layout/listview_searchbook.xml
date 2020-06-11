@@ -3,60 +3,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
-
+    android:padding="5dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/img_book"
-        android:layout_width="74dp"
-        android:layout_height="62dp"
+        android:layout_width="65dp"
+        android:layout_height="59dp"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="8dp" />
+        android:layout_marginLeft="1dp" />
 
-    <LinearLayout
-        android:id="@+id/ppp"
-        android:layout_width="253dp"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="0dp"
-        android:layout_toEndOf="@+id/img_book"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/text_title"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/ppp"
+            android:layout_width="197dp"
             android:layout_height="wrap_content"
-            android:textSize="20dp" />
+            android:layout_gravity="center"
+            android:layout_marginStart="-13dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/text_isbn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20dp" />
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13dp" />
 
-        <TextView
-            android:id="@+id/text_pub"
-            android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_isbn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="8dp" />
+
+            <TextView
+                android:id="@+id/text_pub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13dp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/pick_btn"
+            android:layout_width="74dp"
             android:layout_height="wrap_content"
-            android:textSize="20dp" />
+            android:layout_alignParentRight="true"
+            android:layout_toEndOf="@+id/ppp"
+            android:text="선택"
+            android:textColor="#FFFFFF" />
+
     </LinearLayout>
-
-    <Button
-        android:id="@+id/pick_btn"
-        android:layout_width="77dp"
-        android:layout_height="75dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="360dp"
-        android:layout_marginRight="19dp"
-        android:layout_toEndOf="@+id/ppp"
-
-        android:text="선택"
-        android:textColor="#FFFFFF" />
-
 
 </RelativeLayout>

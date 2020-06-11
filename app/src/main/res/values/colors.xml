@@ -8,4 +8,5 @@
     <color name="colorText">#153452</color>
     <color name="lightGrey">#FFC107</color>
     <color name="duskYellow">#BCDDF7</color>
+    <color name="colorHint">#A69609</color>
 </resources>

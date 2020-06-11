@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.instabook.Activity.ForReview.ReviewActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.Adapter.BookListAdapter;
@@ -34,7 +35,7 @@ public class SearchdbActivity extends AppCompatActivity {
     List<BookData> bookDataList;
     List<BookData> authorDataList;
     SearchBookItem mb;
-    SaveSharedPreference sp;
+
     RetroBaseApiService retroBaseApiService;
 
     @Override
@@ -67,23 +68,31 @@ public class SearchdbActivity extends AppCompatActivity {
                     String t = bookDataList.get(i).getTitle();
                     String p = bookDataList.get(i).getPublisher();
                     String is = bookDataList.get(i).getIsbn();
+                    /**도서 이미지*/
 
                     mb = new SearchBookItem(t, is, p);
                     books.add(mb);
                 }
 
-                BookListAdapter blAdapter = new BookListAdapter(SearchdbActivity.this,
+                BookListAdapter blAdapter = new BookListAdapter(getApplicationContext(),
                         R.layout.listview_searchbook, books);
 
                 ListView listview = (ListView) findViewById(R.id.listview);
                 listview.setAdapter(blAdapter);
+                /*
                 listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        /**TODO
-                         * 클릭시 도서 정보 표출*/
+                        String t = books.get(position).title;
+                        String is = books.get(position).isbn;
+
+                        Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
+                        intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+                        intent.putExtra("isbn", is);
+                        startActivity(intent);
                     }
                 });
+                 */
             }
 
             @Override
