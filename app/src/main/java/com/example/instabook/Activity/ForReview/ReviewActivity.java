@@ -52,7 +52,7 @@ public class ReviewActivity extends AppCompatActivity {
     String review;
     String commentstag = null;
     SaveSharedPreference sp;
-    HashMap<String, Object> map;
+
     ArrayList<int[]> hashtagSpans;
 
     public static RetroBaseApiService retroBaseApiService;
@@ -118,9 +118,11 @@ public class ReviewActivity extends AppCompatActivity {
                 } else {
                     //공백이 아닐 때 처리할 내용
                     review = edReview.getText().toString();
+                    Log.d(TAG, "리뷰 :" + review );
                 }
 
                 //태그 저장
+                /*
                 if(edTag.getText().toString().length() == 0) {
                     Toast.makeText(getApplicationContext(), "태그를 입력하세요", Toast.LENGTH_SHORT).show();;
                 } else {
@@ -128,14 +130,19 @@ public class ReviewActivity extends AppCompatActivity {
                     commentstag = edTag.getText().toString();
                 }
 
-                float rating = ratingBar.getRating();
-                Log.d(TAG, "별점 :" + String.valueOf(rating) );
+                 */
+
+                float rate = ratingBar.getRating();
+                Log.d(TAG, "별점 :" + String.valueOf(rate) );
+
+                HashMap<String, Object> map = new HashMap<>();
 
                 map = new HashMap<>();
-                map.put("UserUID", useruid);
-                map.put("ISBN13", isbn);
-                map.put("Rate", rating);
-                map.put("Review", review);
+
+                map.put("Review",review);
+                map.put("ISBN13",isbn);
+                map.put("UserUID",useruid);
+                map.put("Rate",rate);
 
                 Retrofit dup_retro = new Retrofit.Builder()
                         .baseUrl(retroBaseApiService.Base_URL)

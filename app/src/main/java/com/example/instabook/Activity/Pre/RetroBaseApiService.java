@@ -37,7 +37,7 @@ public interface RetroBaseApiService {
     @POST("/instabook/users/flist")
     Call<ResponseGet> postFrd(@Body HashMap<String, Object> parameters);
 
-    @POST("/instabook/review")
+    @POST("/instabook/reviews/review")
     Call<ReviewData> postReview(@Body HashMap<String, Object> parameters);
 
     /**TODO 리뷰데이터 서버 올리기
