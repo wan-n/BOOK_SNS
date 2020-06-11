@@ -39,7 +39,7 @@
     <FrameLayout
         android:id="@+id/set_fr_info"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:layout_marginTop="50dp"
         android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,14 +53,14 @@
         android:layout_gravity="center_vertical"
         android:text="내 정보"
         android:textColor="#FFFFFF"
-        android:textSize="17sp"
+        android:textSize="19sp"
         android:textStyle="bold" />
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/set_fr_friends"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:layout_marginTop="1dp"
         android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +74,7 @@
         android:layout_gravity="center_vertical"
         android:text="친구 관리"
         android:textColor="#FFFFFF"
-        android:textSize="17sp"
+        android:textSize="19sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/set_fr_info" />
@@ -83,7 +83,7 @@
     <RelativeLayout
         android:id="@+id/set_rel_profile"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:layout_marginTop="1dp"
         android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +96,7 @@
         android:layout_centerVertical="true"
         android:text="프로필 공개"
         android:textColor="#FFFFFF"
-        android:textSize="17sp"
+        android:textSize="19sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent" />
 

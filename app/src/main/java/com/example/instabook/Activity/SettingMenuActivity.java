@@ -8,6 +8,7 @@ import com.example.instabook.Activity.Pre.LoginActivity;
 import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.R;
+import com.facebook.login.LoginManager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -163,6 +164,9 @@ public class SettingMenuActivity extends AppCompatActivity {
                                 sp.clearUserName(SettingMenuActivity.this);
                                 Toast.makeText(getApplicationContext(), "로그아웃 완료", Toast.LENGTH_SHORT).show();
 
+                                //페이스북 계정 연동 해제
+                                LoginManager.getInstance().logOut();
+
                                 //로그인 화면으로 되돌아감
                                 intent = new Intent(getApplicationContext(), LoginActivity.class);
                                 startActivity(intent);
@@ -193,6 +197,8 @@ public class SettingMenuActivity extends AppCompatActivity {
                                         retroBaseApiService.delImage(useruid).enqueue(new Callback<ResponseBody>() {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                //페이스북 계정 연동 해제
+                                                LoginManager.getInstance().logOut();
                                                 Toast.makeText(getApplicationContext(), "회원탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show();
 
                                             }

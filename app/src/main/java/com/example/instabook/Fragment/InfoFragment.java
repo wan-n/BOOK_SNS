@@ -98,13 +98,21 @@ public class InfoFragment extends Fragment {
 
         //상단 프로필 이미지 불러오기
         String string_profile = SaveSharedPreference.getUserImage(getActivity());
-        Bitmap bitmap_profile = StringToBitMap(string_profile);
+        if(string_profile == null){
+            //이미지뷰에 표시
+            info_pimg.setImageResource(R.drawable.default_img);
+            //이미지 동그랗게 보이기
+            info_pimg.setBackground(new ShapeDrawable(new OvalShape()));
+            info_pimg.setClipToOutline(true);
+        }else {
+            Bitmap bitmap_profile = StringToBitMap(string_profile);
 
-        //이미지뷰에 표시
-        info_pimg.setImageBitmap(bitmap_profile);
-        //이미지 동그랗게 보이기
-        info_pimg.setBackground(new ShapeDrawable(new OvalShape()));
-        info_pimg.setClipToOutline(true);
+            //이미지뷰에 표시
+            info_pimg.setImageBitmap(bitmap_profile);
+            //이미지 동그랗게 보이기
+            info_pimg.setBackground(new ShapeDrawable(new OvalShape()));
+            info_pimg.setClipToOutline(true);
+        }
 
 
         //닉네임, 아이디 표시해주기

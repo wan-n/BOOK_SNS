@@ -13,10 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.ForReview.ReviewNotiActivity"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"/>
+        <activity
+            android:name=".Activity.ForReview.ReviewNotiActivity"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity android:name=".Activity.ForReview.ReviewActivity" />
-        <activity android:name=".Activity.ShareActivity" />
         <activity android:name=".Activity.SearchFriendActivity" />
         <activity android:name=".Activity.ForBook.SearchSubActivity" />
         <activity android:name=".Activity.ForBook.SearchdbActivity" />
@@ -38,10 +38,53 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+
+
+        <!-- deeplink_share review -->
+        <activity android:name="com.example.instabook.Activity.MakeDeepLink.LinkActivity">
+            <intent-filter>
+                <!-- Sets the intent action to view the activity -->
+                <action android:name="android.intent.action.VIEW" />
+                <!-- Allows the link to be opened from a web browser -->
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Allows the deep link to be used without specifying the app name -->
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- URI tutsplus://deeplink -->
+                <data android:scheme="instabook" android:host="deeplink"/>
+                <!-- URI http://www.mydeeplink.com -->
+                <data android:scheme="http" android:host="www.mydeeplink.com"/>
+            </intent-filter>
+        </activity>
+
+
+
+        <!-- facebook -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1182541458751255"
+            android:exported="true" />
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

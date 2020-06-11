@@ -59,7 +59,6 @@ public class SearchFriendActivity extends AppCompatActivity {
 
         sf_search = findViewById(R.id.sf_search);
         sf_add = findViewById(R.id.sf_add);
-        sf_back = findViewById(R.id.sf_back);
         sf_fr_back = findViewById(R.id.sf_fr_back);
 
         sf_search.setText(search);
@@ -155,8 +154,10 @@ public class SearchFriendActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<List<ResponseGet>> call, Throwable t) {
-                    items.clear();
-                    sfAdapter.notifyDataSetChanged();
+                    if(items != null){
+                        items.clear();
+                        sfAdapter.notifyDataSetChanged();
+                    }
                     Toast.makeText(getApplicationContext(), "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show();
                 }
             });

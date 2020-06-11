@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">instabook</string>
+    <string name="app_name">INSTABOOK</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -15,7 +15,12 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
 
+    <!--페이스북 디버그키 : keytool -exportcert -alias androiddebugkey -keystore "C:\Users\dtnrl\.android\debug.keystore" | "G:\openssl-1.0.2j-fips-x86_64\OpenSSL\bin\openssl" sha1 -binary | "G:\openssl-1.0.2j-fips-x86_64\OpenSSL\bin\openssl" base64-->
+    <!--<string name="facebook_appid">OetFq3kNF4X9fkpNZkCGwspA14Q=</string>-->
+    <!--<string name="facebook_appid">Qce+5cPoBrUhZu5LF5UFADzGUno=</string>-->
+    <!--페이스북 릴리즈키 : keytool -exportcert -alias samplekey -keystore G:\keyPath_android\samplekeystore.jks | openssl sha1 -binary | openssl base64-->
 
-    <string name="facebook_app_id">app_id</string>
-    <string name="fb_login_protocol_scheme"> fb_login_protocol_scheme </string>
+    <string name="facebook_app_id">1182541458751255</string>
+    <string name="fb_login_protocol_scheme">fb1182541458751255</string>
+
 </resources>

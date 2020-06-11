@@ -45,8 +45,9 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
 
         <ImageView
             android:id="@+id/fr_add"
@@ -54,7 +55,6 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_toEndOf="@+id/fr_search"
             android:layout_toRightOf="@+id/fr_search"
             app:srcCompat="@drawable/add_white" />
@@ -63,7 +63,6 @@
             android:id="@+id/fr_search"
             android:layout_width="278dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:backgroundTint="#FFFFFF"
             android:ems="10"
             android:hint="친구 검색"
@@ -85,7 +84,11 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="#26354A"
+            app:tabSelectedTextColor="#26354A"
+            app:tabGravity="fill"
+            app:tabMode="fixed"/>
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewpager"

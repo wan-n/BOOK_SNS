@@ -14,8 +14,8 @@
         android:layout_height="wrap_content"
         app:tabGravity="fill"
         app:tabMode="fixed"
-        app:tabIndicatorColor="@color/colorPrimaryDark"
-        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabIndicatorColor="#26354A"
+        app:tabSelectedTextColor="#26354A"
         app:tabTextColor="#000000" />
     <!-- tabIndicatorcolor: 현재 선택된 탭 색 지정 -->
 

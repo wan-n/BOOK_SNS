@@ -77,7 +77,12 @@ public class FriendsActivity extends AppCompatActivity {
         viewPager.setAdapter(friendsPagerAdapter);
 
         //탭 선택 이벤트
-        tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+        tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager){
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) { //탭이 선택되었을 때, 호출됨
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+        });
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
 
     }
@@ -86,5 +91,10 @@ public class FriendsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

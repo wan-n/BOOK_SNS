@@ -66,9 +66,6 @@ public interface RetroBaseApiService {
     @GET("/instabook/users/userpwd")
     Call<List<ResponseGet>> getPwd(@Query("userid") String userid);
 
-    @GET("/instabook/users/userinfo")
-    Call<List<ResponseGet>> getInfo(@Query("userid") String userid);
-
     @GET("/instabook/users/nickname")
     Call<List<ResponseGet>> getNickname(@Query("nickname") String nickname, @Query("userid") String userid);
 
