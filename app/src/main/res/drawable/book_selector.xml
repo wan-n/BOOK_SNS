@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 버튼 클릭 이미지 -->
+    <item android:state_pressed="true" android:drawable="@drawable/favorite_black"/>
+    <!-- 버튼 포커스 이미지 -->
+    <item android:state_focused="true" android:drawable="@android:color/holo_orange_light" />
+    <!-- 버튼 기본 이미지 -->
+    <item android:drawable="@drawable/favorite_border_black" />
+</selector>

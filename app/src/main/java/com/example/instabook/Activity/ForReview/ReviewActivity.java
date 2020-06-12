@@ -157,6 +157,7 @@ public class ReviewActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
                         Toast.makeText(getApplicationContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
                     }
 
                     @Override

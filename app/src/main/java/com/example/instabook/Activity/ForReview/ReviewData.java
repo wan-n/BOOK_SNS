@@ -1,12 +1,11 @@
 package com.example.instabook.Activity.ForReview;
 
-import java.util.HashMap;
-
 public class ReviewData {
     public String Review;
     public int Rate;
     public int UserUID;
     public String ISBN13;
+    public String ReviewData;
 
     public ReviewData() {
 
