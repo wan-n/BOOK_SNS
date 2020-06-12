@@ -41,7 +41,7 @@ public interface RetroBaseApiService {
     Call<ReviewData> postReview(@Body HashMap<String, Object> parameters);
 
     /**TODO 리뷰데이터 서버 올리기
-    @POST("/instabook/books/tag")
+    @POST("/instabook/reviews/tag")
     Call<ReviewData> postTag(@Body HashMap<String, Object> parameters);
     */
 

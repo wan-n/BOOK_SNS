@@ -4,10 +4,9 @@ import java.util.HashMap;
 
 public class ReviewData {
     public String Review;
-    public float Rate;
+    public int Rate;
     public int UserUID;
     public String ISBN13;
-    public HashMap<String, Object> map;
 
     public ReviewData() {
 
@@ -17,9 +16,9 @@ public class ReviewData {
 
     public void setReview(String review) { Review = review; }
 
-    public float getRating() { return Rate; }
+    public int getRating() { return Rate; }
 
-    public void setRating(float rate) { Rate = rate; }
+    public void setRating(int rate) { Rate = rate; }
 
     public int getUserUID() { return UserUID; }
 

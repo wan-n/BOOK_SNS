@@ -60,8 +60,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    Button b;
-    View rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

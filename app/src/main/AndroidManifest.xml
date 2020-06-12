@@ -13,9 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".Activity.ForReview.ReviewNotiActivity"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity android:name=".Activity.ForReview.ReviewActivity" />
         <activity android:name=".Activity.SearchFriendActivity" />
         <activity android:name=".Activity.ForBook.SearchSubActivity" />

@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.Fragment.HomeFragment;
@@ -112,13 +113,14 @@ public class ReviewActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //리뷰값 저장
-                if(edReview.getText().toString().length() == 0){
+                String reView = null;
+                if (edReview.getText().toString().length() == 0) {
                     //공백일 때 처리할 내용
-                    Toast.makeText(getApplicationContext(), "리뷰를 입력하세요", Toast.LENGTH_SHORT).show();;
+                    Toast.makeText(getApplicationContext(), "리뷰를 입력하세요", Toast.LENGTH_SHORT).show();
+                    ;
                 } else {
                     //공백이 아닐 때 처리할 내용
-                    review = edReview.getText().toString();
-                    Log.d(TAG, "리뷰 :" + review );
+                    reView = edReview.getText().toString();
                 }
 
                 //태그 저장
@@ -131,18 +133,20 @@ public class ReviewActivity extends AppCompatActivity {
                 }
 
                  */
+                String review = reView.trim();
+                int rate = (int) ratingBar.getRating();
 
-                float rate = ratingBar.getRating();
-                Log.d(TAG, "별점 :" + String.valueOf(rate) );
+                Log.d(TAG, "리뷰 :" + review);
+                Log.d(TAG, "ISBN : " + isbn);
+                Log.d(TAG, "UESRUID : " + useruid);
+                Log.d(TAG, "별점 :" + String.valueOf(rate));
 
                 HashMap<String, Object> map = new HashMap<>();
 
-                map = new HashMap<>();
-
-                map.put("Review",review);
-                map.put("ISBN13",isbn);
-                map.put("UserUID",useruid);
-                map.put("Rate",rate);
+                map.put("Review", review);
+                map.put("ISBN13", isbn);
+                map.put("UserUID", useruid);
+                map.put("Rate", rate);
 
                 Retrofit dup_retro = new Retrofit.Builder()
                         .baseUrl(retroBaseApiService.Base_URL)
@@ -152,8 +156,7 @@ public class ReviewActivity extends AppCompatActivity {
                 retroBaseApiService.postReview(map).enqueue(new Callback<ReviewData>() {
                     @Override
                     public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
-                        Intent intent1 = new Intent(ReviewActivity.this, ReviewNotiActivity.class);
-                        startActivity(intent1);
+                        Toast.makeText(getApplicationContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
