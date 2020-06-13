@@ -13,7 +13,7 @@ public class HomeReviewItem {
     public String nName;
     public int UserBookUID;
 
-    public HomeReviewItem(Bitmap iconDrawable, int uid, String review, String redate, String isbn, int rate, String bname, String nName, int ubid) {
+    public HomeReviewItem(Bitmap iconDrawable, int uid, String review, String redate, String isbn, int rate, String bname, String nName) {
         this.iconDrawable = iconDrawable;
         this.uId = uid;
         this.review = review;
@@ -22,7 +22,10 @@ public class HomeReviewItem {
         this.rate = rate;
         this.bName = bname;
         this.nName = nName;
-        this.UserBookUID = ubid;
+    }
+
+    public void setUserBookUID(int userBookUID) {
+        UserBookUID = userBookUID;
     }
 
     public Bitmap getIconDrawable() {

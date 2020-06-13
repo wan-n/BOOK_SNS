@@ -52,8 +52,6 @@ public class HomeFragment extends Fragment {
     AllUserData alluserData2;
 
     List<HomeData> homeDataList;
-    UserBookUIDData uBookData;
-    UserBookUIDData userBookData;
     ArrayList<HomeReviewItem> items;
     HomeReviewItem item;
 
@@ -123,8 +121,6 @@ public class HomeFragment extends Fragment {
                                 String bname = homeDataList.get(l).getBookName();
                                 String nname = homeDataList.get(l).getNickName();
 
-                                Log.d(TAG,"유아이디: "+uid+"리뷰: "+review+"날짜: "+redate+"ISBN: "+isbn+"별점: "+rate+"제목: "+bname+"닉네임: "+nname);
-
                                 //uid로 이미지 가져오기
                                 Retrofit retro_imgFirst = new Retrofit.Builder()
                                         .baseUrl(retroBaseApiService.Base_URL)
@@ -138,11 +134,9 @@ public class HomeFragment extends Fragment {
                                         InputStream is = response.body().byteStream();
                                         Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
 
-                                        //int ubid = -1;
-
                                         //리스트뷰에 추가
-                                        item = new HomeReviewItem(bitmap_profile, uid, review, redate, isbn, rate, bname, nname, -1);
-                                        Log.d(TAG,"유아이디: "+uid+"리뷰: "+review+"날짜: "+redate+"ISBN: "+isbn+"별점: "+rate+"제목: "+bname+"닉네임: "+nname+"유저북유아이디: -1");
+                                        item = new HomeReviewItem(bitmap_profile, uid, review, redate, isbn, rate, bname, nname);
+                                        Log.d(TAG,"유아이디: "+uid+"리뷰: "+review+"날짜: "+redate+"ISBN: "+isbn+"별점: "+rate+"제목: "+bname+"닉네임: "+nname);
                                         items.add(item);
                                         //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
 
