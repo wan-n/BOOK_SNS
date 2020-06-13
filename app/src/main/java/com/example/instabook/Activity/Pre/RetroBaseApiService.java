@@ -27,6 +27,10 @@ public interface RetroBaseApiService {
     final String Base_URL = "http://instabookadmin.cafe24app.com";
 
 
+
+    @POST("/instabook/reviews/uid")
+    Call<List<ResponseGet>> postRUID(@Body HashMap<String, Object> parameters);
+
     @Multipart
     @POST("/image/upload")
     Call<ResponseBody> postImage(@Part MultipartBody.Part image);
@@ -54,8 +58,14 @@ public interface RetroBaseApiService {
     @GET("/instabook/reviews/uid")
     Call<List<UserData>> getUid(@Query("UserUID") int useruid);
 
+    @GET("/instabook/review")
+    Call<List<HomeData>> getReview(@Query("reviewuid") int reviewuid);
+
     @GET("/instabook/reviews/ubid")
     Call<UserBookData> getUBid(@Query("useruid") int useruid, @Query("isbn") String isbn);
+
+    @GET("/instabook/reviews/uid")
+    Call<UserBookData> getUBid(@Query("useruid") int useruid, String isbn);
 
     @GET("/instabook/reviews/home")
     Call<List<HomeData>> getHreq(@Query("useruid") int useruid);
@@ -94,7 +104,7 @@ public interface RetroBaseApiService {
     Call<List<ResponseGet>> getPub(@Query("userid") String userid);
 
     @GET("/instabook/users/info/nickname")
-    Call<List<ResponseGet>> getUsername(@Query("userid") String userid);
+    Call<List<ResponseGet>> getUsername(@Query("useruid") int useruid);
 
     @GET("/instabook/users/info/name")
     Call<List<ResponseGet>> getEditname(@Query("username") String username);

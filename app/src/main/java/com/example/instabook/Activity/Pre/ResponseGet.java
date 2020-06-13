@@ -13,6 +13,7 @@ public class ResponseGet {
     public Boolean isDeleted;
     public String NickName;
     public int isPublic;
+    public int ReviewUID;
 
     public ResponseGet(String completed, String UserID, String Password) {
         this.completed = completed;
@@ -49,4 +50,6 @@ public class ResponseGet {
     }
 
     public int getIsPublic(){return isPublic;}
+
+    public int getReviewUID(){return ReviewUID;}
 }

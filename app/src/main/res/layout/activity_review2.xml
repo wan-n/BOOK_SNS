@@ -175,16 +175,14 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.976" />
 
-            <Button
+
+
+            <ImageView
                 android:id="@+id/share_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="39dp"
-                android:layout_toEndOf="@+id/push_review"
-                android:background="#FFFFFF"
-                android:text="SNS 공유하기"
-                android:textColor="@color/colorText"
-                android:textSize="22dp" />
+                android:src="@drawable/kakao_icon"/>
 
         </LinearLayout>
 

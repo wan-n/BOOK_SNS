@@ -1,5 +1,6 @@
 package com.example.instabook.Activity.ForReview;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.sip.SipAudioCall;
 import android.os.Bundle;
@@ -15,18 +16,31 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.instabook.Activity.MainActivity;
+import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.Fragment.HomeFragment;
 import com.example.instabook.R;
+import com.kakao.kakaolink.v2.KakaoLinkResponse;
+import com.kakao.kakaolink.v2.KakaoLinkService;
+import com.kakao.message.template.ButtonObject;
+import com.kakao.message.template.ContentObject;
+import com.kakao.message.template.FeedTemplate;
+import com.kakao.message.template.LinkObject;
+import com.kakao.network.ErrorResult;
+import com.kakao.network.callback.ResponseCallback;
+import com.kakao.util.helper.log.Logger;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,11 +57,10 @@ public class ReviewActivity extends AppCompatActivity {
     ImageView binfo_back;
     TextView tvTitle;
     TextView tvRating;
-    ImageView imBook;
+    ImageView imBook, sbtn;
     EditText edReview;
     EditText edTag;
     Button pbtn;
-    Button sbtn;
     String title;
     String isbn;
     String review;
@@ -72,6 +85,7 @@ public class ReviewActivity extends AppCompatActivity {
         edTag = findViewById(R.id.edit_tag);
         pbtn = findViewById(R.id.push_btn);
         sbtn = findViewById(R.id.share_btn); //SNS 공유 버튼
+
 
         //유저 UID 가져오기
         final int useruid = sp.getUserUid(ReviewActivity.this);
@@ -108,22 +122,21 @@ public class ReviewActivity extends AppCompatActivity {
         //hashtagSpans = new ArrayList<>();
         //hashtagSpans = getSpans(commentstag, '#');
 
-        pbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                //리뷰값 저장
-                String reView = null;
-                if (edReview.getText().toString().length() == 0) {
-                    //공백일 때 처리할 내용
-                    Toast.makeText(getApplicationContext(), "리뷰를 입력하세요", Toast.LENGTH_SHORT).show();
-                    ;
-                } else {
-                    //공백이 아닐 때 처리할 내용
-                    reView = edReview.getText().toString();
-                }
 
-                //태그 저장
+
+        //리뷰값 저장
+        String reView = null;
+        if (edReview.getText().toString().length() == 0) {
+            //공백일 때 처리할 내용
+            Toast.makeText(getApplicationContext(), "리뷰를 입력하세요", Toast.LENGTH_SHORT).show();
+            ;
+        } else {
+            //공백이 아닐 때 처리할 내용
+            reView = edReview.getText().toString();
+        }
+
+        //태그 저장
                 /*
                 if(edTag.getText().toString().length() == 0) {
                     Toast.makeText(getApplicationContext(), "태그를 입력하세요", Toast.LENGTH_SHORT).show();;
@@ -133,21 +146,29 @@ public class ReviewActivity extends AppCompatActivity {
                 }
 
                  */
-                String review = reView.trim();
-                int rate = (int) ratingBar.getRating();
+        String review = reView.trim();
+        int rate = (int) ratingBar.getRating();
+
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("Review", review);
+        map.put("ISBN13", isbn);
+        map.put("UserUID", useruid);
+        map.put("Rate", rate);
+
+
+
+        //게시하기 버튼
+        pbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
                 Log.d(TAG, "리뷰 :" + review);
                 Log.d(TAG, "ISBN : " + isbn);
                 Log.d(TAG, "UESRUID : " + useruid);
                 Log.d(TAG, "별점 :" + String.valueOf(rate));
 
-                HashMap<String, Object> map = new HashMap<>();
-
-                map.put("Review", review);
-                map.put("ISBN13", isbn);
-                map.put("UserUID", useruid);
-                map.put("Rate", rate);
-
+                //리뷰 업로드
                 Retrofit dup_retro = new Retrofit.Builder()
                         .baseUrl(retroBaseApiService.Base_URL)
                         .addConverterFactory(GsonConverterFactory.create()).build();
@@ -168,12 +189,42 @@ public class ReviewActivity extends AppCompatActivity {
             }
         });
 
+        //공유하기 버튼
+        sbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //리뷰 공유
+                DialogInterface.OnClickListener share = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        shareKakao(map, useruid);
+                    }
+                };
+                //취소
+                DialogInterface.OnClickListener cancel = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                };
+
+                new AlertDialog.Builder(ReviewActivity.this)
+                        .setTitle("카카오톡으로 리뷰를 공유하시겠습니까?")
+                        .setPositiveButton("공유", share)
+                        .setNegativeButton("취소", cancel)
+                        .show();
+            }
+        });
+
+
+
     }
 
     //뒤로가기
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+
     }
 
     /*
@@ -194,4 +245,65 @@ public class ReviewActivity extends AppCompatActivity {
 
      */
 
+
+    public void shareKakao(HashMap<String, Object> map, int uuid){
+
+        //리뷰 업로드하고 리뷰UID값 가져오기
+        Retrofit retro_ruid = new Retrofit.Builder()
+                .baseUrl(retroBaseApiService.Base_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        retroBaseApiService = retro_ruid.create(RetroBaseApiService.class);
+
+        retroBaseApiService.postRUID(map).enqueue(new Callback<List<ResponseGet>>() {
+            @Override
+            public void onResponse(Call<List<ResponseGet>> call, Response<List<ResponseGet>> response) {
+
+                List<ResponseGet> uid_data = response.body();
+                int ruid = uid_data.get(0).ReviewUID;
+
+                //UserUID와 ReviewUID를 카카오링크 파라미터로 전송
+                kakaolink(ruid, uuid);
+            }
+
+            @Override
+            public void onFailure(Call<List<ResponseGet>> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+
+    public void kakaolink(int ruid, int uuid) {
+
+        FeedTemplate params = FeedTemplate
+                .newBuilder(ContentObject.newBuilder("INSTABOOK",
+                        "",
+                        LinkObject.newBuilder().setMobileWebUrl("kakao1b49a64d64a60eb3b9e5b61ea43a662a://kakaolink").build())
+                        .setDescrption("리뷰를 확인해보세요!")
+                        .build())
+                .addButton(new ButtonObject("앱에서 보기", LinkObject.newBuilder()
+                        .setMobileWebUrl("kakao1b49a64d64a60eb3b9e5b61ea43a662a://kakaolink")
+                        .setAndroidExecutionParams("ruid="+ruid+"&uuid="+uuid)
+                        .build()))
+                .build();
+
+        Map<String, String> serverCallbackArgs = new HashMap<String, String>();
+        serverCallbackArgs.put("user_id", "${current_user_id}");
+        serverCallbackArgs.put("product_id", "${shared_product_id}");
+
+        KakaoLinkService.getInstance().sendDefault(this, params, serverCallbackArgs, new ResponseCallback<KakaoLinkResponse>() {
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                Logger.e(errorResult.toString());
+            }
+
+            @Override
+            public void onSuccess(KakaoLinkResponse result) {
+                // 템플릿 밸리데이션과 쿼터 체크가 성공적으로 끝남. 톡에서 정상적으로 보내졌는지 보장은 할 수 없다. 전송 성공 유무는 서버콜백 기능을 이용하여야 한다.
+            }
+        });
+
+
+    }
 }

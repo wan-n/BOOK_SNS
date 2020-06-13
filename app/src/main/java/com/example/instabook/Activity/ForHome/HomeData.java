@@ -8,6 +8,7 @@ public class HomeData {
     public int Rate;
     public String BookName;
     public String NickName;
+    public boolean isDeleted;
 
     public HomeData(int uid, String review, String reviewDate, String isbn, int rate,
                     String bookName, String nickName){
@@ -41,4 +42,5 @@ public class HomeData {
     public String getNickName() {
         return NickName;
     }
+    public boolean getIsDeleted(){return isDeleted;}
 }

@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.ForUser.NotiBookFActivity"></activity>
+        <activity android:name=".Activity.MakeDeepLink.DelLinkActivity"></activity>
+        <activity android:name=".Activity.ForUser.NotiBookFActivity" />
         <activity android:name=".Activity.ForUser.NotiBookTActivity" />
         <activity
             android:name=".Activity.ForUser.NotiBookActivity"
@@ -42,23 +43,19 @@
         </activity> <!-- deeplink_share review -->
         <activity android:name=".Activity.MakeDeepLink.LinkActivity">
             <intent-filter>
-
-                <!-- Sets the intent action to view the activity -->
                 <action android:name="android.intent.action.VIEW" />
-                <!-- Allows the link to be opened from a web browser -->
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Allows the deep link to be used without specifying the app name -->
+
                 <category android:name="android.intent.category.DEFAULT" />
-                <!-- URI tutsplus://deeplink -->
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:host="deeplink"
-                    android:scheme="instabook" />
-                <!-- URI http://www.mydeeplink.com -->
-                <data
-                    android:host="www.mydeeplink.com"
-                    android:scheme="http" />
+                    android:host="@string/kakaolink_host"
+                    android:scheme="@string/kakao_scheme" />
             </intent-filter>
-        </activity> <!-- facebook -->
+        </activity> <!-- kakaotalk -->
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" /> <!-- facebook -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

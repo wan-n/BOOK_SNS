@@ -2,6 +2,7 @@ package com.example.instabook.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.instabook.Activity.Pre.LoginActivity;
 import com.example.instabook.Adapter.ContentsPagerAdapter;
 import com.example.instabook.R;
 import com.google.android.material.tabs.TabLayout;
@@ -31,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        String userid = SaveSharedPreference.getUserName(MainActivity.this);
+
+        //로그인이 안되어있는 상태일 시 로그인 화면으로 이동
+        if(userid.length() <= 0){
+            Intent home = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(home);
+        }
 
         mContext=getApplicationContext();
 
@@ -103,7 +113,10 @@ public class MainActivity extends AppCompatActivity {
         //2초 이내에 뒤로가기 버튼을 재 클릭 시 앱 종료
         if (System.currentTimeMillis() - lastTimeBackPressed < 2000)
         {
-            finish();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             return;
         }
         //'뒤로' 버튼 한번 클릭 시 메시지

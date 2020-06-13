@@ -1,22 +1,16 @@
 package com.example.instabook.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.R;
 import com.facebook.AccessToken;
@@ -29,22 +23,23 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.facebook.share.model.ShareContent;
 import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.ShareMediaContent;
-import com.facebook.share.model.SharePhoto;
 import com.facebook.share.widget.ShareDialog;
+import com.kakao.kakaolink.v2.KakaoLinkResponse;
+import com.kakao.kakaolink.v2.KakaoLinkService;
+import com.kakao.message.template.ButtonObject;
+import com.kakao.message.template.ContentObject;
+import com.kakao.message.template.FeedTemplate;
+import com.kakao.message.template.LinkObject;
+import com.kakao.network.ErrorResult;
+import com.kakao.network.callback.ResponseCallback;
+import com.kakao.util.helper.log.Logger;
 
 import org.json.JSONObject;
-
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MyInfoActivity extends AppCompatActivity {
 
@@ -197,6 +192,7 @@ public class MyInfoActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
     //callbackManager.onActivityResult를 호출하여 로그인 결과를 callbackManager를 통해 LoginManager에 전달
@@ -204,6 +200,7 @@ public class MyInfoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+
     }
 
     @Override
@@ -220,38 +217,14 @@ public class MyInfoActivity extends AppCompatActivity {
 
 
     public void shareFacebook(){
-
         ShareLinkContent content = new ShareLinkContent.Builder()
-                //링크의 콘텐츠 제목
-                .setContentTitle("페이스북 공유 링크입니다.")
-                //게시물에 표시될
-                //.setImageUrl(Uri.parse(""))
                 //공유될 링크
-                .setContentUrl(Uri.parse("http://www.mydeeplink.com"))
-                //일반적으로 2~4개의 문장으로 구성된 콘텐츠 설명
-                .setContentDescription("문장1, 문장2, 문장3, 문장4")
+                .setContentUrl(Uri.parse("fb1182541458751255://"))
+                .setQuote("INSTABOOK의 리뷰를 만나보세요!")
                 .build();
 
         ShareDialog shareDialog = new ShareDialog(this);
         shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);
-
-/*
-        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.default_img);
-
-        SharePhoto photo = new SharePhoto.Builder()
-                .setBitmap(bitmap)
-                .build();
-
-        ShareContent shareContent = new ShareMediaContent.Builder()
-                .addMedium(photo)
-                .build();
-
-        ShareDialog shareDialog = new ShareDialog(this);
-        shareDialog.show(shareContent, ShareDialog.Mode.AUTOMATIC);
-*/
-
-
     }
-
 
 }

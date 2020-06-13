@@ -15,14 +15,21 @@
         android:layout_height="150dp"
         android:background="#26354A" >
 
+        <FrameLayout
+            android:id="@+id/info_fr_pimg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            >
         <ImageView
             android:id="@+id/info_pimg"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="20dp"
             android:src="@drawable/default_img"
             />
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/info_sort"
@@ -31,7 +38,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="30dp"
             android:layout_marginStart="20dp"
-            android:layout_toEndOf="@+id/info_pimg">
+            android:layout_toEndOf="@+id/info_fr_pimg">
 
 
             <TextView
@@ -43,12 +50,18 @@
                 android:textStyle="bold" />
 
 
+            <FrameLayout
+                android:id="@+id/info_fr_editname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless">
             <ImageView
                 android:id="@+id/info_editname"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:layout_marginStart="8dp"
                 android:src="@drawable/edit_white" />
+            </FrameLayout>
         </LinearLayout>
 
         <TextView
@@ -57,7 +70,7 @@
             android:layout_height="20dp"
             android:layout_below="@+id/info_sort"
             android:layout_marginStart="22dp"
-            android:layout_toEndOf="@+id/info_pimg"
+            android:layout_toEndOf="@+id/info_fr_pimg"
             android:hint="user_id"
             android:textColor="#B8B6B6"
             android:textSize="12sp" />

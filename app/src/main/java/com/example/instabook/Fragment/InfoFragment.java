@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +62,7 @@ public class InfoFragment extends Fragment {
     RetroBaseApiService retroBaseApiService;
     private ImageView info_pimg, info_editname;
     private TextView info_nickname, info_id;
+    private FrameLayout info_fr_pimg,info_fr_editname;
     private Uri mImageCaptureUri;
     private String absoultePath;
     View rootView;
@@ -90,10 +92,11 @@ public class InfoFragment extends Fragment {
 
 
         info_pimg = getView().findViewById(R.id.info_pimg);
+        info_fr_pimg = getView().findViewById(R.id.info_fr_pimg);
         info_nickname = getView().findViewById(R.id.info_nickname);
         info_id = getView().findViewById(R.id.info_id);
         info_editname = getView().findViewById(R.id.info_editname);
-
+        info_fr_editname = getView().findViewById(R.id.info_fr_editname);
 
 
         //상단 프로필 이미지 불러오기
@@ -123,7 +126,7 @@ public class InfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
-                    case R.id.info_editname:
+                    case R.id.info_fr_editname:
                         EditText et = new EditText(getContext());  //닉네임 변경 시 사용
                         DialogInterface.OnClickListener edit = new DialogInterface.OnClickListener() {
                             @Override
@@ -154,7 +157,7 @@ public class InfoFragment extends Fragment {
 
                         break;
                     //프로필이미지 변경
-                    case R.id.info_pimg:
+                    case R.id.info_fr_pimg:
                         //앨범 선택
                         DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
                             @Override
@@ -207,7 +210,7 @@ public class InfoFragment extends Fragment {
                             }
                         };
                         new AlertDialog.Builder(getActivity())
-                                .setTitle("업로드할 이미지 선택")
+                                .setTitle("프로필 이미지 변경")
                                 .setPositiveButton("앨범선택", albumListener)
                                 .setNeutralButton("기본 이미지", basicListener)
                                 .setNegativeButton("취소", cancelListener)
@@ -217,8 +220,8 @@ public class InfoFragment extends Fragment {
             }
         };
 
-        info_pimg.setOnClickListener(listener);
-        info_editname.setOnClickListener(listener);
+        info_fr_pimg.setOnClickListener(listener);
+        info_fr_editname.setOnClickListener(listener);
     }
 
     //프로필 이미지 문자열에서 비트맵으로 변환하기
