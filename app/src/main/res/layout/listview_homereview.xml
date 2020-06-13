@@ -101,13 +101,11 @@
             android:textColor="@color/colorText"
             android:textSize="13dp" />
 
-        <Button
-            android:id="@+id/btn_select"
-            android:layout_width="33dp"
-            android:layout_height="16dp"
-            android:layout_gravity="left"
-            android:background="@drawable/book_selector"
-            android:onClick="onClick" />
+        <ImageButton
+            android:id="@+id/imgbtn_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"/>
 
     </LinearLayout>
 

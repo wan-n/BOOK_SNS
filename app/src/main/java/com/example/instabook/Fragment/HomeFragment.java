@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment {
                                         uBookData = response.body();
 
                                         Integer ubuid;
-                                        if(uBookData.getUserBookUID() == null){
+                                        if(uBookData == null){
                                             ubuid = -1;
                                         } else {
                                             ubuid = uBookData.getUserBookUID();
@@ -144,17 +144,20 @@ public class HomeFragment extends Fragment {
 
                                     @Override
                                     public void onFailure(Call<UserBookData> call, Throwable t) {
-                                        Toast.makeText(getActivity(), "소유 도서 정보 실패", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "소유 도서 정보 없음", Toast.LENGTH_SHORT).show();
+                                        Integer ubuid = -1;
+                                        userBookData = new UserBookData(ubuid);
                                     }
 
                                 });
 
-                                Integer ubid;
-                                if(userBookData.getUserBookUID() == null){
+                                Integer ubid ;
+                                if(userBookData == null){
                                     ubid = -1;
                                 } else {
                                     ubid = userBookData.getUserBookUID();
                                 }
+                                Log.d(TAG,"소유 도서 유아이디: "+ ubid);
 
                                 //uid로 이미지 가져오기
                                 Retrofit retro_imgFirst = new Retrofit.Builder()

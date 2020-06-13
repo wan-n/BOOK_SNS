@@ -20,8 +20,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.instabook.Activity.CircularImageView;
 import com.example.instabook.Activity.ForUser.NotiBookActivity;
-import com.example.instabook.Activity.ForUser.NotiBookFActivity;
-import com.example.instabook.Activity.ForUser.NotiBookTActivity;
 import com.example.instabook.Activity.ForUser.UserBookData;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.ListView.HomeReviewItem;
@@ -84,12 +82,17 @@ public class HomeReviewAdapter extends BaseAdapter {
         ImageButton MemuImageButton = (ImageButton) convertView.findViewById(R.id.btn_menu);
         RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.ratingbarSmall);
         TextView BnameTextView = (TextView) convertView.findViewById(R.id.txt_bname);
-        Button SelectButton = (Button) convertView.findViewById(R.id.btn_select);
         TextView ReviewTextView = (TextView) convertView.findViewById(R.id.txt_review);
         TextView TagTextView = (TextView) convertView.findViewById(R.id.txt_tag);
 
         HomeReviewItem homeReviewItem = getItem(pos);
 
+        ImageButton favButton = (ImageButton)convertView.findViewById(R.id.imgbtn_favorite);
+        if(homeReviewItem.getUserBookUID() == -1){
+            favButton.setImageResource(R.drawable.favorite_border_black);
+        } else {
+            favButton.setImageResource(R.drawable.favorite_black);
+        }
         CImagetView.setImageBitmap(homeReviewItem.getIconDrawable());
         NickTextView.setText(homeReviewItem.getnName());
         DateTextView.setText(homeReviewItem.getReDate());
@@ -97,52 +100,13 @@ public class HomeReviewAdapter extends BaseAdapter {
         ReviewTextView.setText(homeReviewItem.getReview());
         ratingBar.setNumStars(homeReviewItem.getRate());
 
-        SelectButton.setOnClickListener(new Button.OnClickListener() {
+        favButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (homeReviewItem.getUserBookUID() == -1) {
-                    //빈 하트
-                    Retrofit retro_mubook = new Retrofit.Builder()
-                            .baseUrl(retroBaseApiService.Base_URL)
-                            .addConverterFactory(GsonConverterFactory.create()).build();
-                    retroBaseApiService = retro_mubook.create(RetroBaseApiService.class);
-                    //유저 소유 도서 정보 만들기
-                    retroBaseApiService.putUBookt(homeReviewItem.getIsbn13(),homeReviewItem.getuId()).enqueue(new Callback<UserBookData>() {
-                        @Override
-                        public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                            Intent intent = new Intent(context.getApplicationContext(), NotiBookTActivity.class);
-                            context.startActivity(intent);
-                        }
+                    favButton.setImageResource(R.drawable.favorite_black);
 
-                        @Override
-                        public void onFailure(Call<UserBookData> call, Throwable t) {
-                            Toast.makeText(context.getApplicationContext(), "찜하기 취소 실패", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                }
-                if (homeReviewItem.getUserBookUID() > -1) {
-                    //꽉찬 하트
-                    Retrofit retro_mubook = new Retrofit.Builder()
-                            .baseUrl(retroBaseApiService.Base_URL)
-                            .addConverterFactory(GsonConverterFactory.create()).build();
-                    retroBaseApiService = retro_mubook.create(RetroBaseApiService.class);
-                    //유저 소유 도서 정보 만들기
-                    retroBaseApiService.putUBookf(homeReviewItem.getIsbn13(),homeReviewItem.getuId()).enqueue(new Callback<UserBookData>() {
-                        @Override
-                        public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                            Intent intent = new Intent(context.getApplicationContext(), NotiBookFActivity.class);
-                            context.startActivity(intent);
-                        }
-
-                        @Override
-                        public void onFailure(Call<UserBookData> call, Throwable t) {
-                            Toast.makeText(context.getApplicationContext(), "찜하기 추가 실패", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                }
-                if (homeReviewItem.getUserBookUID()!= -1  ) { //소유 도서가 없을 때
+                    //빈 하트 클릭으로 소유도서 생성
                     HashMap<String, Object> map = new HashMap<>();
 
                     map.put("ISBN13", homeReviewItem.getIsbn13());
@@ -163,6 +127,26 @@ public class HomeReviewAdapter extends BaseAdapter {
                         @Override
                         public void onFailure(Call<UserBookData> call, Throwable t) {
                             Toast.makeText(context.getApplicationContext(), "찜하기 생성 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else if (homeReviewItem.getUserBookUID() > -1) {
+                    favButton.setImageResource(R.drawable.favorite_border_black);
+                    //꽉찬 하트 클릭으로 소유 도서 삭제
+                    Retrofit retro_rmbook = new Retrofit.Builder()
+                            .baseUrl(retroBaseApiService.Base_URL)
+                            .addConverterFactory(GsonConverterFactory.create()).build();
+                    retroBaseApiService = retro_rmbook.create(RetroBaseApiService.class);
+                    //유저 소유 도서 정보 만들기
+                    retroBaseApiService.delUBook(homeReviewItem.getIsbn13(),homeReviewItem.getuId()).enqueue(new Callback<UserBookData>() {
+                        @Override
+                        public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
+                            Intent intent = new Intent(context.getApplicationContext(), NotiBookFActivity.class);
+                            context.startActivity(intent);
+                        }
+
+                        @Override
+                        public void onFailure(Call<UserBookData> call, Throwable t) {
+                            Toast.makeText(context.getApplicationContext(), "찜하기 제거 실패", Toast.LENGTH_SHORT).show();
                         }
                     });
 

@@ -24,7 +24,7 @@
         android:background="@android:color/background_light"
         android:gravity="start|center_horizontal|center_vertical"
         android:paddingLeft="20dp"
-        android:text="해당 도서가 찜목록에 추가되었습니다."
+        android:text="도서 찜하기 성공!!"
         android:textColor="@color/colorAccent"
         android:textSize="20sp" />
 

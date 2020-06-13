@@ -121,12 +121,6 @@ public interface RetroBaseApiService {
     @PUT("/instabook/userinfo/name")
     Call<ResponseGet> putName(@Query("userid") String userid, @Query("username") String username);
 
-    @PUT("/instabook/users/ubookt")
-    Call<UserBookData> putUBookt(@Query("ISBN13") String isbn13, @Query("UserUID") int useruid);
-
-    @PUT("/instabook/users/ubookf")
-    Call<UserBookData> putUBookf(@Query("ISBN13") String isbn13, @Query("UserUID") int useruid);
-
     @DELETE("/image/delimg")
     Call<ResponseBody> delImage(@Query("useruid") int useruid);
 
@@ -135,6 +129,9 @@ public interface RetroBaseApiService {
 
     @DELETE("/instabook/users/friend")
     Call<ResponseGet> delFrd(@Query("userid") String userid, @Query("fname") String fname);
+
+    @DELETE("/instabook/users/delubook")
+    Call<UserBookData> delUBook(@Query("ISBN13") String isbn13, @Query("UserUID") int useruid);
 
 }
 

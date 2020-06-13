@@ -5,18 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 import com.example.instabook.R;
 
-public class NotiBookTActivity extends AppCompatActivity {
+public class NotiBookDelActivity extends AppCompatActivity {
 
     TextView btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_noti_book_t);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.activity_noti_book_del);
+
         Intent intent = getIntent();
         btn = (TextView)findViewById(R.id.btn_jjim);
         btn.setOnClickListener(new View.OnClickListener() {
