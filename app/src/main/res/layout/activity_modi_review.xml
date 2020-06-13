@@ -6,22 +6,24 @@
     android:layout_height="match_parent"
     android:background="@color/colorBase"
     android:padding="5dp"
-    tools:context=".Activity.ForReview.ReviewActivity">
+    tools:context=".Activity.ForReview.ModiReviewActivity">
 
     <!--네이게이션 바(뒤로가기) 넣기-->
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/info_box"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal"
-        android:id="@+id/info_box">
+        android:padding="5dp">
 
         <FrameLayout
             android:id="@+id/binfo_fr_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_marginStart="30dp"
             android:layout_marginTop="19dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -30,7 +32,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center_vertical"
-                app:srcCompat="@drawable/back_icon" />
+                app:srcCompat="@drawable/back_white" />
 
         </FrameLayout>
 
@@ -40,14 +42,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="17dp"
-            android:text="새 리뷰 작성하기"
-            android:textColor="@color/colorText"
+            android:text="리뷰 수정하기"
+            android:textColor="#FFFFFF"
             android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/minfo_fr_back"
             app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
-
 
     <TextView
         android:id="@+id/text_title"
@@ -86,7 +87,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:isIndicator="false"
-            android:numStars="0"
             android:rating="5"
             android:stepSize="1"
             android:theme="@style/RatingBar"
@@ -125,7 +125,6 @@
             android:layout_weight="1"
             android:ems="10"
             android:enabled="true"
-            android:hint="내용을 입력하세요"
             android:inputType="textMultiLine"
             android:maxLength="500"
             android:scrollHorizontally="false"
@@ -152,40 +151,24 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.868" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <Button
+            android:id="@+id/push_btn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="5dp">
-
-            <Button
-                android:id="@+id/push_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/book_tag"
-                android:background="@color/colorButton"
-                android:text="게시하기"
-                android:textColor="#FFFFFF"
-                android:textSize="22dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.104"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.976" />
-
-
-
-            <ImageView
-                android:id="@+id/share_btn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="39dp"
-                android:src="@drawable/kakao_icon"/>
-
-        </LinearLayout>
+            android:layout_below="@+id/book_tag"
+            android:background="@color/colorButton"
+            android:text="수정하기"
+            android:textColor="#FFFFFF"
+            android:textSize="22dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.104"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.976" />
 
     </LinearLayout>
+
 
 </RelativeLayout>

@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import com.example.instabook.Activity.ForHome.UserBookUIDData;
 import com.example.instabook.Activity.ForHome.UserData;
 import com.example.instabook.Activity.ForReview.ReviewActivity;
 import com.example.instabook.Activity.ForUser.UserBookData;
+import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.Adapter.HomeReviewAdapter;
@@ -29,7 +32,10 @@ import com.example.instabook.ListView.SearchFriendItem;
 import com.example.instabook.R;
 
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -121,6 +127,18 @@ public class HomeFragment extends Fragment {
                                 String bname = homeDataList.get(l).getBookName();
                                 String nname = homeDataList.get(l).getNickName();
 
+                                /*
+                                Date date = null;
+                                try {
+                                    date = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS.mmm'Z'").parse(f_redate);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                                String redate = sdf.format(date);
+
+                                 */
+
                                 //uid로 이미지 가져오기
                                 Retrofit retro_imgFirst = new Retrofit.Builder()
                                         .baseUrl(retroBaseApiService.Base_URL)
@@ -170,4 +188,10 @@ public class HomeFragment extends Fragment {
 
         return rootView;
     }
+
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
 }

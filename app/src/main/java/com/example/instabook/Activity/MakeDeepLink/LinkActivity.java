@@ -12,36 +12,19 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.instabook.Activity.ForHome.HomeData;
 import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
-import com.example.instabook.ListView.SearchFriendItem;
 import com.example.instabook.R;
-import com.facebook.applinks.AppLinkData;
-import com.kakao.kakaolink.v2.KakaoLinkResponse;
-import com.kakao.kakaolink.v2.KakaoLinkService;
-import com.kakao.message.template.ButtonObject;
-import com.kakao.message.template.ContentObject;
-import com.kakao.message.template.FeedTemplate;
-import com.kakao.message.template.LinkObject;
-import com.kakao.message.template.SocialObject;
-import com.kakao.network.ErrorResult;
-import com.kakao.network.callback.ResponseCallback;
-import com.kakao.util.KakaoParameterException;
-import com.kakao.util.helper.log.Logger;
 
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import bolts.AppLinks;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;

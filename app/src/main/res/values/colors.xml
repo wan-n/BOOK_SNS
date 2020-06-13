@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#002E5B</color>
-    <color name="colorPrimaryDark">#044FA2</color>
+    <color name="colorPrimary">#16457A</color>
+    <color name="colorPrimaryDark">#0D2A4A</color>
     <color name="colorAccent">#27FEE6</color>
-    <color name="colorButton">#0F2F58</color>
+    <color name="colorButton">#133B67</color>
     <color name="colorBase">#E5F4FF</color>
-    <color name="colorText">#153452</color>
-    <color name="lightGrey">#FFC107</color>
-    <color name="duskYellow">#BCDDF7</color>
-    <color name="colorHint">#A69609</color>
+    <color name="colorBaseDark">#CCE7FB</color>
+    <color name="colorText">#133E6C</color>
+    <color name="lightGrey">#19000000</color>
+    <color name="duskYellow">#E6BF49</color>
+    <color name="colorHint">#BD5217</color>
     <color name="colortxtBase">#A6BCCD</color>
+    <color name="colortxtBaseDark">#8FB2CD</color>
     <color name="com_facebook_button_background_color_focused_disabled">#002E5B</color>
     <color name="com_facebook_button_background_color_focused">#002E5B</color>
     <color name="com_facebook_button_border_color_focused">#002E5B</color>

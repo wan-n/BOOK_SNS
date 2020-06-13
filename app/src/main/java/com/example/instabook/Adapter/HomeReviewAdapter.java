@@ -2,6 +2,7 @@ package com.example.instabook.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.method.ScrollingMovementMethod;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,9 +23,12 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.instabook.Activity.CircularImageView;
 import com.example.instabook.Activity.ForHome.UserBookUIDData;
+import com.example.instabook.Activity.ForReview.ModiReviewActivity;
+import com.example.instabook.Activity.ForReview.ReviewDelActivity;
 import com.example.instabook.Activity.ForUser.NotiBookActivity;
 import com.example.instabook.Activity.ForUser.NotiBookDelActivity;
 import com.example.instabook.Activity.ForUser.UserBookData;
+import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.ListView.HomeReviewItem;
@@ -39,7 +43,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.app.PendingIntent.getActivity;
 import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class HomeReviewAdapter extends BaseAdapter {
     private static final String TAG = "BookListAdapter";
@@ -47,9 +53,19 @@ public class HomeReviewAdapter extends BaseAdapter {
     int layout;
     Context context;
     LayoutInflater inflater;
+    ImageButton MemuImageButton;
+    ImageButton favButton;
     ArrayList<HomeReviewItem> items;
+    String iisbn;
+    int uuid;
     int ubuid;
+    int rrate;
+    int useruid2;
+    String rreview;
+    String bbname;
+
     UserBookUIDData uBookData;
+    HomeReviewItem homeReviewItem;
 
     public HomeReviewAdapter(FragmentActivity activity, int layout, ArrayList<HomeReviewItem> items) {
         this.context = activity;
@@ -77,6 +93,7 @@ public class HomeReviewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         //유저 UID 가져오기
         final int useruid = sp.getUserUid(context.getApplicationContext());
+        useruid2 = useruid;
         final int pos = position;
 
         if (convertView == null) {
@@ -84,120 +101,40 @@ public class HomeReviewAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.listview_homereview, parent, false);
         }
 
+        homeReviewItem = getItem(pos);
+
+        MemuImageButton = (ImageButton) convertView.findViewById(R.id.btn_menu);
+        MemuImageButton.setOnClickListener(this::menuOnClick);
+        favButton = (ImageButton) convertView.findViewById(R.id.imgbtn_favorite);
+
         CircularImageView CImagetView = (CircularImageView) convertView.findViewById(R.id.uf_icon);
         TextView NickTextView = (TextView) convertView.findViewById(R.id.txt_nick);
         TextView DateTextView = (TextView) convertView.findViewById(R.id.txt_date);
-        ImageButton MemuImageButton = (ImageButton) convertView.findViewById(R.id.btn_menu);
         RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.ratingbarSmall);
         TextView BnameTextView = (TextView) convertView.findViewById(R.id.txt_bname);
         TextView ReviewTextView = (TextView) convertView.findViewById(R.id.txt_review);
         TextView TagTextView = (TextView) convertView.findViewById(R.id.txt_tag);
-        ImageButton favButton = (ImageButton)convertView.findViewById(R.id.imgbtn_favorite);
-
-        HomeReviewItem homeReviewItem = getItem(pos);
 
         CImagetView.setImageBitmap(homeReviewItem.getIconDrawable());
         NickTextView.setText(homeReviewItem.getnName());
         DateTextView.setText(homeReviewItem.getReDate());
         BnameTextView.setText(homeReviewItem.getbName());
         ReviewTextView.setText(homeReviewItem.getReview());
+        ReviewTextView.setMovementMethod(new ScrollingMovementMethod());
         ratingBar.setNumStars(homeReviewItem.getRate());
 
-        if(useruid == homeReviewItem.getuId()){ //현 사용자와 pos 사용자의 uid가 같으면 하트 표시한다.
-
-            Retrofit retro_ubinfo = new Retrofit.Builder()
-                    .baseUrl(retroBaseApiService.Base_URL)
-                    .addConverterFactory(GsonConverterFactory.create()).build();
-            retroBaseApiService = retro_ubinfo.create(RetroBaseApiService.class);
-
-            retroBaseApiService.getUBid(homeReviewItem.getuId(),homeReviewItem.getIsbn13()).enqueue(new Callback<UserBookUIDData>() {
-                @Override
-                public void onResponse(Call<UserBookUIDData> call, Response<UserBookUIDData> response) {
-                    Log.d(TAG,"들어는 왔다 ");
-                    uBookData = response.body();
-                    Log.d(TAG,"유북아이디: "+uBookData.getUserBookUID());
-
-                    if(uBookData != null){
-                        ubuid = uBookData.getUserBookUID();
-                    } else {
-                        ubuid = -1;
-                    }
-                    homeReviewItem.setUserBookUID(ubuid);
-                }
-
-                @Override
-                public void onFailure(Call<UserBookUIDData> call, Throwable t) {
-
-                }
-            });
-
-            if(homeReviewItem.getUserBookUID() == -1){
-                favButton.setImageResource(R.drawable.favorite_border_black);
-            } else {
-                favButton.setImageResource(R.drawable.favorite_black);
-            }
-        }
-
-        favButton.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (homeReviewItem.getUserBookUID() == -1) {
-                    favButton.setImageResource(R.drawable.favorite_black);
-
-                    //빈 하트 클릭으로 소유도서 생성
-                    HashMap<String, Object> map = new HashMap<>();
-
-                    map.put("ISBN13", homeReviewItem.getIsbn13());
-                    map.put("UserUID", homeReviewItem.getuId());
-
-                    Retrofit retro_mubook = new Retrofit.Builder()
-                            .baseUrl(retroBaseApiService.Base_URL)
-                            .addConverterFactory(GsonConverterFactory.create()).build();
-                    retroBaseApiService = retro_mubook.create(RetroBaseApiService.class);
-                    //유저 소유 도서 정보 만들기
-                    retroBaseApiService.postUBook(map).enqueue(new Callback<UserBookData>() {
-                        @Override
-                        public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                            Intent intent = new Intent(context.getApplicationContext(), NotiBookActivity.class);
-                            context.startActivity(intent);
-                        }
-
-                        @Override
-                        public void onFailure(Call<UserBookData> call, Throwable t) {
-                            Toast.makeText(context.getApplicationContext(), "찜하기 생성 실패", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else if (homeReviewItem.getUserBookUID() > -1) {
-                    favButton.setImageResource(R.drawable.favorite_border_black);
-                    //꽉찬 하트 클릭으로 소유 도서 삭제
-                    Retrofit retro_rmbook = new Retrofit.Builder()
-                            .baseUrl(retroBaseApiService.Base_URL)
-                            .addConverterFactory(GsonConverterFactory.create()).build();
-                    retroBaseApiService = retro_rmbook.create(RetroBaseApiService.class);
-                    //유저 소유 도서 정보 만들기
-                    retroBaseApiService.delUBook(homeReviewItem.getUserBookUID()).enqueue(new Callback<UserBookData>() {
-                        @Override
-                        public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                            Intent intent = new Intent(context.getApplicationContext(), NotiBookDelActivity.class);
-                            context.startActivity(intent);
-                        }
-
-                        @Override
-                        public void onFailure(Call<UserBookData> call, Throwable t) {
-                            Toast.makeText(context.getApplicationContext(), "찜하기 제거 실패", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                }
-            }
-        });
+        iisbn = homeReviewItem.getIsbn13();
+        uuid = homeReviewItem.getuId();
+        rrate = homeReviewItem.getRate();
+        rreview = homeReviewItem.getReview();
+        bbname = homeReviewItem.getbName();
 
         return convertView;
     }
 
-    public void menuOnClick(View v){
+    public void menuOnClick(View v) {
         //버튼이 눌렸을때 여기로옴
-        PopupMenu popup = new PopupMenu(context.getApplicationContext(), v);
+        PopupMenu popup = new PopupMenu(getApplicationContext(), v);
 
         //xml파일에 메뉴 정의한것을 가져오기위해서 전개자 선언
         MenuInflater inflater = popup.getMenuInflater();
@@ -210,14 +147,23 @@ public class HomeReviewAdapter extends BaseAdapter {
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.modify:
-                        //Intent intent = new Intent(context.getApplicationContext(), );
-                        //context.startActivity(intent);
+                        Intent in = new Intent(getApplicationContext(), ModiReviewActivity.class);
+                        in.putExtra("isbn", iisbn);
+                        in.putExtra("uid", uuid);
+                        in.putExtra("rate", rrate);
+                        in.putExtra("review", rreview);
+                        in.putExtra("title", bbname);
+                        getApplicationContext().startActivity(in);
+
                         break;
-                    case  R.id.remove:
-                        //Intent intent = new Intent(context.getApplicationContext(), );
-                        //context.startActivity(intent);
+                    case R.id.remove:
+                        Intent intent = new Intent(getApplicationContext(), ReviewDelActivity.class);
+                        intent.putExtra("isbn", iisbn);
+                        intent.putExtra("uid", uuid);
+                        getApplicationContext().startActivity(intent);
+
                         break;
                 }
                 return false;
@@ -225,4 +171,5 @@ public class HomeReviewAdapter extends BaseAdapter {
         });
         popup.show();
     }
+
 }

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBase"
+    tools:context=".Activity.ForReview.ReviewActivity">
+
+    <!--네이게이션 바(뒤로가기) 넣기-->
+    <LinearLayout
+        android:id="@+id/info_box"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <FrameLayout
+            android:id="@+id/binfo_fr_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="19dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/binfo_back"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/back_white" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="17dp"
+            android:text="새 리뷰 작성하기"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/minfo_fr_back"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/book_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/info_box"
+        android:layout_marginTop="13dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/img_book"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/info_box"
+                android:textColor="@color/colorText"
+                android:textSize="20dp" />
+
+            <LinearLayout
+                android:id="@+id/ratingbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_title"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom|center"
+                    android:text="별점주기"
+                    android:textColor="@color/colorText"
+                    android:textSize="15dp" />
+
+                <RatingBar
+                    android:id="@+id/ratingbarIndicator"
+                    style="?android:attr/ratingBarStyleIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="false"
+                    android:numStars="0"
+                    android:rating="5"
+                    android:stepSize="1"
+                    android:theme="@style/RatingBar"
+                    tools:layout_editor_absoluteX="85dp"
+                    tools:layout_editor_absoluteY="80dp" />
+
+                <TextView
+                    android:id="@+id/text_rating"
+                    android:layout_width="50dp"
+                    android:layout_height="38dp"
+                    android:textColor="@color/colorText"
+                    android:textSize="15dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="406dp"
+        android:layout_height="514dp"
+        android:layout_below="@+id/book_box"
+        android:layout_marginTop="13dp"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="후기 작성"
+            android:textColor="@color/colorText"
+            android:textSize="20dp" />
+
+
+        <EditText
+            android:id="@+id/edit_review"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="15"
+            android:enabled="true"
+            android:hint="내용을 입력하세요"
+            android:inputType="textMultiLine"
+            android:maxLength="500"
+            android:scrollHorizontally="false"
+            android:textColor="@color/colorText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="태그추가"
+            android:textColor="@color/colorText"
+            android:textSize="20dp" />
+
+
+        <EditText
+            android:id="@+id/edit_tag"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="#..."
+            android:inputType="textAutoComplete"
+            android:textColor="@color/colorText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.868" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <Button
+                android:id="@+id/push_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/book_tag"
+                android:background="@color/colorButton"
+                android:text="게시하기"
+                android:textColor="#FFFFFF"
+                android:textSize="22dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.104"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.976" />
+
+
+            <ImageView
+                android:id="@+id/share_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="39dp"
+                android:src="@drawable/kakao_icon" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

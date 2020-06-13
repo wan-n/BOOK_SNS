@@ -51,7 +51,7 @@ public interface RetroBaseApiService {
     @POST("/instabook/users/userbook")
     Call<UserBookData> postUBook(@Body HashMap<String, Object> parameters);
 
-    /**TODO 리뷰데이터 서버 올리기
+    /**TODO 태그데이터 서버 올리기
     @POST("/instabook/reviews/tag")
     Call<ReviewData> postTag(@Body HashMap<String, Object> parameters);
     */
@@ -61,6 +61,7 @@ public interface RetroBaseApiService {
 
     @GET("/instabook/review")
     Call<List<HomeData>> getReview(@Query("reviewuid") int reviewuid);
+
 
     @GET("/instabook/reviews/ubid")
     Call<UserBookUIDData> getUBid(@Query("useruid") int useruid, @Query("isbn") String isbn);
@@ -122,6 +123,9 @@ public interface RetroBaseApiService {
     @PUT("/instabook/userinfo/name")
     Call<ResponseGet> putName(@Query("userid") String userid, @Query("username") String username);
 
+    @PUT("/instabook/reviews/modify")
+    Call<ReviewData> putMoRe(@Body HashMap<String, Object> parameters);
+
     @DELETE("/image/delimg")
     Call<ResponseBody> delImage(@Query("useruid") int useruid);
 
@@ -133,6 +137,9 @@ public interface RetroBaseApiService {
 
     @DELETE("/instabook/users/delubook")
     Call<UserBookData> delUBook(@Query("ubuid") int ubuid);
+
+    @DELETE("/instabook/reviews/delrev")
+    Call<ReviewData> delRev(@Query("uid") int uid, @Query("isbn") String isbn);
 
 }
 

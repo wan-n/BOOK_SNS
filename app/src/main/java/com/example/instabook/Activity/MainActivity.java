@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) { //탭이 선택되었을 때, 호출됨
                 mViewPager.setCurrentItem(tab.getPosition());
+
+                Intent intent = getIntent();
             }
 
             @Override
@@ -93,9 +95,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
-
     private View createTabView(String tabName){ //TextView에 넣을 제목을 받아 처리뒤, View를 리턴, setCustomView() 통해 적용
         View tabView = LayoutInflater.from(mContext).inflate(R.layout.custom_tab,null);
         TextView txt_name = (TextView)tabView.findViewById(R.id.txt_name);
@@ -103,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
         return tabView;
     }
 
+    public void refresh(){
+        mContentPagerAdapter.notifyDataSetChanged();
+    }
 
     //뒤로가기 2번 클릭 시 종료
     private long lastTimeBackPressed; //뒤로가기 버튼이 클릭된 시간

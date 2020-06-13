@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.instabook.Activity.ForBook.BookData;
 import com.example.instabook.Activity.ForReview.ReviewActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
@@ -19,12 +20,21 @@ import com.example.instabook.R;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.example.instabook.Activity.ForReview.ModiReviewActivity.retroBaseApiService;
+
 public class BookListAdapter extends BaseAdapter {
     private static final String TAG = "BookListAdapter";
     int layout;
     Context context;
     LayoutInflater inflater;
     ArrayList<SearchBookItem> books;
+    SaveSharedPreference sp;
 
     // ListViewAdapter의 생성자
     public BookListAdapter(Context context, int layout, ArrayList<SearchBookItem> books) {
@@ -84,10 +94,13 @@ public class BookListAdapter extends BaseAdapter {
         isbnTextView.setText(searchBookItem.getIsbn());
         pubTextView.setText(searchBookItem.getPublisher());
 
+        String isbn = searchBookItem.getIsbn();
+
         btn.setOnClickListener(new Button.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+
                 String t = books.get(pos).getTitle();
                 String is = books.get(pos).getIsbn();
 
