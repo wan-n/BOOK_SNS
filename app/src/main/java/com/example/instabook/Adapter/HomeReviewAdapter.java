@@ -100,7 +100,7 @@ public class HomeReviewAdapter extends BaseAdapter {
         SelectButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (homeReviewItem.getFinished() == true) {
+                if (homeReviewItem.getUserBookUID() == -1) {
                     //빈 하트
                     Retrofit retro_mubook = new Retrofit.Builder()
                             .baseUrl(retroBaseApiService.Base_URL)
@@ -120,7 +120,8 @@ public class HomeReviewAdapter extends BaseAdapter {
                         }
                     });
 
-                } else if (homeReviewItem.getFinished() == false) {
+                }
+                if (homeReviewItem.getUserBookUID() > -1) {
                     //꽉찬 하트
                     Retrofit retro_mubook = new Retrofit.Builder()
                             .baseUrl(retroBaseApiService.Base_URL)
@@ -140,7 +141,8 @@ public class HomeReviewAdapter extends BaseAdapter {
                         }
                     });
 
-                } else if (homeReviewItem.getFinished() == null) { //소유 도서가 없을 때
+                }
+                if (homeReviewItem.getUserBookUID()!= -1  ) { //소유 도서가 없을 때
                     HashMap<String, Object> map = new HashMap<>();
 
                     map.put("ISBN13", homeReviewItem.getIsbn13());

@@ -11,10 +11,9 @@ public class HomeReviewItem {
     public int rate;
     public String bName;
     public String nName;
-    public Boolean isFinished;
-    public int UserBookUID;
+    public Integer UserBookUID;
 
-    public HomeReviewItem(Bitmap iconDrawable, int uid, String review, String redate, String isbn, int rate, String bname, String nName, Boolean isf, int ubid) {
+    public HomeReviewItem(Bitmap iconDrawable, int uid, String review, String redate, String isbn, int rate, String bname, String nName, Integer ubid) {
         this.iconDrawable = iconDrawable;
         this.uId = uid;
         this.review = review;
@@ -23,7 +22,6 @@ public class HomeReviewItem {
         this.rate = rate;
         this.bName = bname;
         this.nName = nName;
-        this.isFinished = isf;
         this.UserBookUID = ubid;
     }
 
@@ -59,11 +57,5 @@ public class HomeReviewItem {
         return nName;
     }
 
-    public Boolean getFinished() {
-        return isFinished;
-    }
-
-    public int getUserBookUID() {
-        return UserBookUID;
-    }
+    public Integer getUserBookUID() { return UserBookUID; }
 }

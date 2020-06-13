@@ -54,8 +54,8 @@ public interface RetroBaseApiService {
     @GET("/instabook/reviews/uid")
     Call<List<UserData>> getUid(@Query("UserUID") int useruid);
 
-    @GET("/instabook/reviews/uid")
-    Call<UserBookData> getUBid(@Query("useruid") int useruid, String isbn);
+    @GET("/instabook/reviews/ubid")
+    Call<UserBookData> getUBid(@Query("useruid") int useruid, @Query("isbn") String isbn);
 
     @GET("/instabook/reviews/home")
     Call<List<HomeData>> getHreq(@Query("useruid") int useruid);

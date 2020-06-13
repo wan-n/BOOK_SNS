@@ -9,6 +9,10 @@ public class UserData {
         this.FriendUID = fuid;
     }
 
+    public UserData() {
+
+    }
+
     public void setUserUID(int uid) {
         this.UserUID = uid;
     }

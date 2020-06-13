@@ -1,27 +1,20 @@
 package com.example.instabook.Activity.ForUser;
 
 public class UserBookData {
-    public Boolean isFinished;
-    public int UserBookUID;
+    public Integer UserBookUID;
     public int UserUID;
     public String ISBN13;
 
-    public UserBookData(Boolean isf, int ubid) {
-        this.isFinished = isf;
+    public UserBookData( Integer ubid) {
         this.UserBookUID = ubid;
     }
 
-    public UserBookData(Boolean isf, int uid, String isbn) {
-        this.isFinished = isf;
+    public UserBookData(int uid, String isbn) {
         this.UserUID = uid;
         this.ISBN13 = isbn;
     }
 
-    public Boolean getFinished() {
-        return isFinished;
-    }
-
-    public int getUserBookUID() {
+    public Integer getUserBookUID() {
         return UserBookUID;
     }
 }
