@@ -5,7 +5,6 @@ public class ReviewData {
     public int Rate;
     public int UserUID;
     public String ISBN13;
-    public String ReviewData;
 
     public ReviewData() {
 

@@ -20,8 +20,6 @@ import com.example.instabook.R;
 import java.util.ArrayList;
 
 public class BookListAdapter extends BaseAdapter {
-    RetroBaseApiService retroService;
-    SaveSharedPreference sp;
     private static final String TAG = "BookListAdapter";
     int layout;
     Context context;

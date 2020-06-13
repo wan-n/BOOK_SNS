@@ -1,7 +1,10 @@
 package com.example.instabook.Activity.Pre;
 
 import com.example.instabook.Activity.ForBook.BookData;
+import com.example.instabook.Activity.ForHome.HomeData;
+import com.example.instabook.Activity.ForHome.UserData;
 import com.example.instabook.Activity.ForReview.ReviewData;
+import com.example.instabook.Activity.ForUser.UserBookData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,10 +43,22 @@ public interface RetroBaseApiService {
     @POST("/instabook/reviews/review")
     Call<ReviewData> postReview(@Body HashMap<String, Object> parameters);
 
+    @POST("/instabook/users/userbook")
+    Call<UserBookData> postUBook(@Body HashMap<String, Object> parameters);
+
     /**TODO 리뷰데이터 서버 올리기
     @POST("/instabook/reviews/tag")
     Call<ReviewData> postTag(@Body HashMap<String, Object> parameters);
     */
+
+    @GET("/instabook/reviews/uid")
+    Call<List<UserData>> getUid(@Query("UserUID") int useruid);
+
+    @GET("/instabook/reviews/uid")
+    Call<UserBookData> getUBid(@Query("useruid") int useruid, String isbn);
+
+    @GET("/instabook/reviews/home")
+    Call<List<HomeData>> getHreq(@Query("useruid") int useruid);
 
     @GET("/instabook/books/info")
     Call<List<BookData>> getBook(@Query("keyword") String keyword);
@@ -95,6 +110,12 @@ public interface RetroBaseApiService {
 
     @PUT("/instabook/userinfo/name")
     Call<ResponseGet> putName(@Query("userid") String userid, @Query("username") String username);
+
+    @PUT("/instabook/users/ubookt")
+    Call<UserBookData> putUBookt(@Query("ISBN13") String isbn13, @Query("UserUID") int useruid);
+
+    @PUT("/instabook/users/ubookf")
+    Call<UserBookData> putUBookf(@Query("ISBN13") String isbn13, @Query("UserUID") int useruid);
 
     @DELETE("/image/delimg")
     Call<ResponseBody> delImage(@Query("useruid") int useruid);
