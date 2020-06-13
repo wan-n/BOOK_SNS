@@ -61,7 +61,7 @@ public class InfoFragment extends Fragment {
 
     RetroBaseApiService retroBaseApiService;
     private ImageView info_pimg, info_editname;
-    private TextView info_nickname, info_id;
+    private TextView info_nickname, info_id, info_count;
     private FrameLayout info_fr_pimg,info_fr_editname;
     private Uri mImageCaptureUri;
     private String absoultePath;
@@ -97,6 +97,29 @@ public class InfoFragment extends Fragment {
         info_id = getView().findViewById(R.id.info_id);
         info_editname = getView().findViewById(R.id.info_editname);
         info_fr_editname = getView().findViewById(R.id.info_fr_editname);
+        info_count = getView().findViewById(R.id.info_count);
+
+
+        //리뷰수 표시하기
+        Retrofit retro_cnt = new Retrofit.Builder()
+                .baseUrl(retroBaseApiService.Base_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        retroBaseApiService = retro_cnt.create(RetroBaseApiService.class);
+
+        retroBaseApiService.getReviewcnt(useruid).enqueue(new Callback<List<ResponseGet>>() {
+            @Override
+            public void onResponse(Call<List<ResponseGet>> call, Response<List<ResponseGet>> response) {
+                List<ResponseGet> get_cnt = response.body();
+                int rv_cnt = get_cnt.get(0).getReviewCnt();
+                info_count.setText("리뷰수: "+rv_cnt+"회");
+            }
+
+            @Override
+            public void onFailure(Call<List<ResponseGet>> call, Throwable t) {
+
+            }
+        });
+
 
 
         //상단 프로필 이미지 불러오기

@@ -76,6 +76,17 @@
             android:textSize="12sp" />
 
 
+        <TextView
+            android:id="@+id/info_count"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/info_fr_pimg"
+            android:layout_below="@+id/info_id"
+            android:hint="리뷰수"
+            android:textColor="#EEE"
+            android:textSize="13sp" />
 
 
     </RelativeLayout>

@@ -55,7 +55,8 @@
         </activity> <!-- kakaotalk -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="@string/kakao_app_key" /> <!-- facebook -->
+            android:value="@string/kakao_app_key" />
+        <!-- facebook -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

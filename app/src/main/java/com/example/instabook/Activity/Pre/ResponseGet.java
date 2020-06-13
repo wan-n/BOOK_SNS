@@ -14,6 +14,7 @@ public class ResponseGet {
     public String NickName;
     public int isPublic;
     public int ReviewUID;
+    public int ReviewCnt;
 
     public ResponseGet(String completed, String UserID, String Password) {
         this.completed = completed;
@@ -52,4 +53,6 @@ public class ResponseGet {
     public int getIsPublic(){return isPublic;}
 
     public int getReviewUID(){return ReviewUID;}
+
+    public int getReviewCnt(){return ReviewCnt;}
 }
