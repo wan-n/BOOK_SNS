@@ -2,6 +2,7 @@ package com.example.instabook.Activity.Pre;
 
 import com.example.instabook.Activity.ForBook.BookData;
 import com.example.instabook.Activity.ForHome.HomeData;
+import com.example.instabook.Activity.ForHome.UserBookUIDData;
 import com.example.instabook.Activity.ForHome.UserData;
 import com.example.instabook.Activity.ForReview.ReviewData;
 import com.example.instabook.Activity.ForUser.UserBookData;
@@ -62,7 +63,7 @@ public interface RetroBaseApiService {
     Call<List<HomeData>> getReview(@Query("reviewuid") int reviewuid);
 
     @GET("/instabook/reviews/ubid")
-    Call<UserBookData> getUBid(@Query("useruid") int useruid, @Query("isbn") String isbn);
+    Call<UserBookUIDData> getUBid(@Query("useruid") int useruid, @Query("isbn") String isbn);
 
     @GET("/instabook/reviews/uid")
     Call<UserBookData> getUBid(@Query("useruid") int useruid, String isbn);
@@ -131,7 +132,7 @@ public interface RetroBaseApiService {
     Call<ResponseGet> delFrd(@Query("userid") String userid, @Query("fname") String fname);
 
     @DELETE("/instabook/users/delubook")
-    Call<UserBookData> delUBook(@Query("ISBN13") String isbn13, @Query("UserUID") int useruid);
+    Call<UserBookData> delUBook(@Query("ubuid") int ubuid);
 
 }
 

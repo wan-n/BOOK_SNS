@@ -11,9 +11,9 @@ public class HomeReviewItem {
     public int rate;
     public String bName;
     public String nName;
-    public Integer UserBookUID;
+    public int UserBookUID;
 
-    public HomeReviewItem(Bitmap iconDrawable, int uid, String review, String redate, String isbn, int rate, String bname, String nName, Integer ubid) {
+    public HomeReviewItem(Bitmap iconDrawable, int uid, String review, String redate, String isbn, int rate, String bname, String nName, int ubid) {
         this.iconDrawable = iconDrawable;
         this.uId = uid;
         this.review = review;
@@ -57,5 +57,5 @@ public class HomeReviewItem {
         return nName;
     }
 
-    public Integer getUserBookUID() { return UserBookUID; }
+    public int getUserBookUID() { return UserBookUID; }
 }

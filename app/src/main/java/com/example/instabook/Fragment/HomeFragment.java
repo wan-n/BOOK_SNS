@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.instabook.Activity.ForBook.SearchdbActivity;
 import com.example.instabook.Activity.ForHome.AllUserData;
 import com.example.instabook.Activity.ForHome.HomeData;
+import com.example.instabook.Activity.ForHome.UserBookUIDData;
 import com.example.instabook.Activity.ForHome.UserData;
 import com.example.instabook.Activity.ForReview.ReviewActivity;
 import com.example.instabook.Activity.ForUser.UserBookData;
@@ -51,8 +52,8 @@ public class HomeFragment extends Fragment {
     AllUserData alluserData2;
 
     List<HomeData> homeDataList;
-    UserBookData uBookData;
-    UserBookData userBookData;
+    UserBookUIDData uBookData;
+    UserBookUIDData userBookData;
     ArrayList<HomeReviewItem> items;
     HomeReviewItem item;
 
@@ -122,42 +123,7 @@ public class HomeFragment extends Fragment {
                                 String bname = homeDataList.get(l).getBookName();
                                 String nname = homeDataList.get(l).getNickName();
 
-                                Retrofit retro_ubid = new Retrofit.Builder()
-                                        .baseUrl(retroBaseApiService.Base_URL)
-                                        .addConverterFactory(GsonConverterFactory.create()).build();
-                                retroBaseApiService = retro_ubid.create(RetroBaseApiService.class);
-                                //유저uid와 isbn으로 소유도서정보 가져오기
-                                retroBaseApiService.getUBid(uid,isbn).enqueue(new Callback<UserBookData>() {
-                                    @Override
-                                    public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                                        uBookData = response.body();
-
-                                        Integer ubuid;
-                                        if(uBookData == null){
-                                            ubuid = -1;
-                                        } else {
-                                            ubuid = uBookData.getUserBookUID();
-                                        }
-
-                                        userBookData = new UserBookData(ubuid);
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<UserBookData> call, Throwable t) {
-                                        Toast.makeText(getActivity(), "소유 도서 정보 없음", Toast.LENGTH_SHORT).show();
-                                        Integer ubuid = -1;
-                                        userBookData = new UserBookData(ubuid);
-                                    }
-
-                                });
-
-                                Integer ubid ;
-                                if(userBookData == null){
-                                    ubid = -1;
-                                } else {
-                                    ubid = userBookData.getUserBookUID();
-                                }
-                                Log.d(TAG,"소유 도서 유아이디: "+ ubid);
+                                Log.d(TAG,"유아이디: "+uid+"리뷰: "+review+"날짜: "+redate+"ISBN: "+isbn+"별점: "+rate+"제목: "+bname+"닉네임: "+nname);
 
                                 //uid로 이미지 가져오기
                                 Retrofit retro_imgFirst = new Retrofit.Builder()
@@ -172,10 +138,18 @@ public class HomeFragment extends Fragment {
                                         InputStream is = response.body().byteStream();
                                         Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
 
+                                        //int ubid = -1;
+
                                         //리스트뷰에 추가
-                                        item = new HomeReviewItem(bitmap_profile, uid, review, redate, isbn, rate, bname, nname, ubid);
+                                        item = new HomeReviewItem(bitmap_profile, uid, review, redate, isbn, rate, bname, nname, -1);
+                                        Log.d(TAG,"유아이디: "+uid+"리뷰: "+review+"날짜: "+redate+"ISBN: "+isbn+"별점: "+rate+"제목: "+bname+"닉네임: "+nname+"유저북유아이디: -1");
                                         items.add(item);
                                         //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
+
+
+                                        HomeReviewAdapter hrAdapter = new HomeReviewAdapter(getActivity(), R.layout.listview_homereview, items);
+                                        ListView listView = (ListView) getView().findViewById(R.id.home_listview);
+                                        listView.setAdapter(hrAdapter);
                                     }
 
                                     @Override
@@ -184,9 +158,6 @@ public class HomeFragment extends Fragment {
                                     }
                                 });
                             }
-                            HomeReviewAdapter hrAdapter = new HomeReviewAdapter(getActivity(), R.layout.listview_homereview, items);
-                            ListView listView = (ListView) getView().findViewById(R.id.home_listview);
-                            listView.setAdapter(hrAdapter);
                         }
 
                         @Override

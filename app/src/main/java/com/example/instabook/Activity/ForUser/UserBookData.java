@@ -1,11 +1,11 @@
 package com.example.instabook.Activity.ForUser;
 
 public class UserBookData {
-    public Integer UserBookUID;
+    public int UserBookUID;
     public int UserUID;
     public String ISBN13;
 
-    public UserBookData( Integer ubid) {
+    public UserBookData(int ubid) {
         this.UserBookUID = ubid;
     }
 
@@ -14,7 +14,14 @@ public class UserBookData {
         this.ISBN13 = isbn;
     }
 
-    public Integer getUserBookUID() {
+    public UserBookData(){
+
+    }
+    public int getUserBookUID() {
         return UserBookUID;
+    }
+
+    public void setUserBookUID(int i) {
+        this.UserBookUID = i;
     }
 }

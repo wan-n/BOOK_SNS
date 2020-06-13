@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.instabook.Activity.CircularImageView;
 import com.example.instabook.Activity.ForUser.NotiBookActivity;
+import com.example.instabook.Activity.ForUser.NotiBookDelActivity;
 import com.example.instabook.Activity.ForUser.UserBookData;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.ListView.HomeReviewItem;
@@ -137,10 +138,10 @@ public class HomeReviewAdapter extends BaseAdapter {
                             .addConverterFactory(GsonConverterFactory.create()).build();
                     retroBaseApiService = retro_rmbook.create(RetroBaseApiService.class);
                     //유저 소유 도서 정보 만들기
-                    retroBaseApiService.delUBook(homeReviewItem.getIsbn13(),homeReviewItem.getuId()).enqueue(new Callback<UserBookData>() {
+                    retroBaseApiService.delUBook(homeReviewItem.getUserBookUID()).enqueue(new Callback<UserBookData>() {
                         @Override
                         public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                            Intent intent = new Intent(context.getApplicationContext(), NotiBookFActivity.class);
+                            Intent intent = new Intent(context.getApplicationContext(), NotiBookDelActivity.class);
                             context.startActivity(intent);
                         }
 
