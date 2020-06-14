@@ -13,6 +13,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -245,10 +246,11 @@ public class ReviewActivity extends AppCompatActivity {
             public void onResponse(Call<List<ResponseGet>> call, Response<List<ResponseGet>> response) {
 
                 List<ResponseGet> uid_data = response.body();
-                int ruid = uid_data.get(0).ReviewUID;
+                int ruid = uid_data.get(0).getReviewUID();
 
                 //UserUID와 ReviewUID를 카카오링크 파라미터로 전송
                 kakaolink(ruid, uuid);
+                onBackPressed();
             }
 
             @Override
@@ -292,4 +294,6 @@ public class ReviewActivity extends AppCompatActivity {
 
 
     }
+
+
 }

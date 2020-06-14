@@ -15,8 +15,6 @@ import com.example.instabook.Activity.ForBook.SearchSubActivity;
 import com.example.instabook.Activity.ForBook.SearchdbActivity;
 import com.example.instabook.R;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 public class SearchFragment extends Fragment{
 
     public SearchFragment() {
