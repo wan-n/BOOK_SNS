@@ -33,8 +33,9 @@ public class BookListAdapter extends BaseAdapter {
     int layout;
     Context context;
     LayoutInflater inflater;
-    ArrayList<SearchBookItem> books;
     SaveSharedPreference sp;
+
+    ArrayList<SearchBookItem> books = new ArrayList<>();
 
     // ListViewAdapter의 생성자
     public BookListAdapter(Context context, int layout, ArrayList<SearchBookItem> books) {
