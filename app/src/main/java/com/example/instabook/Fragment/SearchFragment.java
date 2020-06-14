@@ -63,7 +63,6 @@ public class SearchFragment extends Fragment{
                 startActivity(intent);
             }
 
-
         });
 
         return rootView; //view를 불러왔으니 view 리턴

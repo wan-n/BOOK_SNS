@@ -104,7 +104,7 @@ public class BookListAdapter extends BaseAdapter {
                 String t = books.get(pos).getTitle();
                 String is = books.get(pos).getIsbn();
 
-                Intent intent = new Intent(v.getContext(), ReviewActivity.class);
+                Intent intent = new Intent(context, ReviewActivity.class);
                 intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
                 intent.putExtra("isbn", is);
                 Log.d(TAG,"선택된 제목: " + t);

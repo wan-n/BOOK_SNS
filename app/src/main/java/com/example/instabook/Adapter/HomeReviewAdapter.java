@@ -149,20 +149,20 @@ public class HomeReviewAdapter extends BaseAdapter {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.modify:
-                        Intent in = new Intent(getApplicationContext(), ModiReviewActivity.class);
+                        Intent in = new Intent(context, ModiReviewActivity.class);
                         in.putExtra("isbn", iisbn);
                         in.putExtra("uid", uuid);
                         in.putExtra("rate", rrate);
                         in.putExtra("review", rreview);
                         in.putExtra("title", bbname);
-                        getApplicationContext().startActivity(in);
+                        context.startActivity(in);
 
                         break;
                     case R.id.remove:
-                        Intent intent = new Intent(getApplicationContext(), ReviewDelActivity.class);
+                        Intent intent = new Intent(context, ReviewDelActivity.class);
                         intent.putExtra("isbn", iisbn);
                         intent.putExtra("uid", uuid);
-                        getApplicationContext().startActivity(intent);
+                        context.startActivity(intent);
 
                         break;
                 }
