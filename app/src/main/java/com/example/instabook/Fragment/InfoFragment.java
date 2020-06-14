@@ -22,16 +22,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.instabook.Activity.ForHome.AllUserData;
+import com.example.instabook.Activity.ForHome.HomeData;
+import com.example.instabook.Activity.ForHome.UserData;
+import com.example.instabook.Activity.ForMyBook.MyBookActivity;
+import com.example.instabook.Activity.MakeDeepLink.DelLinkActivity;
 import com.example.instabook.Activity.Pre.LoginActivity;
 import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
+import com.example.instabook.Adapter.HomeReviewAdapter;
+import com.example.instabook.Adapter.InfoReviewAdapter;
+import com.example.instabook.ListView.HomeReviewItem;
 import com.example.instabook.R;
 
 import java.io.ByteArrayOutputStream;
@@ -40,6 +50,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +69,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
 
 
 public class InfoFragment extends Fragment {
@@ -65,11 +80,17 @@ public class InfoFragment extends Fragment {
     private FrameLayout info_fr_pimg,info_fr_editname;
     private Uri mImageCaptureUri;
     private String absoultePath;
+    Button mybook;
     View rootView;
 
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_iMAGE = 2;
+
+
+    List<HomeData> infoDataList;
+    ArrayList<HomeReviewItem> items;
+    HomeReviewItem item;
 
     public InfoFragment() {
         // Required empty public constructor
@@ -98,6 +119,7 @@ public class InfoFragment extends Fragment {
         info_editname = getView().findViewById(R.id.info_editname);
         info_fr_editname = getView().findViewById(R.id.info_fr_editname);
         info_count = getView().findViewById(R.id.info_count);
+        mybook = getView().findViewById(R.id.mybook);
 
 
         //리뷰수 표시하기
@@ -142,8 +164,16 @@ public class InfoFragment extends Fragment {
 
 
         //닉네임, 아이디 표시해주기
-        info_id.setText(userid);
+        info_id.setText("ID: " + userid);
         info_nickname.setText(usernickname);
+
+        mybook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent Success = new Intent(getActivity(), MyBookActivity.class);
+                startActivity(Success);
+            }
+        });
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -245,6 +275,80 @@ public class InfoFragment extends Fragment {
 
         info_fr_pimg.setOnClickListener(listener);
         info_fr_editname.setOnClickListener(listener);
+        //fr_mybook.setOnClickListener(listener);
+
+
+
+
+
+
+
+
+        //유저 UID로 유저 정보, 리뷰 정보, 도서 정보 가져오기
+        retroBaseApiService.getHreq(useruid).enqueue(new Callback<List<HomeData>>() {
+            @Override
+            public void onResponse(Call<List<HomeData>> call, Response<List<HomeData>> response) {
+                infoDataList = response.body();
+                items = new ArrayList<>();
+
+                for(int l = 0; l < infoDataList.size(); l++){
+
+                    int uid = infoDataList.get(l).getUserUID();
+                    String review = infoDataList.get(l).getReview();
+                    String redate = infoDataList.get(l).getReviewDate();
+                    String isbn = infoDataList.get(l).getISBN13();
+                    int rate = infoDataList.get(l).getRate();
+                    String bname = infoDataList.get(l).getBookName();
+                    String nname = infoDataList.get(l).getNickName();
+
+
+                    Date date = null;
+                    try {
+                        date = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS.mmm'Z'").parse(redate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                    String redate_2 = sdf.format(date);
+
+
+                    //uid로 이미지 가져오기
+
+                    retroBaseApiService.getImage(uid).enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            //서버에서 받아온 이미지 비트맵으로 변환
+                            InputStream is = response.body().byteStream();
+                            Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
+
+                            //리스트뷰에 추가
+                            item = new HomeReviewItem(bitmap_profile, uid, review, redate_2, isbn, rate, bname, nname);
+                            items.add(item);
+                            //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
+
+
+                            InfoReviewAdapter infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
+                            ListView listView = (ListView) getView().findViewById(R.id.info_listview);
+                            listView.setAdapter(infoAdapter);
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(getActivity(), "이미지 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<HomeData>> call, Throwable t) {
+                Toast.makeText(getActivity(), "리뷰 정보 없음.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
     }
 
     //프로필 이미지 문자열에서 비트맵으로 변환하기
@@ -462,6 +566,12 @@ public class InfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_info, container, false);
+
+
+
+
+
+
 
         // Inflate the layout for this fragment
         return rootView;

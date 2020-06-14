@@ -13,14 +13,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.ForReview.ReviewDelActivity"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"/>
+        <activity android:name=".Activity.ForMyBook.MyBookActivity"></activity>
+        <activity
+            android:name=".Activity.ForReview.ReviewDelActivity"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity android:name=".Activity.ForReview.ModiReviewActivity" />
         <activity android:name=".Activity.MakeDeepLink.DelLinkActivity" />
-        <activity android:name=".Activity.ForUser.NotiBookActivity"
+        <activity
+            android:name=".Activity.ForUser.NotiBookActivity"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
-        <activity android:name=".Activity.ForUser.NotiBookDelActivity"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"/>
+        <activity
+            android:name=".Activity.ForUser.NotiBookDelActivity"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity android:name=".Activity.ForReview.ReviewActivity" />
         <activity android:name=".Activity.SearchFriendActivity" />
         <activity android:name=".Activity.ForBook.SearchSubActivity" />

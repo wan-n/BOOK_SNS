@@ -15,6 +15,21 @@
         android:layout_height="150dp"
         android:background="#26354A" >
 
+
+        <Button
+            android:id="@+id/mybook"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:background="@drawable/custum_button_info"
+            android:text="찜리스트"
+            android:textSize="14dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:textColor="#f7fcff"/>
+
+
         <FrameLayout
             android:id="@+id/info_fr_pimg"
             android:layout_width="wrap_content"
@@ -34,9 +49,9 @@
         <LinearLayout
             android:id="@+id/info_sort"
             android:layout_width="wrap_content"
-            android:layout_height="33dp"
+            android:layout_height="25dp"
             android:orientation="horizontal"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
             android:layout_marginStart="20dp"
             android:layout_toEndOf="@+id/info_fr_pimg">
 
@@ -46,6 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:textColor="#FFFFFF"
+                android:layout_gravity="center_vertical"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -96,7 +112,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp">
 
-
+            <ListView
+                android:id="@+id/info_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
 
     </RelativeLayout>

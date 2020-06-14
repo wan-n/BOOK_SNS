@@ -3,8 +3,6 @@ package com.example.instabook.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.text.method.ScrollingMovementMethod;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,12 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -25,30 +21,16 @@ import com.example.instabook.Activity.CircularImageView;
 import com.example.instabook.Activity.ForHome.UserBookUIDData;
 import com.example.instabook.Activity.ForReview.ModiReviewActivity;
 import com.example.instabook.Activity.ForReview.ReviewDelActivity;
-import com.example.instabook.Activity.ForUser.NotiBookActivity;
-import com.example.instabook.Activity.ForUser.NotiBookDelActivity;
-import com.example.instabook.Activity.ForUser.UserBookData;
-import com.example.instabook.Activity.MainActivity;
-import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.ListView.HomeReviewItem;
 import com.example.instabook.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import static android.app.PendingIntent.getActivity;
-import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class HomeReviewAdapter extends BaseAdapter {
-    private static final String TAG = "BookListAdapter";
+public class InfoReviewAdapter extends BaseAdapter {
+    private static final String TAG = "InfoListAdapter";
     SaveSharedPreference sp;
     int layout;
     Context context;
@@ -67,7 +49,7 @@ public class HomeReviewAdapter extends BaseAdapter {
     UserBookUIDData uBookData;
     HomeReviewItem homeReviewItem;
 
-    public HomeReviewAdapter(FragmentActivity activity, int layout, ArrayList<HomeReviewItem> items) {
+    public InfoReviewAdapter(FragmentActivity activity, int layout, ArrayList<HomeReviewItem> items) {
         this.context = activity;
         this.items = items;
         this.layout = layout;
@@ -98,7 +80,7 @@ public class HomeReviewAdapter extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.listview_homereview, parent, false);
+            convertView = inflater.inflate(R.layout.listview_inforeview, parent, false);
         }
 
         homeReviewItem = getItem(pos);
@@ -171,5 +153,4 @@ public class HomeReviewAdapter extends BaseAdapter {
         });
         popup.show();
     }
-
 }
