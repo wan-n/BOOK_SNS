@@ -121,7 +121,8 @@ public class LinkActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<HomeData>> call, Throwable t) {
-                //Toast.makeText(LinkActivity.this, "오류", Toast.LENGTH_SHORT).show();
+                Intent Success = new Intent(getApplicationContext(), DelLinkActivity.class);
+                startActivity(Success);
             }
         });
 
