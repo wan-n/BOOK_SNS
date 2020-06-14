@@ -167,18 +167,16 @@ public class InfoFragment extends Fragment {
         info_id.setText("ID: " + userid);
         info_nickname.setText(usernickname);
 
-        mybook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent Success = new Intent(getActivity(), MyBookActivity.class);
-                startActivity(Success);
-            }
-        });
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
+                    //찜리스트 화면으로 이동
+                    case R.id.mybook:
+                        Intent Success = new Intent(getActivity(), MyBookActivity.class);
+                        startActivity(Success);
+                        break;
                     case R.id.info_fr_editname:
                         EditText et = new EditText(getContext());  //닉네임 변경 시 사용
                         DialogInterface.OnClickListener edit = new DialogInterface.OnClickListener() {
@@ -275,7 +273,7 @@ public class InfoFragment extends Fragment {
 
         info_fr_pimg.setOnClickListener(listener);
         info_fr_editname.setOnClickListener(listener);
-        //fr_mybook.setOnClickListener(listener);
+        mybook.setOnClickListener(listener);
 
 
 

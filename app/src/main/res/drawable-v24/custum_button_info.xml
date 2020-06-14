@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_focused="false" android:state_pressed="false">
+    <ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:color="@color/cardview_light_background"
+        tools:targetApi="lollipop"> <!-- ripple effect color -->
+    <item android:id="@android:id/background">
         <shape>
-            <solid android:color="#26354A"/>
+            <solid android:color="#26354A"
+                android:background="?attr/selectableItemBackgroundBorderless" />
             <stroke android:color="#f7fcff"
                 android:width="1dp"/>
             <corners android:radius="7dp" />
         </shape>
     </item>
-</selector>
+</ripple>
