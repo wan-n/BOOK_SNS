@@ -11,8 +11,11 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.instabook.Activity.ForBook.SearchSubActivity;
 import com.example.instabook.Activity.ForBook.SearchdbActivity;
 import com.example.instabook.R;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class SearchFragment extends Fragment{
 
@@ -47,11 +50,20 @@ public class SearchFragment extends Fragment{
 
             searchBook = (EditText) rootView.findViewById(R.id.searchBook);
             keyword = searchBook.getText().toString(); //editView의 텍스트를 String으로 keyword에 저장
+            String key = keyword.trim();
 
-            //intent로 데이터 전달
-            Intent intent = new Intent(getActivity(), SearchdbActivity.class);
-            intent.putExtra("keyword",keyword);  //Intent는 데이터를 extras 키-값 쌍으로 전달
-            startActivity(intent);
+            if (key == ""){
+                Intent intent = new Intent(getActivity(), SearchSubActivity.class);
+                intent.putExtra("keyword",key);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+                startActivity(intent);
+            } else {
+                //intent로 데이터 전달
+                Intent intent = new Intent(getActivity(), SearchdbActivity.class);
+                intent.putExtra("keyword",key);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+                startActivity(intent);
+            }
+
+
         });
 
         return rootView; //view를 불러왔으니 view 리턴

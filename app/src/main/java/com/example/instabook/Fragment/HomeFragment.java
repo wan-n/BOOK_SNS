@@ -174,7 +174,7 @@ public class HomeFragment extends Fragment {
 
                         @Override
                         public void onFailure(Call<List<HomeData>> call, Throwable t) {
-                            Toast.makeText(getActivity(), "리뷰 정보 실패.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "리뷰 정보 없음.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

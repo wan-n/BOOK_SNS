@@ -48,8 +48,6 @@ public class SearchdbActivity extends AppCompatActivity {
         Log.d(TAG, "키워드: " + keyword);
 
         getBook(keyword);
-
-
     }
 
     public void getBook(String keyword){
@@ -97,7 +95,9 @@ public class SearchdbActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<BookData>> call, Throwable t) {
-                Toast.makeText(SearchdbActivity.this, "책정보 가져오기 실패.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), SearchSubActivity.class);
+                intent.putExtra("keyword", keyword);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+                startActivity(intent);
             }
         });
     }

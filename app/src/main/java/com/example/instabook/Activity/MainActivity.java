@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) { //탭이 선택되었을 때, 호출됨
-                mViewPager.setCurrentItem(tab.getPosition());
-
                 Intent intent = getIntent();
+
+                mViewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) { //탭이 다시 선택되었을 때, 호출됨
+                Intent intent = getIntent();
 
             }
         });

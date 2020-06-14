@@ -3,12 +3,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Fragment.RecmdFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:background="@color/colorBase"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:id="@+id/tagserch_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <EditText
+                android:id="@+id/searchBook"
+                android:layout_width="311dp"
+                android:layout_height="match_parent"
+                android:hint="태그를 입력해주세요" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorButton"
+                android:textColor="#FFFFFF"
+                android:text="검색"
+                android:id="@+id/searchBookBtn" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_recnd"
+            android:text="이달의 추천 도서"
+            android:textSize="15dp"
+            android:gravity="center"
+            android:background="@color/colortxtBaseDark"
+            android:textColor="@color/colorText"
+            android:layout_below="@+id/tagserch_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <ListView
+            android:id="@+id/recom_listview"
+            android:layout_below="@+id/tv_recnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 
 </FrameLayout>

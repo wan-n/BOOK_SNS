@@ -3,26 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBase"
     tools:context=".Fragment.SearchFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
-
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <EditText
+            android:id="@+id/searchBook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="책 제목을 입력해주세요"
-            android:id="@+id/searchBook"/>
+            android:textColorHint="@color/colortxtBaseDark"
+            android:hint="책 제목을 입력해주세요" />
 
         <Button
+            android:id="@+id/searchBookBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="검색"
-            android:id="@+id/searchBookBtn" />
+            android:background="@color/colorButton"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center"
+            android:text="검색" />
 
     </LinearLayout>
-
 </FrameLayout>
