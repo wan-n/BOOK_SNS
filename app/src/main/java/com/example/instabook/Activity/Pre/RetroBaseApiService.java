@@ -71,8 +71,8 @@ public interface RetroBaseApiService {
     @GET("/instabook/review")
     Call<List<HomeData>> getReview(@Query("reviewuid") int reviewuid);
 
-    @GET("/instabook/reviews/ubid")
-    Call<UserBookUIDData> getUBid(@Query("useruid") int useruid, @Query("isbn") String isbn);
+    @GET("/instabook/recmds/ubid")
+    Call<UserBookUIDData> getUBid(@Query("uid") int useruid, @Query("isbn") String isbn);
 
     @GET("/instabook/reviews/home")
     Call<List<HomeData>> getHreq(@Query("useruid") int useruid);
@@ -144,7 +144,7 @@ public interface RetroBaseApiService {
     Call<ResponseGet> delFrd(@Query("userid") String userid, @Query("fname") String fname);
 
     @DELETE("/instabook/users/delubook")
-    Call<UserBookData> delUBook(@Query("ubuid") int ubuid);
+    Call<UserBookData> delUBook(@Query("ubid") int ubid);
 
     @DELETE("/instabook/reviews/delrev")
     Call<ReviewData> delRev(@Query("uid") int uid, @Query("isbn") String isbn);

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,7 @@ public class RecmdFragment extends Fragment {
                 .baseUrl(retroBaseApiService.Base_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         retroBaseApiService = retro_rcmd.create(RetroBaseApiService.class);
-        //유저 UID와 친구 UID 리스트 만들기
+
         retroBaseApiService.getRcmd(useruid).enqueue(new Callback<List<RecmdBookItem>>() {
             @Override
             public void onResponse(Call<List<RecmdBookItem>> call, Response<List<RecmdBookItem>> response) {

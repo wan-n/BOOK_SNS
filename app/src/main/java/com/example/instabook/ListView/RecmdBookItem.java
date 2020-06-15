@@ -5,6 +5,7 @@ public class RecmdBookItem {
     String Publisher;
     String BookImageUrl;
     String ISBN13;
+    int UserBookUID;
 
     public RecmdBookItem(String b, String isbn, String url, String p) {
         this.BookName = b;
@@ -13,6 +14,13 @@ public class RecmdBookItem {
         this.Publisher = p;
     }
 
+    public void setUserBookUID(int userBookUID) {
+        UserBookUID = userBookUID;
+    }
+
+    public int getUserBookUID() {
+        return UserBookUID;
+    }
 
     public String getRbname() {
         return BookName;
