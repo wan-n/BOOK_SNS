@@ -127,5 +127,13 @@ public class MainActivity extends AppCompatActivity {
         //lastTimeBackPressed에 '뒤로'버튼이 눌린 시간을 기록
         lastTimeBackPressed = System.currentTimeMillis();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mContentPagerAdapter.notifyDataSetChanged();
+    }
 }
+
+
 

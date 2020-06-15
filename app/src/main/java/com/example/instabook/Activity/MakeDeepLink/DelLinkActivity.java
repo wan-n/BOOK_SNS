@@ -38,5 +38,6 @@ public class DelLinkActivity extends AppCompatActivity {
     public void onBackPressed(){
         Intent Success = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(Success);
+        finish();
     }
 }

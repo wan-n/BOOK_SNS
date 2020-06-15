@@ -2,6 +2,8 @@ package com.example.instabook.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
+
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,14 +13,18 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.instabook.Adapter.FriendsPagerAdapter;
+import com.example.instabook.Fragment.InfoFragment;
 import com.example.instabook.R;
 import com.google.android.material.tabs.TabLayout;
 
 public class FriendsActivity extends AppCompatActivity {
 
-    ImageView fr_back, fr_add;
-    EditText fr_search;
-    FrameLayout fr_fr_back;
+    private ImageView fr_back, fr_add;
+    private EditText fr_search;
+    private FrameLayout fr_fr_back;
+    private FriendsPagerAdapter fpAdapter;
+    private ViewPager viewPager;
+
 
 
     @Override
@@ -72,15 +78,25 @@ public class FriendsActivity extends AppCompatActivity {
         tabs.setTabGravity(tabs.GRAVITY_FILL);
 
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        final FriendsPagerAdapter friendsPagerAdapter = new FriendsPagerAdapter(getSupportFragmentManager(), 2);
-        viewPager.setAdapter(friendsPagerAdapter);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        fpAdapter = new FriendsPagerAdapter(getSupportFragmentManager(), 2);
+        viewPager.setAdapter(fpAdapter);
 
         //탭 선택 이벤트
         tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager){
             @Override
             public void onTabSelected(TabLayout.Tab tab) { //탭이 선택되었을 때, 호출됨
                 viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                super.onTabUnselected(tab);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                super.onTabReselected(tab);
             }
         });
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
@@ -96,5 +112,6 @@ public class FriendsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        fpAdapter.notifyDataSetChanged();
     }
 }

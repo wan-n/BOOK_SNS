@@ -250,7 +250,8 @@ public class ReviewActivity extends AppCompatActivity {
 
                 //UserUID와 ReviewUID를 카카오링크 파라미터로 전송
                 kakaolink(ruid, uuid);
-                onBackPressed();
+                Intent in = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(in);
             }
 
             @Override
