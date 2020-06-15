@@ -50,6 +50,8 @@ public class FListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         //유저 아이디가져오기
         final String userid = sp.getUserName(getActivity());
 

@@ -123,6 +123,7 @@ public class LinkActivity extends AppCompatActivity {
             public void onFailure(Call<List<HomeData>> call, Throwable t) {
                 Intent Success = new Intent(getApplicationContext(), DelLinkActivity.class);
                 startActivity(Success);
+                finish();
             }
         });
 
@@ -172,6 +173,7 @@ public class LinkActivity extends AppCompatActivity {
     public void onBackPressed(){
         Intent Success = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(Success);
+        finish();
     }
 
 

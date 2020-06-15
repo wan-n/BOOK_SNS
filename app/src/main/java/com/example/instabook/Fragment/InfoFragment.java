@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Environment;
 import android.util.Base64;
@@ -34,6 +35,7 @@ import com.example.instabook.Activity.ForHome.AllUserData;
 import com.example.instabook.Activity.ForHome.HomeData;
 import com.example.instabook.Activity.ForHome.UserData;
 import com.example.instabook.Activity.ForMyBook.MyBookActivity;
+import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.MakeDeepLink.DelLinkActivity;
 import com.example.instabook.Activity.Pre.LoginActivity;
 import com.example.instabook.Activity.Pre.ResponseGet;
@@ -250,6 +252,10 @@ public class InfoFragment extends Fragment {
 
                                         //기본 이미지로 변경
                                         info_pimg.setImageBitmap(bitmap_profile);
+
+                                        //프래그먼트 새로고침
+                                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                        ft.detach(InfoFragment.this).attach(InfoFragment.this).commit();
                                     }
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -312,29 +318,17 @@ public class InfoFragment extends Fragment {
 
                     //uid로 이미지 가져오기
 
-                    retroBaseApiService.getImage(uid).enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            //서버에서 받아온 이미지 비트맵으로 변환
-                            InputStream is = response.body().byteStream();
-                            Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
+                    Bitmap bitmap_profile = StringToBitMap(string_profile);
 
-                            //리스트뷰에 추가
-                            item = new HomeReviewItem(bitmap_profile, uid, review, redate_2, isbn, rate, bname, nname);
-                            items.add(item);
-                            //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
+                    //리스트뷰에 추가
+                    item = new HomeReviewItem(bitmap_profile, uid, review, redate_2, isbn, rate, bname, nname);
+                    items.add(item);
+                    //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
 
 
-                            InfoReviewAdapter infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
-                            ListView listView = (ListView) getView().findViewById(R.id.info_listview);
-                            listView.setAdapter(infoAdapter);
-                        }
-
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Toast.makeText(getActivity(), "이미지 실패", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    InfoReviewAdapter infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
+                    ListView listView = (ListView) getView().findViewById(R.id.info_listview);
+                    listView.setAdapter(infoAdapter);
                 }
             }
 
@@ -498,6 +492,12 @@ public class InfoFragment extends Fragment {
                     //이미지 동그랗게 보이기
                     info_pimg.setBackground(new ShapeDrawable(new OvalShape()));
                     info_pimg.setClipToOutline(true);
+
+
+                    //프래그먼트 새로고침
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.detach(InfoFragment.this).attach(InfoFragment.this).commit();
+
                 }
                 //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
             }
@@ -550,6 +550,10 @@ public class InfoFragment extends Fragment {
                 SaveSharedPreference.setUserNickName(getActivity(), name);
                 Toast.makeText(getActivity(), "변경이 완료되었습니다.", Toast.LENGTH_SHORT).show();
 
+                //프래그먼트 새로고침
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.detach(InfoFragment.this).attach(InfoFragment.this).commit();
+
             }
 
             @Override
@@ -559,17 +563,15 @@ public class InfoFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_info, container, false);
-
-
-
-
-
-
 
         // Inflate the layout for this fragment
         return rootView;

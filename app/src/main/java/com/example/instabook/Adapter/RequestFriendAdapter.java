@@ -12,10 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.Fragment.Friends.FRequestFragment;
+import com.example.instabook.Fragment.InfoFragment;
 import com.example.instabook.ListView.SearchFriendItem;
 import com.example.instabook.R;
 
