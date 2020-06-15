@@ -33,6 +33,7 @@ import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.Fragment.HomeFragment;
 import com.example.instabook.ListView.HomeReviewItem;
+import com.example.instabook.ListView.RecmdBookItem;
 import com.example.instabook.R;
 
 import java.util.ArrayList;
@@ -79,8 +80,6 @@ public class HomeReviewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //유저 UID 가져오기
-        final int useruid = sp.getUserUid(context.getApplicationContext());
         final int pos = position;
 
         if (convertView == null) {
@@ -114,16 +113,27 @@ public class HomeReviewAdapter extends BaseAdapter {
         String rreview = homeReviewItem.getReview();
         String bbname = homeReviewItem.getbName();
 
-        //MemuImageButton.setOnClickListener(this::menuOnClick);
+        MemuImageButton.setTag(pos);
+        MemuImageButton.setOnClickListener(this::menuOnClick);
 
 
 
         return convertView;
     }
-/*
+
     public void menuOnClick(View v) {
         //버튼이 눌렸을때 여기로옴
         PopupMenu popup = new PopupMenu(context, v);
+        //유저 UID 가져오기
+        final int useruid = sp.getUserUid(context.getApplicationContext());
+        int position = Integer.parseInt((v.getTag().toString()));
+        HomeReviewItem item = items.get(position);
+
+        int uuid = item.getuId();
+        String iisbn = item.getIsbn13();
+        int rrate = item.getRate();
+        String rreview = item.getReview();
+        String bbname = item.getbName();
 
         //xml파일에 메뉴 정의한것을 가져오기위해서 전개자 선언
         MenuInflater inflater = popup.getMenuInflater();
@@ -139,7 +149,7 @@ public class HomeReviewAdapter extends BaseAdapter {
                 switch (item.getItemId()) {
                     case R.id.modify:
                         if(uuid == useruid){
-                            Intent in = new Intent(getApplicationContext(), ModiReviewActivity.class);
+                            Intent in = new Intent(context.getApplicationContext(), ModiReviewActivity.class);
                             in.putExtra("isbn", iisbn);
                             in.putExtra("uid", uuid);
                             in.putExtra("rate", rrate);
@@ -149,8 +159,8 @@ public class HomeReviewAdapter extends BaseAdapter {
                         }
                         break;
                     case R.id.remove:
-                        if(uuid == useruid2){
-                            Intent intent = new Intent(context, ReviewDelActivity.class);
+                        if(uuid == useruid){
+                            Intent intent = new Intent(context.getApplicationContext(), ReviewDelActivity.class);
                             intent.putExtra("isbn", iisbn);
                             intent.putExtra("uid", uuid);
                             context.startActivity(intent);
@@ -163,5 +173,4 @@ public class HomeReviewAdapter extends BaseAdapter {
         popup.show();
     }
 
- */
 }

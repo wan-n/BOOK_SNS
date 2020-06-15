@@ -147,7 +147,25 @@ public class RecmdAdapter extends BaseAdapter {
             map.put("uid",useruid2);
             map.put("isbn",isbn);
 
-            if (userbookUID == null){  //찜목록에 넣기
+            if (ubuid > 0){ //찜 목록에서 없애기
+                Retrofit retro_djim = new Retrofit.Builder()
+                        .baseUrl(retroBaseApiService.Base_URL)
+                        .addConverterFactory(GsonConverterFactory.create()).build();
+                retroBaseApiService = retro_djim.create(RetroBaseApiService.class);
+
+                retroBaseApiService.delUBook(ubuid).enqueue(new Callback<UserBookData>() {
+                    @Override
+                    public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
+                        btn.setImageResource(R.drawable.favorite_border_black);
+                        Toast.makeText(context.getApplicationContext(), "찜 도서 제거 성공", Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onFailure(Call<UserBookData> call, Throwable t) {
+                        Toast.makeText(context.getApplicationContext(), "찜 도서 제거 실패", Toast.LENGTH_SHORT).show();
+                    }
+
+                });
+            } else { //찜목록에 넣기
                 Retrofit retro_jjim = new Retrofit.Builder()
                         .baseUrl(retroBaseApiService.Base_URL)
                         .addConverterFactory(GsonConverterFactory.create()).build();
@@ -164,23 +182,7 @@ public class RecmdAdapter extends BaseAdapter {
                         Toast.makeText(context.getApplicationContext(), "찜 도서 추가 실패", Toast.LENGTH_SHORT).show();
                     }
                 });
-            } else { //찜 목록에서 없애기
-                Retrofit retro_djim = new Retrofit.Builder()
-                        .baseUrl(retroBaseApiService.Base_URL)
-                        .addConverterFactory(GsonConverterFactory.create()).build();
-                retroBaseApiService = retro_djim.create(RetroBaseApiService.class);
 
-                retroBaseApiService.delUBook(ubuid).enqueue(new Callback<UserBookData>() {
-                    @Override
-                    public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                        btn.setImageResource(R.drawable.favorite_border_black);
-                        Toast.makeText(context.getApplicationContext(), "찜 도서 제거 성공", Toast.LENGTH_SHORT).show();
-                    }
-                    @Override
-                    public void onFailure(Call<UserBookData> call, Throwable t) {
-                        Toast.makeText(context.getApplicationContext(), "찜 도서 제거 실패", Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
         }
     };
