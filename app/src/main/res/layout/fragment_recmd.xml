@@ -17,12 +17,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:padding="5dp">
 
             <EditText
                 android:id="@+id/searchBook"
-                android:layout_width="311dp"
-                android:layout_height="match_parent"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
                 android:hint="태그를 입력해주세요" />
 
             <Button
@@ -30,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorButton"
                 android:textColor="#FFFFFF"
+                android:padding="1dp"
                 android:text="검색"
                 android:id="@+id/searchBookBtn" />
 

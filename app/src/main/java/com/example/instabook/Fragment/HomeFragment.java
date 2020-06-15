@@ -53,7 +53,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";

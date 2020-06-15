@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.instabook.Activity.ForHome.UserBookUIDData;
+import com.example.instabook.Activity.ForUser.UserBookData;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.ListView.RecmdBookItem;
@@ -18,6 +19,7 @@ import com.example.instabook.ListView.SearchBookItem;
 import com.example.instabook.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -25,6 +27,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 
 import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
 
@@ -68,14 +72,14 @@ public class RecmdAdapter extends BaseAdapter {
         // "listview_item" Layout을 inflate하여 convertView 참조 획득.
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.listview_searchbook, parent, false);
+            convertView = inflater.inflate(R.layout.listview_recmd, parent, false);
         }
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.img_book) ;
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.text_title) ;
-        TextView isbnTextView = (TextView) convertView.findViewById(R.id.text_isbn) ;
-        TextView pubTextView = (TextView) convertView.findViewById(R.id.text_pub) ;
+        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.img_book);
+        TextView titleTextView = (TextView) convertView.findViewById(R.id.text_title);
+        TextView isbnTextView = (TextView) convertView.findViewById(R.id.text_isbn);
+        TextView pubTextView = (TextView) convertView.findViewById(R.id.text_pub);
         ImageButton btn = (ImageButton) convertView.findViewById(R.id.imgbtn_favorite);
 
         RecmdBookItem recmdBookItem = getItem(pos);
@@ -92,7 +96,7 @@ public class RecmdAdapter extends BaseAdapter {
                 .baseUrl(retroBaseApiService.Base_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         retroBaseApiService = retro_id.create(RetroBaseApiService.class);
-        //유저 UID와 친구 UID 리스트 만들기
+
         retroBaseApiService.getUBid(useruid,isbn).enqueue(new Callback<UserBookUIDData>() {
             @Override
             public void onResponse(Call<UserBookUIDData> call, Response<UserBookUIDData> response) {
@@ -109,8 +113,28 @@ public class RecmdAdapter extends BaseAdapter {
             }
         });
 
-        return null;
+        //찜 버튼 클릭
+        btn.setTag(position);
+        btn.setOnClickListener(jjimOnClickListener);
+
+
+
+        return convertView;
     }
 
+    final Button.OnClickListener jjimOnClickListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int position = Integer.parseInt((v.getTag().toString()));
 
+            Retrofit retro_jjim = new Retrofit.Builder()
+                    .baseUrl(retroBaseApiService.Base_URL)
+                    .addConverterFactory(GsonConverterFactory.create()).build();
+            retroBaseApiService = retro_jjim.create(RetroBaseApiService.class);
+
+           // retroBaseApiService.getUBid(useruid,isbn).enqueue(new Callback
+        }
+    };
 }
+   // @POST("/instabook/users/userbook")
+   // Call<UserBookData> postUBook(@Body HashMap<String, Object> parameters);

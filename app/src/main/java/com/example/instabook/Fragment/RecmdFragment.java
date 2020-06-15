@@ -46,32 +46,36 @@ public class RecmdFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_recmd, container, false);
-        recmdlist = new ArrayList<>();
-        Retrofit retro_rem = new Retrofit.Builder()
+
+        //유저 UID 가져오기
+        final int useruid = sp.getUserUid(getActivity());
+
+        Retrofit retro_rcmd = new Retrofit.Builder()
                 .baseUrl(retroBaseApiService.Base_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
-        retroBaseApiService = retro_rem.create(RetroBaseApiService.class);
-        retroBaseApiService.getRcmd().enqueue(new Callback<List<RecmdBookItem>>() {
+        retroBaseApiService = retro_rcmd.create(RetroBaseApiService.class);
+        //유저 UID와 친구 UID 리스트 만들기
+        retroBaseApiService.getRcmd(useruid).enqueue(new Callback<List<RecmdBookItem>>() {
             @Override
             public void onResponse(Call<List<RecmdBookItem>> call, Response<List<RecmdBookItem>> response) {
                 recmdlist = response.body();
-                items = new ArrayList<>();
 
-                for(int i = 0; i < recmdlist.size(); i++){
+                items = new ArrayList<>();
+                for(int i = 0; i < recmdlist.size(); i++) {
                     String b = recmdlist.get(i).getRbname();
                     String isbn = recmdlist.get(i).getRisbn();
                     String url = recmdlist.get(i).getRimguri();
                     String p = recmdlist.get(i).getRpub();
 
-                    rb = new RecmdBookItem(b,isbn,url,p);
+                    rb = new RecmdBookItem(b, isbn, url, p);
                     items.add(rb);
                 }
-                RecmdAdapter rAdapter = new RecmdAdapter(getActivity(),
-                        R.layout.listview_searchbook, items);
 
-                ListView listview = (ListView) getActivity().findViewById(R.id.listview);
-                listview.setAdapter(rAdapter);
+                    RecmdAdapter rAdapter = new RecmdAdapter(getActivity(),
+                            R.layout.listview_recmd, items);
 
+                    ListView listview = (ListView) getActivity().findViewById(R.id.recom_listview);
+                    listview.setAdapter(rAdapter);
             }
 
             @Override
@@ -79,6 +83,7 @@ public class RecmdFragment extends Fragment {
 
             }
         });
+
 
         // Inflate the layout for this fragment
         return rootView;

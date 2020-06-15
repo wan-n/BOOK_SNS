@@ -63,7 +63,7 @@ public interface RetroBaseApiService {
     */
 
     @GET("/instabook/rcmbook")
-    Call<List<RecmdBookItem>> getRcmd();
+    Call<List<RecmdBookItem>> getRcmd(@Query("UserUid") int useruid);
 
     @GET("/instabook/reviews/uid")
     Call<List<UserData>> getUid(@Query("UserUID") int useruid);
