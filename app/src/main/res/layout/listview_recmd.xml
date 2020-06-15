@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:padding="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="407dp"
+        android:layout_height="69dp"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/img_book"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="1dp" />
+
+        <LinearLayout
+            android:id="@+id/ppp"
+            android:layout_width="262dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="-13dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13dp" />
+
+            <TextView
+                android:id="@+id/text_isbn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="8dp" />
+
+            <TextView
+                android:id="@+id/text_pub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13dp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/imgbtn_favorite"
+            android:layout_width="56dp"
+            android:layout_height="59dp"
+            android:background="@android:color/transparent"
+            android:onClick="favonClick"
+            android:tint="#E91E63" />
+
+    </LinearLayout>
+
+</RelativeLayout>

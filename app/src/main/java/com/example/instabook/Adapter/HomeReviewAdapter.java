@@ -31,6 +31,7 @@ import com.example.instabook.Activity.ForUser.UserBookData;
 import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
+import com.example.instabook.Fragment.HomeFragment;
 import com.example.instabook.ListView.HomeReviewItem;
 import com.example.instabook.R;
 
@@ -53,19 +54,7 @@ public class HomeReviewAdapter extends BaseAdapter {
     int layout;
     Context context;
     LayoutInflater inflater;
-    ImageButton MemuImageButton;
-    ImageButton favButton;
-    ArrayList<HomeReviewItem> items;
-    String iisbn;
-    int uuid;
-    int ubuid;
-    int rrate;
-    int useruid2;
-    String rreview;
-    String bbname;
-
-    UserBookUIDData uBookData;
-    HomeReviewItem homeReviewItem;
+    ArrayList<HomeReviewItem> items = new ArrayList<>();
 
     public HomeReviewAdapter(FragmentActivity activity, int layout, ArrayList<HomeReviewItem> items) {
         this.context = activity;
@@ -93,7 +82,6 @@ public class HomeReviewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         //유저 UID 가져오기
         final int useruid = sp.getUserUid(context.getApplicationContext());
-        useruid2 = useruid;
         final int pos = position;
 
         if (convertView == null) {
@@ -101,12 +89,8 @@ public class HomeReviewAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.listview_homereview, parent, false);
         }
 
-        homeReviewItem = getItem(pos);
-
-        MemuImageButton = (ImageButton) convertView.findViewById(R.id.btn_menu);
-        MemuImageButton.setOnClickListener(this::menuOnClick);
-        favButton = (ImageButton) convertView.findViewById(R.id.imgbtn_favorite);
-
+        ImageButton MemuImageButton = (ImageButton) convertView.findViewById(R.id.btn_menu);
+        ImageButton favButton = (ImageButton) convertView.findViewById(R.id.imgbtn_favorite);
         CircularImageView CImagetView = (CircularImageView) convertView.findViewById(R.id.uf_icon);
         TextView NickTextView = (TextView) convertView.findViewById(R.id.txt_nick);
         TextView DateTextView = (TextView) convertView.findViewById(R.id.txt_date);
@@ -114,6 +98,8 @@ public class HomeReviewAdapter extends BaseAdapter {
         TextView BnameTextView = (TextView) convertView.findViewById(R.id.txt_bname);
         TextView ReviewTextView = (TextView) convertView.findViewById(R.id.txt_review);
         TextView TagTextView = (TextView) convertView.findViewById(R.id.txt_tag);
+
+        HomeReviewItem homeReviewItem = getItem(pos);
 
         CImagetView.setImageBitmap(homeReviewItem.getIconDrawable());
         NickTextView.setText(homeReviewItem.getnName());
@@ -123,15 +109,19 @@ public class HomeReviewAdapter extends BaseAdapter {
         ReviewTextView.setMovementMethod(new ScrollingMovementMethod());
         ratingBar.setNumStars(homeReviewItem.getRate());
 
-        iisbn = homeReviewItem.getIsbn13();
-        uuid = homeReviewItem.getuId();
-        rrate = homeReviewItem.getRate();
-        rreview = homeReviewItem.getReview();
-        bbname = homeReviewItem.getbName();
+        String iisbn = homeReviewItem.getIsbn13();
+        int uuid = homeReviewItem.getuId();
+        int rrate = homeReviewItem.getRate();
+        String rreview = homeReviewItem.getReview();
+        String bbname = homeReviewItem.getbName();
+
+        //MemuImageButton.setOnClickListener(this::menuOnClick);
+
+
 
         return convertView;
     }
-
+/*
     public void menuOnClick(View v) {
         //버튼이 눌렸을때 여기로옴
         PopupMenu popup = new PopupMenu(getApplicationContext(), v);
@@ -149,21 +139,23 @@ public class HomeReviewAdapter extends BaseAdapter {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.modify:
-                        Intent in = new Intent(context, ModiReviewActivity.class);
-                        in.putExtra("isbn", iisbn);
-                        in.putExtra("uid", uuid);
-                        in.putExtra("rate", rrate);
-                        in.putExtra("review", rreview);
-                        in.putExtra("title", bbname);
-                        context.startActivity(in);
-
+                        if(uuid == useruid){
+                            Intent in = new Intent(getApplicationContext(), ModiReviewActivity.class);
+                            in.putExtra("isbn", iisbn);
+                            in.putExtra("uid", uuid);
+                            in.putExtra("rate", rrate);
+                            in.putExtra("review", rreview);
+                            in.putExtra("title", bbname);
+                            context.startActivity(in);
+                        }
                         break;
                     case R.id.remove:
-                        Intent intent = new Intent(context, ReviewDelActivity.class);
-                        intent.putExtra("isbn", iisbn);
-                        intent.putExtra("uid", uuid);
-                        context.startActivity(intent);
-
+                        if(uuid == useruid2){
+                            Intent intent = new Intent(context, ReviewDelActivity.class);
+                            intent.putExtra("isbn", iisbn);
+                            intent.putExtra("uid", uuid);
+                            context.startActivity(intent);
+                        }
                         break;
                 }
                 return false;
@@ -172,4 +164,5 @@ public class HomeReviewAdapter extends BaseAdapter {
         popup.show();
     }
 
+ */
 }

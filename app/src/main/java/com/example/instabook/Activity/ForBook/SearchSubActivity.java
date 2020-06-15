@@ -137,7 +137,7 @@ public class SearchSubActivity extends AppCompatActivity {
          final String clientId = "q9rD74qm2NEUevZOZ0HA";
          final String clientSecret = "KVrwN1NIGi";
 
-         int display = 20;
+         int display = 100;
          boolean initem = false, intitle = false, inlink = false, inimage = false, inauthor = false, inprice = false, indiscount = false,
                  inpublisher = false, inpubdate = false, inisbn = false, indescription = false;
 

@@ -1,24 +1,24 @@
 package com.example.instabook.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.instabook.Activity.ForBook.BookData;
-import com.example.instabook.Activity.ForReview.ReviewActivity;
+import com.example.instabook.Activity.ForHome.UserBookUIDData;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
+import com.example.instabook.ListView.RecmdBookItem;
 import com.example.instabook.ListView.SearchBookItem;
 import com.example.instabook.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,20 +26,18 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.example.instabook.Activity.ForReview.ModiReviewActivity.retroBaseApiService;
+import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
 
-public class BookListAdapter extends BaseAdapter {
-    private static final String TAG = "BookListAdapter";
+public class RecmdAdapter extends BaseAdapter {
     int layout;
     Context context;
     LayoutInflater inflater;
+    SaveSharedPreference sp;
+    ArrayList<RecmdBookItem> items = new ArrayList<>();
 
-    ArrayList<SearchBookItem> books;
-
-    // ListViewAdapter의 생성자
-    public BookListAdapter(Context context, int layout, ArrayList<SearchBookItem> books) {
+    public RecmdAdapter(Context context, int layout, ArrayList<RecmdBookItem> items) {
         this.context = context;
-        this.books = books;
+        this.items = items;
         this.layout = layout;
 
         inflater = LayoutInflater.from(this.context);
@@ -48,13 +46,13 @@ public class BookListAdapter extends BaseAdapter {
     // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
     @Override
     public int getCount() {
-        return books.size();
+        return items.size();
     }
 
     // 지정한 위치(position)에 있는 데이터 리턴 : 필수 구현
     @Override
-    public SearchBookItem getItem(int position) {
-        return books.get(position);
+    public RecmdBookItem getItem(int position) {
+        return items.get(position);
     }
 
     // 지정한 위치(position)에 있는 데이터와 관계된 아이템(row)의 ID를 리턴. : 필수 구현
@@ -63,8 +61,6 @@ public class BookListAdapter extends BaseAdapter {
         return position;
     }
 
-
-    // position에 위치한 데이터를 화면에 출력하는데 사용될 View를 리턴. : 필수 구현
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         int pos = position;
@@ -80,31 +76,41 @@ public class BookListAdapter extends BaseAdapter {
         TextView titleTextView = (TextView) convertView.findViewById(R.id.text_title) ;
         TextView isbnTextView = (TextView) convertView.findViewById(R.id.text_isbn) ;
         TextView pubTextView = (TextView) convertView.findViewById(R.id.text_pub) ;
-        Button btn = (Button)convertView.findViewById(R.id.pick_btn);
+        ImageButton btn = (ImageButton) convertView.findViewById(R.id.imgbtn_favorite);
 
-        SearchBookItem searchBookItem = getItem(pos);
+        RecmdBookItem recmdBookItem = getItem(pos);
 
         iconImageView.setImageResource(R.drawable.default_img);
-        titleTextView.setText(searchBookItem.getTitle());
-        isbnTextView.setText(searchBookItem.getIsbn());
-        pubTextView.setText(searchBookItem.getPublisher());
+        titleTextView.setText(recmdBookItem.getRbname());
+        isbnTextView.setText(recmdBookItem.getRisbn());
+        pubTextView.setText(recmdBookItem.getRpub());
 
-        btn.setOnClickListener(new Button.OnClickListener() {
+        final int useruid = sp.getUserUid(context.getApplicationContext());
+        String isbn = recmdBookItem.getRisbn();
+
+        Retrofit retro_id = new Retrofit.Builder()
+                .baseUrl(retroBaseApiService.Base_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        retroBaseApiService = retro_id.create(RetroBaseApiService.class);
+        //유저 UID와 친구 UID 리스트 만들기
+        retroBaseApiService.getUBid(useruid,isbn).enqueue(new Callback<UserBookUIDData>() {
+            @Override
+            public void onResponse(Call<UserBookUIDData> call, Response<UserBookUIDData> response) {
+                if(response.body() == null){
+                    btn.setImageResource(R.drawable.favorite_border_black);
+                } else {
+                    btn.setImageResource(R.drawable.favorite_black);
+                }
+            }
 
             @Override
-            public void onClick(View v) {
-
-                String t = searchBookItem.getTitle();
-                String is = searchBookItem.getIsbn();
-
-                Intent intent = new Intent(context, ReviewActivity.class);
-                intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
-                intent.putExtra("isbn", is);
-                Log.d(TAG,"선택된 제목: " + t);
-                context.startActivity(intent);
+            public void onFailure(Call<UserBookUIDData> call, Throwable t) {
+                btn.setImageResource(R.drawable.favorite_border_black);
             }
         });
 
-        return convertView;
+        return null;
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.instabook.Fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -10,10 +11,14 @@ import androidx.lifecycle.Lifecycle;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.example.instabook.Activity.ForBook.SearchdbActivity;
@@ -21,7 +26,9 @@ import com.example.instabook.Activity.ForHome.AllUserData;
 import com.example.instabook.Activity.ForHome.HomeData;
 import com.example.instabook.Activity.ForHome.UserBookUIDData;
 import com.example.instabook.Activity.ForHome.UserData;
+import com.example.instabook.Activity.ForReview.ModiReviewActivity;
 import com.example.instabook.Activity.ForReview.ReviewActivity;
+import com.example.instabook.Activity.ForReview.ReviewDelActivity;
 import com.example.instabook.Activity.ForUser.UserBookData;
 import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
@@ -46,6 +53,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
