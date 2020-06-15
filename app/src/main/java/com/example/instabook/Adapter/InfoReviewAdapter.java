@@ -27,8 +27,6 @@ import com.example.instabook.R;
 
 import java.util.ArrayList;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 public class InfoReviewAdapter extends BaseAdapter {
     private static final String TAG = "InfoListAdapter";
     SaveSharedPreference sp;
@@ -116,7 +114,7 @@ public class InfoReviewAdapter extends BaseAdapter {
 
     public void menuOnClick(View v) {
         //버튼이 눌렸을때 여기로옴
-        PopupMenu popup = new PopupMenu(getApplicationContext(), v);
+        PopupMenu popup = new PopupMenu(context, v);
 
         //xml파일에 메뉴 정의한것을 가져오기위해서 전개자 선언
         MenuInflater inflater = popup.getMenuInflater();

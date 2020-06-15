@@ -46,7 +46,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.app.PendingIntent.getActivity;
 import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class HomeReviewAdapter extends BaseAdapter {
     private static final String TAG = "BookListAdapter";
@@ -124,7 +123,7 @@ public class HomeReviewAdapter extends BaseAdapter {
 /*
     public void menuOnClick(View v) {
         //버튼이 눌렸을때 여기로옴
-        PopupMenu popup = new PopupMenu(getApplicationContext(), v);
+        PopupMenu popup = new PopupMenu(context, v);
 
         //xml파일에 메뉴 정의한것을 가져오기위해서 전개자 선언
         MenuInflater inflater = popup.getMenuInflater();

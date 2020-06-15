@@ -135,17 +135,17 @@ public class HomeFragment extends Fragment {
                                 String bname = homeDataList.get(l).getBookName();
                                 String nname = homeDataList.get(l).getNickName();
 
-                                /*
+
                                 Date date = null;
                                 try {
-                                    date = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS.mmm'Z'").parse(f_redate);
+                                    date = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS.mmm'Z'").parse(redate);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                                String redate = sdf.format(date);
+                                String redate_2 = sdf.format(date);
 
-                                 */
+
 
                                 //uid로 이미지 가져오기
                                 Retrofit retro_imgFirst = new Retrofit.Builder()
@@ -161,8 +161,8 @@ public class HomeFragment extends Fragment {
                                         Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
 
                                         //리스트뷰에 추가
-                                        item = new HomeReviewItem(bitmap_profile, uid, review, redate, isbn, rate, bname, nname);
-                                        Log.d(TAG,"유아이디: "+uid+"리뷰: "+review+"날짜: "+redate+"ISBN: "+isbn+"별점: "+rate+"제목: "+bname+"닉네임: "+nname);
+                                        item = new HomeReviewItem(bitmap_profile, uid, review, redate_2, isbn, rate, bname, nname);
+                                        Log.d(TAG,"유아이디: "+uid+"리뷰: "+review+"날짜: "+redate_2+"ISBN: "+isbn+"별점: "+rate+"제목: "+bname+"닉네임: "+nname);
                                         items.add(item);
                                         //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
 

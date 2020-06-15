@@ -157,7 +157,7 @@
 
                     <ImageView
                         android:id="@+id/img_facebook"
-                        android:src="@drawable/facebook_icon"
+                        android:src="@drawable/kakao_icon"
                         android:layout_gravity="center_vertical"
                         android:layout_width="50dp"
                         android:layout_height="50dp"/>
@@ -192,14 +192,5 @@
                     android:textStyle="bold" />
             </FrameLayout>
         </LinearLayout>
-
-
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
-            android:visibility="gone"/>
     </LinearLayout>
 </LinearLayout>
