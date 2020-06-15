@@ -40,6 +40,7 @@ public class ModiReviewActivity extends AppCompatActivity {
     EditText edTag;
     Button pbtn;
     String new_review;
+    int rate;
     int new_rate;
     int uid;
     String isbn;
@@ -59,7 +60,7 @@ public class ModiReviewActivity extends AppCompatActivity {
         String review = intent.getStringExtra("review");
         String title = intent.getStringExtra("title");
         uid = intent.getIntExtra("uid", 0);
-        int rate = intent.getIntExtra("rate", 0);
+        rate = intent.getIntExtra("rate", 0);
 
         binfo_back = findViewById(R.id.binfo_back);
         binfo_fr_back = findViewById(R.id.binfo_fr_back);
@@ -97,6 +98,7 @@ public class ModiReviewActivity extends AppCompatActivity {
             }
         });
 
+
         //게시하기 버튼
         pbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +112,7 @@ public class ModiReviewActivity extends AppCompatActivity {
                     //공백이 아닐 때 처리할 내용
                     reView = edReview.getText().toString();
                     new_review = reView.trim();
-                    new_rate = (int) ratingBar.getRating();
+                    int new_rate = (int) ratingBar.getRating();
 
                     HashMap<String, Object> map = new HashMap<>();
 
