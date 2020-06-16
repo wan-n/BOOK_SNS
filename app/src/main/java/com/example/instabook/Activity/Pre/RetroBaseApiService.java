@@ -54,7 +54,7 @@ public interface RetroBaseApiService {
     @POST("/instabook/users/userbook")
     Call<UserBookData> postUBook(@Body HashMap<String, Object> parameters);
 
-    @POST("/instabook/books")
+    @POST("/instabook/books/naverbook")
     Call<NaverData> postNbook(@Body HashMap<String, Object> parameters);
 
     /**TODO 태그데이터 서버 올리기

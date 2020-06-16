@@ -41,10 +41,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
 
+/**SearchdbActivity와 합침*/
+
 public class SearchSubActivity extends AppCompatActivity {
     private static final String TAG = "SearchSubActivity";
     static List<NaverBookData> list;
-
     ArrayList<SearchBookItem> items;
     SearchBookItem sb;
     String keyword;
@@ -67,15 +68,17 @@ public class SearchSubActivity extends AppCompatActivity {
                     items = new ArrayList<>();
                     for(int i = 0; i <list.size(); i++) {
                         String bname = list.get(i).getTitle();
-                        String isbn = list.get(i).getIsbn();
+                        String isbn26 = list.get(i).getIsbn();
                         String pub = list.get(i).getPublisher();
                         String pdate = list.get(i).getPubdate();
                         String price = list.get(i).getPrice();
                         String sale = list.get(i).getDiscount();
                         String img = list.get(i).getImage();
+                        String author = list.get(i).getAuthor();
+
 
                         pdate += " 00:00:00.000";
-
+                        String isbn = isbn26.substring(isbn26.length()-13, isbn26.length());
 
                         map.put("bookname", bname);
                         map.put("isbn", isbn);
@@ -84,8 +87,9 @@ public class SearchSubActivity extends AppCompatActivity {
                         map.put("price", price);
                         map.put("sale", sale);
                         map.put("img", img);
+                        map.put("author",author);
 
-                        sb = new SearchBookItem(bname, isbn, pub);
+                        sb = new SearchBookItem(bname, author, pub, img, isbn);
                         items.add(sb);
 
                         Retrofit naver_retro = new Retrofit.Builder()
@@ -104,6 +108,8 @@ public class SearchSubActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "네이버 도서 검색 실패", Toast.LENGTH_SHORT).show();
                             }
                         });
+
+
                     }
 
                     runOnUiThread(new Runnable() {
@@ -137,7 +143,7 @@ public class SearchSubActivity extends AppCompatActivity {
          final String clientId = "q9rD74qm2NEUevZOZ0HA";
          final String clientSecret = "KVrwN1NIGi";
 
-         int display = 100;
+         int display = 10;
          boolean initem = false, intitle = false, inlink = false, inimage = false, inauthor = false, inprice = false, indiscount = false,
                  inpublisher = false, inpubdate = false, inisbn = false, indescription = false;
 
@@ -160,9 +166,9 @@ public class SearchSubActivity extends AppCompatActivity {
              xpp.setInput(new StringReader(responseBody));
 
              String tag = null;
-
              int eventType = 0; //파싱 시작
              eventType = xpp.getEventType();
+
              //결과데이터 담을 리스트
              List<NaverBookData> booklist = null;
              NaverBookData bookdata = null;
@@ -171,7 +177,6 @@ public class SearchSubActivity extends AppCompatActivity {
                  switch (eventType) {
                      case XmlPullParser.START_DOCUMENT:
                          booklist = new ArrayList<NaverBookData>();
-                         Log.d(TAG, "xml 시작");
                          break;
 
                      case XmlPullParser.START_TAG: //START_TAG : 태그의 시작, 시작 태그를 만나면 이름을 봐서 저장한다.
@@ -215,7 +220,7 @@ public class SearchSubActivity extends AppCompatActivity {
                      case XmlPullParser.TEXT:
                          if(intitle){
                              if (bookdata != null) {
-                                 bookdata.setTitle(xpp.getText(). replaceAll("\\<.*?>","") );
+                                 bookdata.setTitle(xpp.getText().replaceAll("\\<.*?>",""));
                              }
                              intitle = false;
                          }
@@ -233,7 +238,7 @@ public class SearchSubActivity extends AppCompatActivity {
                          }
                          if(inauthor){
                              if (bookdata != null) {
-                                 bookdata.setAuthor(xpp.getText());
+                                 bookdata.setAuthor(xpp.getText().replaceAll("\\<.*?>",""));
                              }
                              inauthor = false;
                          }
@@ -251,7 +256,7 @@ public class SearchSubActivity extends AppCompatActivity {
                          }
                          if(inpublisher){
                              if (bookdata != null) {
-                                 bookdata.setPublisher(xpp.getText());
+                                 bookdata.setPublisher(xpp.getText(). replaceAll("\\<.*?>",""));
                              }
                              inpublisher = false;
                          }
@@ -289,7 +294,6 @@ public class SearchSubActivity extends AppCompatActivity {
                  eventType = xpp.next();
              }
              list = booklist;
-             Log.d(TAG,"파싱끝");
          } catch (Exception e){
              e.printStackTrace();
          }

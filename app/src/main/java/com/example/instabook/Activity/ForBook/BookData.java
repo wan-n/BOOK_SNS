@@ -4,26 +4,35 @@ public class BookData {
     public String BookName;
     public String Publisher;
     public String ISBN13;
-    public String[] Author;
+    public String Author;
+    public String BookImageUrl;
 
     public BookData() {
 
     }
-    /**TODO 저자정보 배열로 받아보기
-     public String[] getAuthor() {
-     return Author;
-     }
 
-     public void setAuthor(String[] author) {
-     this.Author = author;
-     }
-     */
-    public String getTitle() {
+    public void setAuthor(String author) {
+        Author = author;
+    }
+
+    public String getAuthor() {
+        return Author;
+    }
+
+    public String getBookImageUrl() {
+        return BookImageUrl;
+    }
+
+    public void setBookImageUrl(String bookImageUrl) {
+        BookImageUrl = bookImageUrl;
+    }
+
+    public String getBookName() {
         return BookName;
     }
 
-    public void setTitle(String title) {
-        this.BookName = title;
+    public void setBookName(String bookName) {
+        BookName = bookName;
     }
 
     public String getPublisher() {
@@ -34,12 +43,11 @@ public class BookData {
         this.Publisher = Publisher;
     }
 
-    public String getIsbn() {
+    public String getISBN13() {
         return ISBN13;
     }
 
-    public void setIsbn(String isbn) {
-        this.ISBN13 = isbn;
+    public void setISBN13(String ISBN13) {
+        this.ISBN13 = ISBN13;
     }
-
 }

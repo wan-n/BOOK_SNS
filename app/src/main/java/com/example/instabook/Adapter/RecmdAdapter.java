@@ -1,6 +1,8 @@
 package com.example.instabook.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,9 @@ import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.ListView.RecmdBookItem;
 import com.example.instabook.R;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,6 +41,8 @@ public class RecmdAdapter extends BaseAdapter {
     Context context;
     LayoutInflater inflater;
     SaveSharedPreference sp;
+    Bitmap bm;
+    String imgurl;
     ImageButton btn = null;
     int useruid2;
     UserBookUIDData userbookUID;
@@ -91,13 +98,48 @@ public class RecmdAdapter extends BaseAdapter {
         TextView pubTextView = (TextView) convertView.findViewById(R.id.text_pub);
         btn = (ImageButton) convertView.findViewById(R.id.imgbtn_favorite);
 
+        //item 가져오기
         RecmdBookItem recmdBookItem = getItem(pos);
 
-        iconImageView.setImageResource(R.drawable.default_img);
+        //텍스트 뷰에 표시될 텍스트 넣기
         titleTextView.setText(recmdBookItem.getRbname());
         isbnTextView.setText(recmdBookItem.getRisbn());
         pubTextView.setText(recmdBookItem.getRpub());
 
+        //이미지 가져오기
+        String imgurll = recmdBookItem.getRimguri();
+
+        if(imgurll == null){
+            iconImageView.setImageResource(R.drawable.default_img);
+        } else {
+            int idx = imgurll.indexOf("?");
+            imgurl = imgurll.substring(0, idx);
+
+            Thread uthread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        URL url = new URL(imgurl);
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.connect();
+                        InputStream bis = conn.getInputStream();
+                        bm = BitmapFactory.decodeStream(bis);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            uthread.start();
+
+            try{
+                uthread.join();
+                iconImageView.setImageBitmap(bm);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        /**TODO 찜 도서 생성, 삭제 구현하기*/
         final int[] jjim = {0};
         String isbn = recmdBookItem.getRisbn();
 

@@ -2,6 +2,8 @@ package com.example.instabook.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,11 @@ import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.ListView.SearchBookItem;
 import com.example.instabook.R;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -33,7 +40,8 @@ public class BookListAdapter extends BaseAdapter {
     int layout;
     Context context;
     LayoutInflater inflater;
-
+    Bitmap bm;
+    String imgurl;
     ArrayList<SearchBookItem> books;
 
     // ListViewAdapter의 생성자
@@ -76,17 +84,49 @@ public class BookListAdapter extends BaseAdapter {
         }
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.img_book) ;
+        ImageView bookImageView = (ImageView) convertView.findViewById(R.id.img_book) ;
         TextView titleTextView = (TextView) convertView.findViewById(R.id.text_title) ;
-        TextView isbnTextView = (TextView) convertView.findViewById(R.id.text_isbn) ;
+        TextView authorTextView = (TextView) convertView.findViewById(R.id.text_author) ;
         TextView pubTextView = (TextView) convertView.findViewById(R.id.text_pub) ;
         Button btn = (Button)convertView.findViewById(R.id.pick_btn);
 
         SearchBookItem searchBookItem = getItem(pos);
+        String imgurll = searchBookItem.getImg();
 
-        iconImageView.setImageResource(R.drawable.default_img);
+        //이미지 가져오기
+        if(imgurll == null){
+            bookImageView.setImageResource(R.drawable.default_img);
+        } else {
+            int idx = imgurll.indexOf("?");
+            imgurl = imgurll.substring(0, idx);
+
+            Thread uthread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        URL url = new URL(imgurl);
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.connect();
+                        InputStream bis = conn.getInputStream();
+                        bm = BitmapFactory.decodeStream(bis);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            uthread.start();
+
+            try{
+                uthread.join();
+
+                bookImageView.setImageBitmap(bm);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         titleTextView.setText(searchBookItem.getTitle());
-        isbnTextView.setText(searchBookItem.getIsbn());
+        authorTextView.setText(searchBookItem.getAuthor());
         pubTextView.setText(searchBookItem.getPublisher());
 
         btn.setOnClickListener(new Button.OnClickListener() {
@@ -96,15 +136,15 @@ public class BookListAdapter extends BaseAdapter {
 
                 String t = searchBookItem.getTitle();
                 String is = searchBookItem.getIsbn();
+                String img = searchBookItem.getImg();
 
                 Intent intent = new Intent(context, ReviewActivity.class);
-                intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+                intent.putExtra("title", t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
                 intent.putExtra("isbn", is);
-                Log.d(TAG,"선택된 제목: " + t);
+                intent.putExtra("img",imgurl);
                 context.startActivity(intent);
             }
         });
-
         return convertView;
     }
 }

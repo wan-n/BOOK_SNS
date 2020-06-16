@@ -8,6 +8,7 @@ public class NaverData {
     String BookPrice;
     String SalePrice;
     String BookImageUrl;
+    String Author;
 
     public NaverData() {
 

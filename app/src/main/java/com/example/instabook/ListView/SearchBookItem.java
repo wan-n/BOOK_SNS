@@ -7,10 +7,12 @@ public class SearchBookItem {
     public String publisher;
     public String author;
 
-    public SearchBookItem(String t, String is, String p){
+    public SearchBookItem(String t, String a, String p, String im, String is){
         this.title = t;
-        this.isbn = is;
+        this.author = a;
         this.publisher = p;
+        this.img = im;
+        this.isbn = is;
     }
 
 

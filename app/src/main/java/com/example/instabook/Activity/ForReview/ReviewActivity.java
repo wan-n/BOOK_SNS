@@ -2,6 +2,8 @@ package com.example.instabook.Activity.ForReview;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +35,9 @@ import com.kakao.network.ErrorResult;
 import com.kakao.network.callback.ResponseCallback;
 import com.kakao.util.helper.log.Logger;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +67,8 @@ public class ReviewActivity extends AppCompatActivity {
     String title;
     String isbn;
     String review;
+    String img;
+    Bitmap bm;
     String commentstag = null;
     ArrayList<int[]> hashtagSpans;
 
@@ -101,6 +108,31 @@ public class ReviewActivity extends AppCompatActivity {
         tvTitle.setText(intent.getStringExtra("title"));
         title = tvTitle.getText().toString();
         isbn = intent.getStringExtra("isbn");
+        img = intent.getStringExtra("img");
+
+        //이미지 가져오기
+        Thread uthread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(img);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.connect();
+                    InputStream bis = conn.getInputStream();
+                    bm = BitmapFactory.decodeStream(bis);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        uthread.start();
+        try{
+            uthread.join();
+
+            imBook.setImageBitmap(bm);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //별점 점수 변화주기
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {

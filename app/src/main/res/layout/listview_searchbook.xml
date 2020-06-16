@@ -4,8 +4,10 @@
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:padding="5dp"
+    android:background="@color/colorBase"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <!-- TODO: LAYOUT 꾸미기 -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,35 +15,38 @@
         android:padding="5dp"
         android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/img_book"
-        android:layout_width="65dp"
-        android:layout_height="59dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="1dp" />
+        <ImageView
+            android:id="@+id/img_book"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:layout_marginLeft="1dp" />
 
         <LinearLayout
             android:id="@+id/ppp"
-            android:layout_width="197dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="-13dp"
+            android:layout_weight="4"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/text_title"
+                android:textColor="@color/colorText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="13dp" />
 
             <TextView
-                android:id="@+id/text_isbn"
+                android:id="@+id/text_author"
+                android:textColor="@color/colorText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="8dp" />
 
             <TextView
                 android:id="@+id/text_pub"
+                android:textColor="@color/colorText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="13dp" />
@@ -49,10 +54,10 @@
 
         <Button
             android:id="@+id/pick_btn"
-            android:layout_width="74dp"
+            android:layout_width="0dp"
+            android:background="@color/colorButton"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_toEndOf="@+id/ppp"
+            android:layout_weight="1"
             android:text="선택"
             android:textColor="#FFFFFF" />
 
