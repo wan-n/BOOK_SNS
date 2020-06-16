@@ -111,27 +111,31 @@ public class ReviewActivity extends AppCompatActivity {
         img = intent.getStringExtra("img");
 
         //이미지 가져오기
-        Thread uthread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(img);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.connect();
-                    InputStream bis = conn.getInputStream();
-                    bm = BitmapFactory.decodeStream(bis);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        if(img == null){
+            imBook.setImageResource(R.drawable.default_img);
+        } else {
+            Thread uthread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        URL url = new URL(img);
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.connect();
+                        InputStream bis = conn.getInputStream();
+                        bm = BitmapFactory.decodeStream(bis);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
-        uthread.start();
-        try{
-            uthread.join();
+            });
+            uthread.start();
+            try {
+                uthread.join();
 
-            imBook.setImageBitmap(bm);
-        } catch (Exception e) {
-            e.printStackTrace();
+                imBook.setImageBitmap(bm);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         //별점 점수 변화주기

@@ -50,7 +50,7 @@ public class RecmdFragment extends Fragment {
 
         //유저 UID 가져오기
         final int useruid = sp.getUserUid(getActivity());
-
+        /*
         Retrofit retro_rcmd = new Retrofit.Builder()
                 .baseUrl(retroBaseApiService.Base_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
@@ -85,7 +85,7 @@ public class RecmdFragment extends Fragment {
             }
         });
 
-
+*/
         // Inflate the layout for this fragment
         return rootView;
     }

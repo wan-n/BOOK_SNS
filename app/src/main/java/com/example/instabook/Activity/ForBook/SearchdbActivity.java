@@ -78,6 +78,8 @@ public class SearchdbActivity extends AppCompatActivity {
 
     //DB에서 도서 정보 가져오는 함수
     public void getBook(String keyword){
+        Log.d(TAG, "위치 get Book: " + keyword);
+
         Retrofit retro_name = new Retrofit.Builder()
                 .baseUrl(retroBaseApiService.Base_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
@@ -88,12 +90,15 @@ public class SearchdbActivity extends AppCompatActivity {
             public void onResponse(Call<List<BookData>> call, Response<List<BookData>> response) {
                 bookDataList = response.body();
                 books = new ArrayList<>();
+                Log.d(TAG, "위치 get Book 속 onResponse");
 
                 for(int i = 0; i < bookDataList.size(); i++){
                     String b = bookDataList.get(i).getBookName();
                     String p = bookDataList.get(i).getPublisher();
                     String is = bookDataList.get(i).getISBN13();
                     String url = bookDataList.get(i).getBookImageUrl();
+                    Log.d(TAG, "위치 get Book 속 onResponse 안 for문");
+                    Log.d(TAG, "제목 : "+b+" 출판사 : "+p);
 
                     Retrofit retro_author = new Retrofit.Builder()
                             .baseUrl(retroBaseApiService.Base_URL)
@@ -106,6 +111,7 @@ public class SearchdbActivity extends AppCompatActivity {
                             authorDataList = response.body();
                             authorlist = authorDataList;
                             authorsam = new ArrayList<>();
+                            Log.d(TAG, "위치 get Book 속 onResponse 안 for문의 onResponse");
 
                             for(int j = 0; j < authorlist.size(); j++){
                                 authorsam.add(authorlist.get(j).getAuthor());
@@ -140,7 +146,14 @@ public class SearchdbActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onFailure(Call<List<BookData>> call, Throwable t) {
+                            mb = new SearchBookItem(b, " ", p, url, is);
+                            books.add(mb);
 
+                            BookListAdapter blAdapter = new BookListAdapter(getApplicationContext(),
+                                    R.layout.listview_searchbook, books);
+
+                            ListView listview = (ListView) findViewById(R.id.listview);
+                            listview.setAdapter(blAdapter);
                         }
                     });
                 }
@@ -149,18 +162,19 @@ public class SearchdbActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<BookData>> call, Throwable t) {
-
+                Log.d(TAG, "위치 get Book 속 onFailure");
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            //Intent intent = getIntent(); //데이터 수신
-                            //keyword = intent.getStringExtra("keyword"); //intent 값을 String 타입으로 변환
                             getNaverSearch(keyword);
 
+                            Log.d(TAG, "위치 get Book 속 onFailure Thread 안");
                             HashMap<String, Object> map = new HashMap<>();
+
                             items = new ArrayList<>();
                             for(int i = 0; i <list.size(); i++) {
+                                Log.d(TAG, "위치 get Book 속 onFailure Thread 안의 for문");
                                 String bname = list.get(i).getTitle();
                                 String isbn26 = list.get(i).getIsbn();
                                 String pub = list.get(i).getPublisher();
@@ -194,7 +208,7 @@ public class SearchdbActivity extends AppCompatActivity {
                                 retroBaseApiService.postNbook(map).enqueue(new Callback<NaverData>() {
                                     @Override
                                     public void onResponse(Call<NaverData> call, Response<NaverData> response) {
-
+                                        Log.d(TAG, "위치 get Book 속 onFailure Thread 안의 for문 naver_retro");
                                     }
 
                                     @Override
@@ -209,6 +223,7 @@ public class SearchdbActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    Log.d(TAG, "위치 get Book 속 onFailure Thread 안의 runOnUiThread");
                                     BookListAdapter blAdapter = new BookListAdapter(getApplicationContext(),
                                             R.layout.listview_searchbook, items);
 
@@ -236,6 +251,7 @@ public class SearchdbActivity extends AppCompatActivity {
     }
 
     public void getNaverSearch(final String keyword) {
+        Log.d(TAG, "위치 getNaverSearch");
         final String clientId = "q9rD74qm2NEUevZOZ0HA";
         final String clientSecret = "KVrwN1NIGi";
 

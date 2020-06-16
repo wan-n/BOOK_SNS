@@ -97,14 +97,14 @@ public class BookListAdapter extends BaseAdapter {
         if(imgurll == null){
             bookImageView.setImageResource(R.drawable.default_img);
         } else {
-            int idx = imgurll.indexOf("?");
-            imgurl = imgurll.substring(0, idx);
+            //int idx = imgurll.indexOf("?");
+            //imgurl = imgurll.substring(0, idx);
 
             Thread uthread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        URL url = new URL(imgurl);
+                        URL url = new URL(imgurll);
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                         conn.connect();
                         InputStream bis = conn.getInputStream();
@@ -136,12 +136,11 @@ public class BookListAdapter extends BaseAdapter {
 
                 String t = searchBookItem.getTitle();
                 String is = searchBookItem.getIsbn();
-                String img = searchBookItem.getImg();
 
                 Intent intent = new Intent(context, ReviewActivity.class);
                 intent.putExtra("title", t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
                 intent.putExtra("isbn", is);
-                intent.putExtra("img",imgurl);
+                intent.putExtra("img",imgurll);
                 context.startActivity(intent);
             }
         });
