@@ -13,7 +13,7 @@ public class FriendsPagerAdapter extends FragmentPagerAdapter {
     private int mNumOfTabs;
 
     public FriendsPagerAdapter(FragmentManager fm, int numTabs){
-        super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.mNumOfTabs = numTabs;
     }
 

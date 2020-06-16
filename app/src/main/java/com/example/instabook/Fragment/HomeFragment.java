@@ -55,11 +55,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment{
     private static final String TAG = "HomeFragment";
     SaveSharedPreference sp;
     View rootView;
-    String redate_2;
 
     List<UserData> frDataList;
     List<AllUserData> allUserDataList;
@@ -83,8 +82,6 @@ public class HomeFragment extends Fragment {
 
         //유저 UID 가져오기
         final int useruid1 = sp.getUserUid(getActivity());
-
-        Log.d(TAG,"사용자 유아이디 1: " + useruid1);
 
         Retrofit retro_id = new Retrofit.Builder()
                 .baseUrl(retroBaseApiService.Base_URL)
@@ -137,13 +134,14 @@ public class HomeFragment extends Fragment {
                                 String nname = homeDataList.get(l).getNickName();
 
 
+                                Date date = null;
                                 try {
-                                    Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(redate);
-                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                                    redate_2 = sdf.format(date);
+                                    date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(redate);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                                    String redate_2 = sdf.format(date);
 
                                 //uid로 이미지 가져오기
                                 Retrofit retro_imgFirst = new Retrofit.Builder()

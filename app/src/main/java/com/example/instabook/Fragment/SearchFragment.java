@@ -50,17 +50,10 @@ public class SearchFragment extends Fragment{
             keyword = searchBook.getText().toString(); //editView의 텍스트를 String으로 keyword에 저장
             String key = keyword.trim();
 
-            if (key == ""){
-                Intent intent = new Intent(getActivity(), SearchSubActivity.class);
-                intent.putExtra("keyword",key);  //Intent는 데이터를 extras 키-값 쌍으로 전달
-                startActivity(intent);
-            } else {
-                //intent로 데이터 전달
-                Intent intent = new Intent(getActivity(), SearchdbActivity.class);
-                intent.putExtra("keyword",key);  //Intent는 데이터를 extras 키-값 쌍으로 전달
-                startActivity(intent);
-            }
-
+            //intent로 데이터 전달
+            Intent intent = new Intent(getActivity(), SearchdbActivity.class);
+            intent.putExtra("keyword",key);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+            startActivity(intent);
         });
 
         return rootView; //view를 불러왔으니 view 리턴

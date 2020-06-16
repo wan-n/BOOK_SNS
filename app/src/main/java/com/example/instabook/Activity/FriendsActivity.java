@@ -1,9 +1,5 @@
 package com.example.instabook.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +10,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.instabook.Adapter.FriendsPagerAdapter;
-import com.example.instabook.Fragment.InfoFragment;
 import com.example.instabook.R;
 import com.google.android.material.tabs.TabLayout;
 

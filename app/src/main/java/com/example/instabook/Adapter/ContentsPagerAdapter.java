@@ -17,7 +17,8 @@ public class ContentsPagerAdapter extends FragmentStatePagerAdapter {
     private int mPageCount;
 
     public ContentsPagerAdapter(FragmentManager fm, int pageCount){
-        super(fm);
+        //super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.mPageCount=pageCount;
     }
 

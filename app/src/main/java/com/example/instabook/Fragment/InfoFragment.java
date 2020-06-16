@@ -93,7 +93,6 @@ public class InfoFragment extends Fragment {
     private static final int PICK_FROM_ALBUM = 0;
     private static final int CROP_FROM_iMAGE = 1;
 
-    String redate_2;
     List<HomeData> infoDataList;
     ArrayList<HomeReviewItem> items;
     HomeReviewItem item;
@@ -320,13 +319,14 @@ public class InfoFragment extends Fragment {
                     String bname = infoDataList.get(l).getBookName();
                     String nname = infoDataList.get(l).getNickName();
 
+                    Date date = null;
                     try {
-                        Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(redate);
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                        redate_2 = sdf.format(date);
+                        date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(redate);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                    String redate_2 = sdf.format(date);
 
                     //uid로 이미지 가져오기
 
