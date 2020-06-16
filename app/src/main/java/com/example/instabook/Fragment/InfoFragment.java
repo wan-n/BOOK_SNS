@@ -305,7 +305,7 @@ public class InfoFragment extends Fragment {
                     String bname = infoDataList.get(l).getBookName();
                     String nname = infoDataList.get(l).getNickName();
 
-
+/*
                     Date date = null;
                     try {
                         date = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS.mmm'Z'").parse(redate);
@@ -314,14 +314,14 @@ public class InfoFragment extends Fragment {
                     }
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
                     String redate_2 = sdf.format(date);
-
+*/
 
                     //uid로 이미지 가져오기
 
                     Bitmap bitmap_profile = StringToBitMap(string_profile);
 
                     //리스트뷰에 추가
-                    item = new HomeReviewItem(bitmap_profile, uid, review, redate_2, isbn, rate, bname, nname);
+                    item = new HomeReviewItem(bitmap_profile, uid, review, redate, isbn, rate, bname, nname);
                     items.add(item);
                     //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
 
