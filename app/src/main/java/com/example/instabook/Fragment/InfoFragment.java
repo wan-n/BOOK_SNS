@@ -93,7 +93,7 @@ public class InfoFragment extends Fragment {
     private static final int PICK_FROM_ALBUM = 0;
     private static final int CROP_FROM_iMAGE = 1;
 
-
+    String redate_2;
     List<HomeData> infoDataList;
     ArrayList<HomeReviewItem> items;
     HomeReviewItem item;
@@ -309,6 +309,7 @@ public class InfoFragment extends Fragment {
                 infoDataList = response.body();
                 items = new ArrayList<>();
 
+
                 for(int l = 0; l < infoDataList.size(); l++){
 
                     int uid = infoDataList.get(l).getUserUID();
@@ -319,23 +320,20 @@ public class InfoFragment extends Fragment {
                     String bname = infoDataList.get(l).getBookName();
                     String nname = infoDataList.get(l).getNickName();
 
-/*
-                    Date date = null;
                     try {
-                        date = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS.mmm'Z'").parse(redate);
+                        Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(redate);
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                        redate_2 = sdf.format(date);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                    String redate_2 = sdf.format(date);
-*/
 
                     //uid로 이미지 가져오기
 
                     Bitmap bitmap_profile = StringToBitMap(string_profile);
 
                     //리스트뷰에 추가
-                    item = new HomeReviewItem(bitmap_profile, uid, review, redate, isbn, rate, bname, nname);
+                    item = new HomeReviewItem(bitmap_profile, uid, review, redate_2, isbn, rate, bname, nname);
                     items.add(item);
                     //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
 
