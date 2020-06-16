@@ -1,8 +1,10 @@
 package com.example.instabook.Fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -14,10 +16,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -85,9 +90,8 @@ public class InfoFragment extends Fragment {
     Button mybook;
     View rootView;
 
-    private static final int PICK_FROM_CAMERA = 0;
-    private static final int PICK_FROM_ALBUM = 1;
-    private static final int CROP_FROM_iMAGE = 2;
+    private static final int PICK_FROM_ALBUM = 0;
+    private static final int CROP_FROM_iMAGE = 1;
 
 
     List<HomeData> infoDataList;
@@ -216,7 +220,17 @@ public class InfoFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //앨범에서 이미지 선택
-                                doTakeAlbumAction();
+
+                                int permission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA);
+                                if(permission == PackageManager.PERMISSION_DENIED){
+                                    // 권한 없어서 요청
+                                    checkSelfPermission();
+                                }else{
+                                    // 권한 있음
+                                    doTakeAlbumAction();
+                                }
+
+
                             }
                         };
 
@@ -343,8 +357,31 @@ public class InfoFragment extends Fragment {
 
     }
 
+    private void checkSelfPermission() {
+        String temp = ""; //파일 읽기 권한 확인
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            temp += Manifest.permission.READ_EXTERNAL_STORAGE + " ";
+        }
+        //파일 쓰기 권한 확인
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " ";
+        }
+        if (!TextUtils.isEmpty(temp)) {
+            // 권한 요청
+            ActivityCompat.requestPermissions(getActivity(), temp.trim().split(" "),1);
+        }else{
+            // 모두 허용 상태
+            //Toast.makeText(getActivity(), "권한을 모두 허용", Toast.LENGTH_SHORT).show();
+            doTakeAlbumAction();
+        }
+    }
+
+
+
+
+
     //프로필 이미지 문자열에서 비트맵으로 변환하기
-    public Bitmap StringToBitMap(String encodedString){
+    private Bitmap StringToBitMap(String encodedString){
         try {
             byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
@@ -356,7 +393,7 @@ public class InfoFragment extends Fragment {
     }
 
     //프로필 이미지를 문자열로 Sharedpreference에 저장
-    public String bitMapToString(Bitmap bitmap){
+    private String bitMapToString(Bitmap bitmap){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte [] b = baos.toByteArray();
@@ -365,7 +402,7 @@ public class InfoFragment extends Fragment {
     }
 
     // 앨범에서 이미지 가져오기
-    public void doTakeAlbumAction() {
+    private void doTakeAlbumAction() {
         // 앨범 호출
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
@@ -387,10 +424,7 @@ public class InfoFragment extends Fragment {
                 // 이후의 처리가 카메라와 같으므로 일단  break없이 진행
                 mImageCaptureUri = data.getData();
                 Log.d("SmartWheel",mImageCaptureUri.getPath().toString());
-            }
-            case PICK_FROM_CAMERA: {
-                // 이미지를 가져온 이후의 리사이즈할 이미지 크기를 결정
-                // 이후에 이미지 크롭 어플리케이션을 호출
+
                 Intent intent = new Intent("com.android.camera.action.CROP");
                 intent.setDataAndType(mImageCaptureUri, "image/*");
 
@@ -433,7 +467,7 @@ public class InfoFragment extends Fragment {
     }
 
     //jpg로 확장자 변경, useruid로 파일명 변경
-    public void saveBitmapToJpeg(Context context, Bitmap bitmap, int useruid){
+    private void saveBitmapToJpeg(Context context, Bitmap bitmap, int useruid){
 
         File storage = context.getCacheDir(); //임시파일 저장 경로
 

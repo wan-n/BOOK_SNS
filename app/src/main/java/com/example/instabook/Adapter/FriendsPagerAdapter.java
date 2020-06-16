@@ -10,7 +10,7 @@ import com.example.instabook.Fragment.Friends.FRequestFragment;
 
 public class FriendsPagerAdapter extends FragmentPagerAdapter {
 
-    int mNumOfTabs;
+    private int mNumOfTabs;
 
     public FriendsPagerAdapter(FragmentManager fm, int numTabs){
         super(fm);

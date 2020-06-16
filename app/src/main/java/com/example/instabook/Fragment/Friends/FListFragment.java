@@ -4,8 +4,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.Adapter.FriendListAdapter;
+import com.example.instabook.Fragment.InfoFragment;
 import com.example.instabook.ListView.SearchFriendItem;
 import com.example.instabook.R;
 
@@ -34,6 +37,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FListFragment extends Fragment {
 
+    View rootView;
+
     ArrayList<SearchFriendItem> items;
     RetroBaseApiService retroBaseApiService;
     SearchFriendItem mi;
@@ -50,7 +55,14 @@ public class FListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+
+        rootView = inflater.inflate(R.layout.fragment_flist, container, false);
 
         //유저 아이디가져오기
         final String userid = sp.getUserName(getActivity());
@@ -116,12 +128,13 @@ public class FListFragment extends Fragment {
         });
 
 
+
+
+        return rootView;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_flist, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 }

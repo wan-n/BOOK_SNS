@@ -13,6 +13,7 @@ import com.example.instabook.Fragment.SearchFragment;
 //생성자를 통해서 Fragment의 관리를 도와주는 FragmentManager와 페이지의 개수를 탭의 개수와 맞춰주기 위해 pageCount를 받아옴
 @SuppressWarnings("ALL")
 public class ContentsPagerAdapter extends FragmentStatePagerAdapter {
+
     private int mPageCount;
 
     public ContentsPagerAdapter(FragmentManager fm, int pageCount){
