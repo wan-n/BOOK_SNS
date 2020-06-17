@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.instabook.Activity.ForReview.ReviewActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
-import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.Adapter.BookListAdapter;
 import com.example.instabook.ListView.SearchBookItem;
 import com.example.instabook.R;
@@ -40,10 +39,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-
-import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
 
 public class SearchdbActivity extends AppCompatActivity {
     private static final String TAG = "SearchdbActivity";
@@ -73,216 +68,206 @@ public class SearchdbActivity extends AppCompatActivity {
         keyword = intent.getStringExtra("keyword"); //intent 값을 String 타입으로 변환
         Log.d(TAG, "키워드: " + keyword);
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getBook(keyword);
-            }
-        });
-        thread.start();
+        getBook(keyword);
     }
 
     //DB에서 도서 정보 가져오는 함수
     public void getBook(String keyword){
-        Log.d(TAG, "위치 get Book: " + keyword);
 
-       Thread thread2 = new Thread(new Runnable() {
-           @Override
-           public void run() {
-               Retrofit retro_name = new Retrofit.Builder()
-                       .baseUrl(retroBaseApiService.Base_URL)
-                       .addConverterFactory(GsonConverterFactory.create()).build();
-               retroBaseApiService = retro_name.create(RetroBaseApiService.class);
+        Retrofit retro_name = new Retrofit.Builder()
+                .baseUrl(retroBaseApiService.Base_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        retroBaseApiService = retro_name.create(RetroBaseApiService.class);
 
-               retroBaseApiService.getBook(keyword).enqueue(new Callback<List<BookData>>() {
-                   @Override
-                   public void onResponse(Call<List<BookData>> call, Response<List<BookData>> response) {
-                       bookDataList = response.body();
-                       books = new ArrayList<>();
-                       Log.d(TAG, "위치 get Book 속 onResponse");
+        retroBaseApiService.getBook(keyword).enqueue(new Callback<List<BookData>>() {
+            @Override
+            public void onResponse(Call<List<BookData>> call, Response<List<BookData>> response) {
+                bookDataList = response.body();
+                books = new ArrayList<>();
 
-                       for(int i = 0; i < bookDataList.size(); i++){
-                           String b = bookDataList.get(i).getBookName();
-                           String p = bookDataList.get(i).getPublisher();
-                           String is = bookDataList.get(i).getISBN13();
-                           String url = bookDataList.get(i).getBookImageUrl();
-                           Log.d(TAG, "위치 get Book 속 onResponse 안 for문");
-                           Log.d(TAG, "제목 : "+b+" 출판사 : "+p);
+                for(int i = 0; i < bookDataList.size(); i++){
+                    String b = bookDataList.get(i).getBookName();
+                    String p = bookDataList.get(i).getPublisher();
+                    String is = bookDataList.get(i).getISBN13();
+                    String url = bookDataList.get(i).getBookImageUrl();
 
-                           Thread thread3 = new Thread(new Runnable() {
-                               @Override
-                               public void run() {
-                                   Retrofit retro_author = new Retrofit.Builder()
-                                           .baseUrl(retroBaseApiService.Base_URL)
-                                           .addConverterFactory(GsonConverterFactory.create()).build();
-                                   retroBaseApiService = retro_author.create(RetroBaseApiService.class);
+                    Retrofit retro_author = new Retrofit.Builder()
+                            .baseUrl(retroBaseApiService.Base_URL)
+                            .addConverterFactory(GsonConverterFactory.create()).build();
+                    retroBaseApiService = retro_author.create(RetroBaseApiService.class);
 
-                                   retroBaseApiService.getAuthor(is).enqueue(new Callback<List<BookData>>() {
-                                       @Override
-                                       public void onResponse(Call<List<BookData>> call, Response<List<BookData>> response) {
-                                           authorDataList = response.body();
-                                           authorlist = authorDataList;
-                                           authorsam = new ArrayList<>();
-                                           Log.d(TAG, "위치 get Book 속 onResponse 안 for문의 onResponse");
+                    retroBaseApiService.getAuthor(is).enqueue(new Callback<List<BookData>>() {
+                        @Override
+                        public void onResponse(Call<List<BookData>> call, Response<List<BookData>> response) {
+                            authorDataList = response.body();
+                            authorlist = authorDataList;
+                            authorsam = new ArrayList<>();
 
-                                           for(int j = 0; j < authorlist.size(); j++){
-                                               authorsam.add(authorlist.get(j).getAuthor());
-                                           }
-                                           author = authorsam.toString();
-                                           Log.d(TAG,"author to String : "+author);
-                                           author = String.join("| ", authorsam);
-                                           Log.d(TAG,"author to join : "+author);
+                            for(int j = 0; j < authorlist.size(); j++){
+                                authorsam.add(authorlist.get(j).getAuthor());
+                            }
+                            author = authorsam.toString();
+                            author = String.join(" | ", authorsam);
 
-                                           Log.d(TAG,"author SET ITEM : "+author);
-                                           mb = new SearchBookItem(b, author, p, url, is);
-                                           books.add(mb);
+                            mb = new SearchBookItem(b, author, p, url, is);
+                            books.add(mb);
 
-                                           runOnUiThread(new Runnable() {
-                                               @Override
-                                               public void run() {
-                                                   BookListAdapter blAdapter = new BookListAdapter(getApplicationContext(),
-                                                           R.layout.listview_searchbook, books);
+                            Thread bdthread = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    BookListAdapter blAdapter = new BookListAdapter(getApplicationContext(),
+                                            R.layout.listview_searchbook, books);
+                                    ListView listview = (ListView) findViewById(R.id.listview);
 
-                                                   ListView listview = (ListView) findViewById(R.id.listview);
-                                                   listview.setAdapter(blAdapter);
+                                    listview.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            listview.setAdapter(blAdapter);
+                            /*
+                            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    String t = books.get(position).title;
+                                    String is = books.get(position).isbn;
 
-                                                   listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                       @Override
-                                                       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                           String t = books.get(position).title;
-                                                           String is = books.get(position).isbn;
+                                    Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
+                                    intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+                                    intent.putExtra("isbn", is);
+                                    //startActivity(intent);
+                                }
+                            }); */
+                                        }
+                                    });
+                                }
+                            });
+                            bdthread.start();
+                        }
 
-                                                           Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
-                                                           intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
-                                                           // intent.putExtra("isbn", is);
-                                                           // startActivity(intent);
-                                                       }
-                                                   });
-                                               }
-                                           });
-                                       }
+                        @Override
+                        public void onFailure(Call<List<BookData>> call, Throwable t) {
+                            mb = new SearchBookItem(b, " ", p, url, is);
+                            books.add(mb);
 
-                                       @Override
-                                       public void onFailure(Call<List<BookData>> call, Throwable t) {
-                                           runOnUiThread(new Runnable() {
-                                               @Override
-                                               public void run() {
-                                                   mb = new SearchBookItem(b, " ", p, url, is);
-                                                   books.add(mb);
+                            Thread bdthread = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    BookListAdapter blAdapter = new BookListAdapter(getApplicationContext(),
+                                            R.layout.listview_searchbook, books);
+                                    ListView listview = (ListView) findViewById(R.id.listview);
 
-                                                   BookListAdapter blAdapter = new BookListAdapter(getApplicationContext(),
-                                                           R.layout.listview_searchbook, books);
+                                    listview.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            listview.setAdapter(blAdapter);
+                            /*
+                            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    String t = books.get(position).title;
+                                    String is = books.get(position).isbn;
 
-                                                   ListView listview = (ListView) findViewById(R.id.listview);
-                                                   listview.setAdapter(blAdapter);
-                                               }
-                                           });
-                                       }
-                                   });
-                               }
-                           }); thread3.start();
-                       }
-                   }
+                                    Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
+                                    intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+                                    intent.putExtra("isbn", is);
+                                    //startActivity(intent);
+                                }
+                            }); */
+                                        }
+                                    });
+                                }
+                            });
+                            bdthread.start();
+                        }
+                    });
+                }
+            }
 
-                   @Override
-                   public void onFailure(Call<List<BookData>> call, Throwable t) {
-                       Log.d(TAG, "위치 get Book 속 onFailure");
-                       Thread thread5 = new Thread(new Runnable() {
-                           @Override
-                           public void run() {
-                               try {
-                                   getNaverSearch(keyword);
+            @Override
+            public void onFailure(Call<List<BookData>> call, Throwable t) {
+                getNaverSearch(keyword);
 
-                                   Log.d(TAG, "위치 get Book 속 onFailure Thread 안");
-                                   HashMap<String, Object> map = new HashMap<>();
+                HashMap<String, Object> map = new HashMap<>();
 
-                                   items = new ArrayList<>();
-                                   for(int i = 0; i <list.size(); i++) {
-                                       Log.d(TAG, "위치 get Book 속 onFailure Thread 안의 for문");
-                                       String bname = list.get(i).getTitle();
-                                       String isbn26 = list.get(i).getIsbn();
-                                       String pub = list.get(i).getPublisher();
-                                       String pdate = list.get(i).getPubdate();
-                                       String price = list.get(i).getPrice();
-                                       String sale = list.get(i).getDiscount();
-                                       String img = list.get(i).getImage();
-                                       String author = list.get(i).getAuthor();
+                items = new ArrayList<>();
+                for(int i = 0; i <list.size(); i++) {
+                    String bname = list.get(i).getTitle();
+                    String isbn26 = list.get(i).getIsbn();
+                    String pub = list.get(i).getPublisher();
+                    String pdate = list.get(i).getPubdate();
+                    String price = list.get(i).getPrice();
+                    String sale = list.get(i).getDiscount();
+                    String img = list.get(i).getImage();
+                    String author = list.get(i).getAuthor();
 
+                    pdate += " 00:00:00.000";
+                    String isbn = isbn26.substring(isbn26.length()-13, isbn26.length());
 
-                                       pdate += " 00:00:00.000";
-                                       String isbn = isbn26.substring(isbn26.length()-13, isbn26.length());
+                    map.put("bookname", bname);
+                    map.put("isbn", isbn);
+                    map.put("pub", pub);
+                    map.put("pdate", pdate);
+                    map.put("price", price);
+                    map.put("sale", sale);
+                    map.put("img", img);
+                    map.put("author",author);
 
-                                       map.put("bookname", bname);
-                                       map.put("isbn", isbn);
-                                       map.put("pub", pub);
-                                       map.put("pdate", pdate);
-                                       map.put("price", price);
-                                       map.put("sale", sale);
-                                       map.put("img", img);
-                                       map.put("author",author);
+                    sb = new SearchBookItem(bname, author, pub, img, isbn);
+                    items.add(sb);
 
-                                       sb = new SearchBookItem(bname, author, pub, img, isbn);
-                                       items.add(sb);
+                    Retrofit naver_retro = new Retrofit.Builder()
+                            .baseUrl(retroBaseApiService.Base_URL)
+                            .addConverterFactory(GsonConverterFactory.create()).build();
+                    retroBaseApiService = naver_retro.create(RetroBaseApiService.class);
 
-                                       Thread thread4 = new Thread(new Runnable() {
-                                           @Override
-                                           public void run() {
-                                               Retrofit naver_retro = new Retrofit.Builder()
-                                                       .baseUrl(retroBaseApiService.Base_URL)
-                                                       .addConverterFactory(GsonConverterFactory.create()).build();
-                                               retroBaseApiService = naver_retro.create(RetroBaseApiService.class);
+                    retroBaseApiService.postNbook(map).enqueue(new Callback<NaverData>() {
+                        @Override
+                        public void onResponse(Call<NaverData> call, Response<NaverData> response) {
 
-                                               retroBaseApiService.postNbook(map).enqueue(new Callback<NaverData>() {
-                                                   @Override
-                                                   public void onResponse(Call<NaverData> call, Response<NaverData> response) {
-                                                       Log.d(TAG, "위치 get Book 속 onFailure Thread 안의 for문 naver_retro");
-                                                   }
+                        }
+                        @Override
+                        public void onFailure(Call<NaverData> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "도서 검색 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                Thread bdthread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        BookListAdapter blAdapter = new BookListAdapter(getApplicationContext(),
+                                R.layout.listview_searchbook, books);
+                        ListView listview = (ListView) findViewById(R.id.listview);
 
-                                                   @Override
-                                                   public void onFailure(Call<NaverData> call, Throwable t) {
-                                                       Toast.makeText(getApplicationContext(), "도서 검색 실패", Toast.LENGTH_SHORT).show();
-                                                   }
-                                               });
-                                           }
-                                       }); thread4.start();
-                                   }
+                        listview.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                listview.setAdapter(blAdapter);
+                            /*
+                            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    String t = books.get(position).title;
+                                    String is = books.get(position).isbn;
 
-                                   runOnUiThread(new Runnable() {
-                                       @Override
-                                       public void run() {
-                                           Log.d(TAG, "위치 get Book 속 onFailure Thread 안의 runOnUiThread");
-                                           BookListAdapter blAdapter = new BookListAdapter(getApplicationContext(),
-                                                   R.layout.listview_searchbook, items);
-
-                                           ListView listview = (ListView) findViewById(R.id.listview);
-                                           listview.setAdapter(blAdapter);
-
-                                           Toast.makeText(getApplicationContext(), "네이버 도서로 검색", Toast.LENGTH_SHORT).show();
-                                           listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                               @Override
-                                               public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                                               }
-                                           });
-
-                                       }
-                                   });
-                               } catch (Exception e) {
-                                   e.printStackTrace();
-                               }
-                           }
-                       }); thread5.start();
-
-                   }
-               });
-           }
-       });
-       thread2.start();
+                                    Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
+                                    intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+                                    intent.putExtra("isbn", is);
+                                    //startActivity(intent);
+                                }
+                            }); */
+                            }
+                        });
+                    }
+                });
+                bdthread.start();
+                Toast.makeText(getApplicationContext(), "네이버 도서로 검색", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     String text = null;
     boolean initem = false, intitle = false, inlink = false, inimage = false, inauthor = false, inprice = false, indiscount = false,
             inpublisher = false, inpubdate = false, inisbn = false, indescription = false;
+
 
     public void getNaverSearch(final String keyword) {
         Log.d(TAG, "위치 getNaverSearch");
@@ -290,7 +275,7 @@ public class SearchdbActivity extends AppCompatActivity {
         final String clientSecret = "KVrwN1NIGi";
         int display = 10;
 
-        Thread thread6 = new Thread(new Runnable() {
+        new Thread() {
             @Override
             public void run() {
                 try {
@@ -299,19 +284,19 @@ public class SearchdbActivity extends AppCompatActivity {
                     throw new RuntimeException("검색어 인코딩 실패",e);
                 }
             }
-        }); thread6.start();
+        }.start();
 
         String apiURL = "https://openapi.naver.com/v1/search/book.xml?query=" + text + "&display=" + display;
 
-        Thread thread7 = new Thread(new Runnable() {
+        Thread naverthread = new Thread(new Runnable() {
             @Override
             public void run() {
                 Map<String, String> requestHeaders = new HashMap<>();
                 requestHeaders.put("X-Naver-Client-Id", clientId);
                 requestHeaders.put("X-Naver-Client-Secret", clientSecret);
-                String responseBody = get(apiURL,requestHeaders);
 
                 try {
+                    String responseBody = get(apiURL,requestHeaders);
                     XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();
                     XmlPullParser xpp = parserCreator.newPullParser();
                     xpp.setInput(new StringReader(responseBody));
@@ -449,8 +434,8 @@ public class SearchdbActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }); thread7.start();
-
+        });
+        naverthread.start();
     }
 
     private static String get(String apiUrl, Map<String, String> requestHeaders){

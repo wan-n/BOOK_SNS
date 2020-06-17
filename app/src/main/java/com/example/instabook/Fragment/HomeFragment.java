@@ -117,7 +117,6 @@ public class HomeFragment extends Fragment{
                                 String bname = homeDataList.get(l).getBookName();
                                 String nname = homeDataList.get(l).getNickName();
 
-
                                 Date date = null;
                                 try {
                                     date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(redate);
@@ -144,20 +143,27 @@ public class HomeFragment extends Fragment{
                                         item = new HomeReviewItem(bitmap_profile, uid, review, redate_2, isbn, rate, bname, nname);
                                         Log.d(TAG,"유아이디: "+uid+"리뷰: "+review+"날짜: "+redate+"ISBN: "+isbn+"별점: "+rate+"제목: "+bname+"닉네임: "+nname);
                                         items.add(item);
-                                        //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
-
-                                                HomeReviewAdapter hrAdapter = new HomeReviewAdapter(getActivity(), R.layout.listview_homereview, items);
-                                                ListView listView = (ListView) getView().findViewById(R.id.home_listview);
-
-                                                listView.setAdapter(hrAdapter);
                                     }
 
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        Toast.makeText(getActivity(), "이미지 실패", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    HomeReviewAdapter hrAdapter = new HomeReviewAdapter(getActivity(), R.layout.listview_homereview, items);
+                                    ListView listView = (ListView) getView().findViewById(R.id.home_listview);
+
+                                    listView.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            listView.setAdapter(hrAdapter);
+                                        }
+                                    });
+                                }
+                            }).start();
                         }
 
                         @Override
