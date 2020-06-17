@@ -113,6 +113,19 @@ public class ReviewActivity extends AppCompatActivity {
         //이미지 가져오기
         if(img == null){
             imBook.setImageResource(R.drawable.default_img);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //별점 점수 변화주기
+                    ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                        @Override
+                        public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                            tvRating.setText(rating + "점");
+                        }
+                    });
+                }
+            });
         } else {
             Thread uthread = new Thread(new Runnable() {
                 @Override
@@ -123,28 +136,27 @@ public class ReviewActivity extends AppCompatActivity {
                         conn.connect();
                         InputStream bis = conn.getInputStream();
                         bm = BitmapFactory.decodeStream(bis);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                imBook.setImageBitmap(bm);
+                                //별점 점수 변화주기
+                                ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                                    @Override
+                                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                                        tvRating.setText(rating + "점");
+                                    }
+                                });
+                            }
+                        });
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-            });
-            uthread.start();
-            try {
-                uthread.join();
-
-                imBook.setImageBitmap(bm);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            }); uthread.start();
         }
 
-        //별점 점수 변화주기
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                tvRating.setText(rating + "점");
-            }
-        });
         //별점 받아오기
         int rate = (int) ratingBar.getRating();
 
@@ -153,12 +165,11 @@ public class ReviewActivity extends AppCompatActivity {
         //태그 저장
                 /*
                 if(edTag.getText().toString().length() == 0) {
-                    Toast.makeText(getApplicationContext(), "태그를 입력하세요", Toast.LENGTH_SHORT).show();;
+                    Toast.makeText(getBaseContext(), "태그를 입력하세요", Toast.LENGTH_SHORT).show();;
                 } else {
                     //받아온 text를 string으로 저장
                     commentstag = edTag.getText().toString();
                 }   */
-
 
 
         //게시하기 버튼
@@ -166,7 +177,7 @@ public class ReviewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (edReview.getText().toString().length() == 0) {  //공백일 때 처리할 내용
-                    Toast.makeText(getApplicationContext(), "리뷰를 입력하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "리뷰를 입력하세요", Toast.LENGTH_SHORT).show();
                 } else { //공백이 아닐 때 처리할 내용
                     //리뷰값 저장
                     review = edReview.getText().toString();
@@ -187,14 +198,14 @@ public class ReviewActivity extends AppCompatActivity {
                 retroBaseApiService.postReview(map).enqueue(new Callback<ReviewData>() {
                     @Override
                     public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
-                        Toast.makeText(getApplicationContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
-                        Intent in = new Intent(getApplicationContext(), MainActivity.class);
+                        Toast.makeText(getBaseContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
+                        Intent in = new Intent(getBaseContext(), MainActivity.class);
                         startActivity(in);
                     }
 
                     @Override
                     public void onFailure(Call<ReviewData> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), "리뷰 올리기 실패", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), "리뷰 올리기 실패", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -205,7 +216,7 @@ public class ReviewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (edReview.getText().toString().length() == 0) {  //공백일 때 처리할 내용
-                    Toast.makeText(getApplicationContext(), "리뷰를 입력하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "리뷰를 입력하세요", Toast.LENGTH_SHORT).show();
                 } else { //공백이 아닐 때 처리할 내용
                     //리뷰값 저장
                     review = edReview.getText().toString();
@@ -286,7 +297,7 @@ public class ReviewActivity extends AppCompatActivity {
 
                 //UserUID와 ReviewUID를 카카오링크 파라미터로 전송
                 kakaolink(ruid, uuid);
-                Intent in = new Intent(getApplicationContext(), MainActivity.class);
+                Intent in = new Intent(getBaseContext(), MainActivity.class);
                 startActivity(in);
             }
 

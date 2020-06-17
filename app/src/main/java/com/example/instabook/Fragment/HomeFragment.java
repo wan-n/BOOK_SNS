@@ -143,6 +143,22 @@ public class HomeFragment extends Fragment{
                                         item = new HomeReviewItem(bitmap_profile, uid, review, redate_2, isbn, rate, bname, nname);
                                         Log.d(TAG,"유아이디: "+uid+"리뷰: "+review+"날짜: "+redate+"ISBN: "+isbn+"별점: "+rate+"제목: "+bname+"닉네임: "+nname);
                                         items.add(item);
+
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+
+                                                HomeReviewAdapter hrAdapter = new HomeReviewAdapter(getActivity(), R.layout.listview_homereview, items);
+                                                ListView listView = (ListView) getView().findViewById(R.id.home_listview);
+
+                                                listView.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        listView.setAdapter(hrAdapter);
+                                                    }
+                                                });
+                                            }
+                                        }).start();
                                     }
 
                                     @Override
@@ -150,20 +166,6 @@ public class HomeFragment extends Fragment{
                                     }
                                 });
                             }
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    HomeReviewAdapter hrAdapter = new HomeReviewAdapter(getActivity(), R.layout.listview_homereview, items);
-                                    ListView listView = (ListView) getView().findViewById(R.id.home_listview);
-
-                                    listView.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            listView.setAdapter(hrAdapter);
-                                        }
-                                    });
-                                }
-                            }).start();
                         }
 
                         @Override

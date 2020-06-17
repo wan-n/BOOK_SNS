@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.instabook.Activity.ForBook.BookData;
+import com.example.instabook.Activity.ForBook.SearchdbActivity;
 import com.example.instabook.Activity.ForReview.ReviewActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
@@ -95,7 +97,15 @@ public class BookListAdapter extends BaseAdapter {
 
         //이미지 가져오기
         if(imgurll == null){
-            bookImageView.setImageResource(R.drawable.default_img);
+            ((SearchdbActivity)context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    bookImageView.setImageResource(R.drawable.default_img);
+                    titleTextView.setText(searchBookItem.getTitle());
+                    authorTextView.setText(searchBookItem.getAuthor());
+                    pubTextView.setText(searchBookItem.getPublisher());
+                }
+            });
         } else {
             //int idx = imgurll.indexOf("?");
             //imgurl = imgurll.substring(0, idx);
@@ -109,25 +119,31 @@ public class BookListAdapter extends BaseAdapter {
                         conn.connect();
                         InputStream bis = conn.getInputStream();
                         bm = BitmapFactory.decodeStream(bis);
+                        int height = bm.getHeight();
+                        int width = bm.getWidth();
+
+                        Bitmap resized = null;
+                        while(height>70){
+                            resized = Bitmap.createScaledBitmap(bm,(width*70)/height,70,true);
+                            height = resized.getHeight();
+                            width = resized.getWidth();
+                        }
+
+                        ((SearchdbActivity)context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                titleTextView.setText(searchBookItem.getTitle());
+                                authorTextView.setText(searchBookItem.getAuthor());
+                                pubTextView.setText(searchBookItem.getPublisher());
+                                bookImageView.setImageBitmap(bm);
+                            }
+                        });
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-            });
-            uthread.start();
-
-            try{
-                uthread.join();
-
-                bookImageView.setImageBitmap(bm);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            }); uthread.start();
         }
-
-        titleTextView.setText(searchBookItem.getTitle());
-        authorTextView.setText(searchBookItem.getAuthor());
-        pubTextView.setText(searchBookItem.getPublisher());
 
         btn.setOnClickListener(new Button.OnClickListener() {
 

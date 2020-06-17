@@ -115,7 +115,7 @@ public class SearchdbActivity extends AppCompatActivity {
                             Thread bdthread = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    BookListAdapter blAdapter = new BookListAdapter(getApplicationContext(),
+                                    BookListAdapter blAdapter = new BookListAdapter(getBaseContext(),
                                             R.layout.listview_searchbook, books);
                                     ListView listview = (ListView) findViewById(R.id.listview);
 
@@ -151,7 +151,7 @@ public class SearchdbActivity extends AppCompatActivity {
                             Thread bdthread = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    BookListAdapter blAdapter = new BookListAdapter(getApplicationContext(),
+                                    BookListAdapter blAdapter = new BookListAdapter(getBaseContext(),
                                             R.layout.listview_searchbook, books);
                                     ListView listview = (ListView) findViewById(R.id.listview);
 
@@ -226,21 +226,21 @@ public class SearchdbActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onFailure(Call<NaverData> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), "도서 검색 실패", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getBaseContext(), "도서 검색 실패", Toast.LENGTH_SHORT).show();
                         }
                     });
-                }
-                Thread bdthread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        BookListAdapter blAdapter = new BookListAdapter(getApplicationContext(),
-                                R.layout.listview_searchbook, books);
-                        ListView listview = (ListView) findViewById(R.id.listview);
 
-                        listview.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                listview.setAdapter(blAdapter);
+                    Thread bdthread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            BookListAdapter blAdapter = new BookListAdapter(getBaseContext(),
+                                    R.layout.listview_searchbook, books);
+                            ListView listview = (ListView) findViewById(R.id.listview);
+
+                            listview.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    listview.setAdapter(blAdapter);
                             /*
                             listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
@@ -254,12 +254,14 @@ public class SearchdbActivity extends AppCompatActivity {
                                     //startActivity(intent);
                                 }
                             }); */
-                            }
-                        });
-                    }
-                });
-                bdthread.start();
-                Toast.makeText(getApplicationContext(), "네이버 도서로 검색", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    });
+                    bdthread.start();
+                }
+
+                Toast.makeText(getBaseContext(), "네이버 도서로 검색", Toast.LENGTH_SHORT).show();
             }
         });
     }

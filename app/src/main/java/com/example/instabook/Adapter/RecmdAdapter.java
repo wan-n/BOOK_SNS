@@ -3,6 +3,8 @@ package com.example.instabook.Adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.instabook.Activity.ForHome.UserBookUIDData;
+import com.example.instabook.Activity.ForReview.ReviewActivity;
 import com.example.instabook.Activity.ForUser.UserBookData;
+import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.ListView.RecmdBookItem;
@@ -45,6 +49,11 @@ public class RecmdAdapter extends BaseAdapter {
     String imgurl;
     ImageButton btn = null;
     int useruid2;
+    ImageView iconImageView;
+    TextView titleTextView;
+    TextView isbnTextView;
+    TextView pubTextView;
+    RecmdBookItem recmdBookItem;
     UserBookUIDData userbookUID;
 
     ArrayList<RecmdBookItem> items = new ArrayList<>();
@@ -92,25 +101,29 @@ public class RecmdAdapter extends BaseAdapter {
         }
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.img_book);
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.text_title);
-        TextView isbnTextView = (TextView) convertView.findViewById(R.id.text_isbn);
-        TextView pubTextView = (TextView) convertView.findViewById(R.id.text_pub);
+        iconImageView = (ImageView) convertView.findViewById(R.id.img_book);
+        titleTextView = (TextView) convertView.findViewById(R.id.text_title);
+        isbnTextView = (TextView) convertView.findViewById(R.id.text_isbn);
+        pubTextView = (TextView) convertView.findViewById(R.id.text_pub);
         btn = (ImageButton) convertView.findViewById(R.id.imgbtn_favorite);
 
         //item 가져오기
-        RecmdBookItem recmdBookItem = getItem(pos);
-
-        //텍스트 뷰에 표시될 텍스트 넣기
-        titleTextView.setText(recmdBookItem.getRbname());
-        isbnTextView.setText(recmdBookItem.getRisbn());
-        pubTextView.setText(recmdBookItem.getRpub());
+        recmdBookItem = getItem(pos);
 
         //이미지 가져오기
         String imgurll = recmdBookItem.getRimguri();
 
         if(imgurll == null){
-            iconImageView.setImageResource(R.drawable.default_img);
+            ((MainActivity)context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //각 뷰에 표시될 내용 넣기
+                    titleTextView.setText(recmdBookItem.getRbname());
+                    isbnTextView.setText(recmdBookItem.getRisbn());
+                    pubTextView.setText(recmdBookItem.getRpub());
+                    iconImageView.setImageResource(R.drawable.default_img);
+                }
+            });
         } else {
             int idx = imgurll.indexOf("?");
             imgurl = imgurll.substring(0, idx);
@@ -124,22 +137,36 @@ public class RecmdAdapter extends BaseAdapter {
                         conn.connect();
                         InputStream bis = conn.getInputStream();
                         bm = BitmapFactory.decodeStream(bis);
+
+                        ((MainActivity)context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                int height = bm.getHeight();
+                                int width = bm.getWidth();
+
+                                Bitmap resized = null;
+                                while(height>70){
+                                    resized = Bitmap.createScaledBitmap(bm,(width*70)/height,70,true);
+                                    height = resized.getHeight();
+                                    width = resized.getWidth();
+                                }
+
+                                //각 뷰에 표시될 내용 넣기
+                                titleTextView.setText(recmdBookItem.getRbname());
+                                isbnTextView.setText(recmdBookItem.getRisbn());
+                                pubTextView.setText(recmdBookItem.getRpub());
+                                iconImageView.setImageBitmap(bm);
+                            }
+                        });
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
             uthread.start();
-
-            try{
-                uthread.join();
-                iconImageView.setImageBitmap(bm);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
 
-        /**TODO 찜 도서 생성, 삭제 구현하기*/
+        /**TODO 찜 도서 생성, 삭제 구현하기
         final int[] jjim = {0};
         String isbn = recmdBookItem.getRisbn();
 
@@ -167,12 +194,14 @@ public class RecmdAdapter extends BaseAdapter {
             }
         });
 
-
         //찜 버튼 클릭
         btn.setTag(pos);
         btn.setOnClickListener(jjimOnClickListener);
+        */
+
         return convertView;
     }
+
 
     final Button.OnClickListener jjimOnClickListener = new Button.OnClickListener() {
         @Override
