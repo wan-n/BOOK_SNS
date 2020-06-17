@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
@@ -36,21 +35,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.instabook.Activity.ForHome.AllUserData;
 import com.example.instabook.Activity.ForHome.HomeData;
-import com.example.instabook.Activity.ForHome.UserData;
 import com.example.instabook.Activity.ForMyBook.MyBookActivity;
-import com.example.instabook.Activity.MainActivity;
-import com.example.instabook.Activity.MakeDeepLink.DelLinkActivity;
-import com.example.instabook.Activity.Pre.LoginActivity;
 import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
-import com.example.instabook.Adapter.HomeReviewAdapter;
 import com.example.instabook.Adapter.InfoReviewAdapter;
 import com.example.instabook.ListView.HomeReviewItem;
 import com.example.instabook.R;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -61,9 +55,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -76,7 +68,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
+
 
 
 public class InfoFragment extends Fragment {
@@ -191,7 +183,9 @@ public class InfoFragment extends Fragment {
 
                                 if(edit_name.length() <= 0){
                                     Toast.makeText(getActivity(), "변경할 닉네임을 입력해주세요.", Toast.LENGTH_SHORT).show();
-                                }else {
+                                } else if(edit_name.length() > 10){
+                                    Toast.makeText(getActivity(), "10글자 이내로만 변경 가능합니다.", Toast.LENGTH_SHORT).show();
+                                } else {
                                     conNickName(edit_name, userid);
                                     dialog.dismiss();
                                 }
@@ -426,7 +420,7 @@ public class InfoFragment extends Fragment {
                 // 이후의 처리가 카메라와 같으므로 일단  break없이 진행
                 mImageCaptureUri = data.getData();
                 assert mImageCaptureUri != null;
-                Log.d("SmartWheel",mImageCaptureUri.getPath().toString());
+                Log.d("InstaBook",mImageCaptureUri.getPath().toString());
 
                 Intent intent = new Intent("com.android.camera.action.CROP");
                 intent.setDataAndType(mImageCaptureUri, "image/*");
@@ -449,24 +443,115 @@ public class InfoFragment extends Fragment {
                 }
                 final Bundle extras = data.getExtras();
 
+                //CROP 된 이미지를 저장하기 위한 FILE 경로
+                String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+
+                        "/InstaBook/"+System.currentTimeMillis()+".jpg";
+
+                String storage = Environment.getExternalStorageDirectory().getAbsolutePath()+
+                        "/InstaBook/";
+
 
                 if(extras != null) {
                     Bitmap photo = extras.getParcelable("data"); // CROP된 BITMAP
 
+
+                    storeCropImage(getActivity(), photo, filePath, useruid, storage); // CROP된 이미지를 외부저장소, 앨범에 저장한다.
+                    absoultePath = filePath;
+
                     //jpg로 확장자 변경, userid로 파일명 변경 후 서버에 업로드까지
-                    saveBitmapToJpeg(getActivity(), photo, useruid);
+                    //saveBitmapToJpeg(getActivity(), photo, useruid);
 
                     break;
                 }
 
                 // 임시 파일 삭제
                 File f = new File(mImageCaptureUri.getPath());
+                Log.d("임시파일 경로", mImageCaptureUri.getPath().toString());
                 if(f.exists()) {
                     f.delete();
                 }
             }
         }
     }
+
+
+
+    private void storeCropImage(Context context, Bitmap bitmap, String filePath, int useruid, String storage){
+        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/InstaBook";
+        File directory_InstaBook = new File(dirPath);
+        if(!directory_InstaBook.exists()) // SmartWheel 디렉터리에 폴더가 없다면 (새로 이미지를 저장할 경우에 속한다.)
+            directory_InstaBook.mkdir();
+
+        //파일명을 UserUID로 변경
+        String fileName = useruid+".jpg"; // 파일이름 : userUID.jpg
+        File photo_fin = new File(storage, fileName);
+
+        BufferedOutputStream out = null;
+
+        try {
+            photo_fin.createNewFile();
+            out = new BufferedOutputStream(new FileOutputStream(photo_fin));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, out);
+            getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                    Uri.fromFile(photo_fin)));
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        //서버에 업로드
+        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), photo_fin);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("upload", photo_fin.getName(), reqFile);
+        //RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload");
+
+
+        Retrofit retro_name = new Retrofit.Builder()
+                .baseUrl(retroBaseApiService.Base_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        retroBaseApiService = retro_name.create(RetroBaseApiService.class);
+
+        retroBaseApiService.postImage(body).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code() == 200) {
+
+                    //비트맵을 문자열로 변환하여 sharedpreference에 저장
+                    String string_profile = bitMapToString(bitmap);
+                    SaveSharedPreference.setUserImage(getActivity(), string_profile);
+
+
+                    // 레이아웃의 이미지칸에 CROP된 BITMAP을 보여줌
+                    info_pimg.setImageBitmap(bitmap);
+
+                    //이미지 동그랗게 보이기
+                    info_pimg.setBackground(new ShapeDrawable(new OvalShape()));
+                    info_pimg.setClipToOutline(true);
+
+
+                    //프래그먼트 새로고침
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.detach(InfoFragment.this).attach(InfoFragment.this).commit();
+
+                }
+                //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
+            }
+
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getActivity(), "실패", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+    }
+
+
+
+
 
     //jpg로 확장자 변경, useruid로 파일명 변경
     private void saveBitmapToJpeg(Context context, Bitmap bitmap, int useruid){
