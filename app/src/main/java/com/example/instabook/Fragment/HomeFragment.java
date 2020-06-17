@@ -1,41 +1,26 @@
 package com.example.instabook.Fragment;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Lifecycle;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import com.example.instabook.Activity.ForBook.SearchdbActivity;
 import com.example.instabook.Activity.ForHome.AllUserData;
 import com.example.instabook.Activity.ForHome.HomeData;
-import com.example.instabook.Activity.ForHome.UserBookUIDData;
 import com.example.instabook.Activity.ForHome.UserData;
-import com.example.instabook.Activity.ForReview.ModiReviewActivity;
-import com.example.instabook.Activity.ForReview.ReviewActivity;
-import com.example.instabook.Activity.ForReview.ReviewDelActivity;
-import com.example.instabook.Activity.ForUser.UserBookData;
-import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.Adapter.HomeReviewAdapter;
 import com.example.instabook.ListView.HomeReviewItem;
-import com.example.instabook.ListView.SearchFriendItem;
 import com.example.instabook.R;
 
 import java.io.InputStream;
@@ -44,7 +29,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -162,10 +146,10 @@ public class HomeFragment extends Fragment{
                                         items.add(item);
                                         //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
 
+                                                HomeReviewAdapter hrAdapter = new HomeReviewAdapter(getActivity(), R.layout.listview_homereview, items);
+                                                ListView listView = (ListView) getView().findViewById(R.id.home_listview);
 
-                                        HomeReviewAdapter hrAdapter = new HomeReviewAdapter(getActivity(), R.layout.listview_homereview, items);
-                                        ListView listView = (ListView) getView().findViewById(R.id.home_listview);
-                                        listView.setAdapter(hrAdapter);
+                                                listView.setAdapter(hrAdapter);
                                     }
 
                                     @Override
@@ -195,7 +179,6 @@ public class HomeFragment extends Fragment{
 
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-
     }
 
 }

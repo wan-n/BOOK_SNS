@@ -4,17 +4,21 @@ package com.example.instabook.Adapter;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.instabook.Fragment.HomeFragment;
 import com.example.instabook.Fragment.InfoFragment;
 import com.example.instabook.Fragment.RecmdFragment;
 import com.example.instabook.Fragment.SearchFragment;
+import com.example.instabook.R;
 
 //생성자를 통해서 Fragment의 관리를 도와주는 FragmentManager와 페이지의 개수를 탭의 개수와 맞춰주기 위해 pageCount를 받아옴
 @SuppressWarnings("ALL")
 public class ContentsPagerAdapter extends FragmentStatePagerAdapter {
 
     private int mPageCount;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction transaction;
 
     public ContentsPagerAdapter(FragmentManager fm, int pageCount){
         //super(fm);

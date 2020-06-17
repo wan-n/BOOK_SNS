@@ -32,7 +32,6 @@
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity android:name=".Activity.ForReview.ReviewActivity" />
         <activity android:name=".Activity.SearchFriendActivity" />
-        <activity android:name=".Activity.ForBook.SearchSubActivity" />
         <activity android:name=".Activity.ForBook.SearchdbActivity" />
         <activity android:name=".Activity.FriendsActivity" />
         <activity android:name=".Activity.MyInfoActivity" />

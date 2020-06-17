@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.ListView;
 
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
-import com.example.instabook.Adapter.BookListAdapter;
 import com.example.instabook.Adapter.RecmdAdapter;
 import com.example.instabook.ListView.RecmdBookItem;
 import com.example.instabook.R;
@@ -50,7 +48,7 @@ public class RecmdFragment extends Fragment {
 
         //유저 UID 가져오기
         final int useruid = sp.getUserUid(getActivity());
-        /*
+
         Retrofit retro_rcmd = new Retrofit.Builder()
                 .baseUrl(retroBaseApiService.Base_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
@@ -85,7 +83,7 @@ public class RecmdFragment extends Fragment {
             }
         });
 
-*/
+
         // Inflate the layout for this fragment
         return rootView;
     }
