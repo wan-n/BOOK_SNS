@@ -102,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                                             retroBaseApiService = retro_img.create(RetroBaseApiService.class);
 
                                             retroBaseApiService.getImage(uid).enqueue(new Callback<ResponseBody>() {
+                                            //retroBaseApiService.delImage(uid).enqueue(new Callback<ResponseBody>() {
 
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
