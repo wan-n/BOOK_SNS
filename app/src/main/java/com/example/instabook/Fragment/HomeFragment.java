@@ -1,5 +1,6 @@
 package com.example.instabook.Fragment;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -42,21 +43,22 @@ import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseA
 public class HomeFragment extends Fragment{
     private static final String TAG = "HomeFragment";
     SaveSharedPreference sp;
-    View rootView;
+    private View rootView;
+    private Context context;
+    private List<UserData> frDataList;
+    private  List<AllUserData> allUserDataList;
+    private AllUserData alluserData;
+    private AllUserData alluserData2;
 
-    List<UserData> frDataList;
-    List<AllUserData> allUserDataList;
-    AllUserData alluserData;
-    AllUserData alluserData2;
-
-    List<HomeData> homeDataList;
-    ArrayList<HomeReviewItem> items;
-    HomeReviewItem item;
+    private List<HomeData> homeDataList;
+    private ArrayList<HomeReviewItem> items;
+    private HomeReviewItem item;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        context = getContext();
     }
 
     @Override
@@ -144,21 +146,7 @@ public class HomeFragment extends Fragment{
                                         Log.d(TAG,"유아이디: "+uid+"리뷰: "+review+"날짜: "+redate+"ISBN: "+isbn+"별점: "+rate+"제목: "+bname+"닉네임: "+nname);
                                         items.add(item);
 
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-
-                                                HomeReviewAdapter hrAdapter = new HomeReviewAdapter(getActivity(), R.layout.listview_homereview, items);
-                                                ListView listView = (ListView) getView().findViewById(R.id.home_listview);
-
-                                                listView.post(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        listView.setAdapter(hrAdapter);
-                                                    }
-                                                });
-                                            }
-                                        }).start();
+                                        initView();
                                     }
 
                                     @Override
@@ -189,4 +177,9 @@ public class HomeFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
     }
 
+    private void initView(){
+        HomeReviewAdapter hrAdapter = new HomeReviewAdapter(getActivity(), R.layout.listview_homereview, items);
+        ListView listView = (ListView) getView().findViewById(R.id.home_listview);
+        listView.setAdapter(hrAdapter);
+    }
 }

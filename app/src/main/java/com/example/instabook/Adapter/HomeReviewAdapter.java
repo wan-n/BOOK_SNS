@@ -116,8 +116,6 @@ public class HomeReviewAdapter extends BaseAdapter {
         MemuImageButton.setTag(pos);
         MemuImageButton.setOnClickListener(this::menuOnClick);
 
-
-
         return convertView;
     }
 

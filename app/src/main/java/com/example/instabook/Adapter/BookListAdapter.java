@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.instabook.Activity.ForBook.BookData;
 import com.example.instabook.Activity.ForBook.SearchdbActivity;
 import com.example.instabook.Activity.ForReview.ReviewActivity;
+import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.ListView.SearchBookItem;
@@ -97,7 +98,7 @@ public class BookListAdapter extends BaseAdapter {
 
         //이미지 가져오기
         if(imgurll == null){
-            ((SearchdbActivity)context).runOnUiThread(new Runnable() {
+            ((MainActivity)context).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     bookImageView.setImageResource(R.drawable.default_img);
@@ -129,7 +130,7 @@ public class BookListAdapter extends BaseAdapter {
                             width = resized.getWidth();
                         }
 
-                        ((SearchdbActivity)context).runOnUiThread(new Runnable() {
+                        ((MainActivity)context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 titleTextView.setText(searchBookItem.getTitle());

@@ -73,24 +73,8 @@ public class RecmdFragment extends Fragment {
                     rb = new RecmdBookItem(b, isbn, url, p);
                     items.add(rb);
                     Log.d(TAG,"추천 도서 정보 items에 넣음");
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            RecmdAdapter rAdapter = new RecmdAdapter(getContext(),
-                                    R.layout.listview_recmd, items);
-                            ListView listview = (ListView) getActivity().findViewById(R.id.recom_listview);
-                            Log.d(TAG,"추천 도서 정보 어댑터 선언");
 
-                            ((MainActivity)getContext()).runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Log.d(TAG,"추천 도서 정보 어댑터에 넘겨주기");
-                                    listview.setAdapter(rAdapter);
-                                }
-                            });
-
-                        }
-                    }).start();
+                    initView();
                 }
             }
 
@@ -104,4 +88,23 @@ public class RecmdFragment extends Fragment {
         return rootView;
     }
 
+    private void initView() {
+        RecmdAdapter rAdapter = new RecmdAdapter(getActivity(),
+                R.layout.listview_recmd, items);
+        ListView listview = (ListView) getActivity().findViewById(R.id.recom_listview);
+        Log.d(TAG,"추천 도서 정보 어댑터 선언");
+
+        listview.setAdapter(rAdapter);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ((MainActivity)getContext()).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        rAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+    }
 }

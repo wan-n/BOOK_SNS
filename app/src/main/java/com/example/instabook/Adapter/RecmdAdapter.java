@@ -22,6 +22,7 @@ import com.example.instabook.Activity.ForUser.UserBookData;
 import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
+import com.example.instabook.Fragment.RecmdFragment;
 import com.example.instabook.ListView.RecmdBookItem;
 import com.example.instabook.R;
 
@@ -114,16 +115,10 @@ public class RecmdAdapter extends BaseAdapter {
         String imgurll = recmdBookItem.getRimguri();
 
         if(imgurll == null){
-            ((MainActivity)context).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //각 뷰에 표시될 내용 넣기
-                    titleTextView.setText(recmdBookItem.getRbname());
-                    isbnTextView.setText(recmdBookItem.getRisbn());
-                    pubTextView.setText(recmdBookItem.getRpub());
-                    iconImageView.setImageResource(R.drawable.default_img);
-                }
-            });
+            titleTextView.setText(recmdBookItem.getRbname());
+            isbnTextView.setText(recmdBookItem.getRisbn());
+            pubTextView.setText(recmdBookItem.getRpub());
+            iconImageView.setImageResource(R.drawable.default_img);
         } else {
             int idx = imgurll.indexOf("?");
             imgurl = imgurll.substring(0, idx);
@@ -138,26 +133,22 @@ public class RecmdAdapter extends BaseAdapter {
                         InputStream bis = conn.getInputStream();
                         bm = BitmapFactory.decodeStream(bis);
 
-                        ((MainActivity)context).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                int height = bm.getHeight();
-                                int width = bm.getWidth();
+                        int height = bm.getHeight();
+                        int width = bm.getWidth();
 
-                                Bitmap resized = null;
-                                while(height>70){
-                                    resized = Bitmap.createScaledBitmap(bm,(width*70)/height,70,true);
-                                    height = resized.getHeight();
-                                    width = resized.getWidth();
-                                }
+                        Bitmap resized = null;
+                        while(height>70){
+                            resized = Bitmap.createScaledBitmap(bm,(width*70)/height,70,true);
+                            height = resized.getHeight();
+                            width = resized.getWidth();
+                        }
 
-                                //각 뷰에 표시될 내용 넣기
-                                titleTextView.setText(recmdBookItem.getRbname());
-                                isbnTextView.setText(recmdBookItem.getRisbn());
-                                pubTextView.setText(recmdBookItem.getRpub());
-                                iconImageView.setImageBitmap(bm);
-                            }
-                        });
+                        //각 뷰에 표시될 내용 넣기
+                        titleTextView.setText(recmdBookItem.getRbname());
+                        isbnTextView.setText(recmdBookItem.getRisbn());
+                        pubTextView.setText(recmdBookItem.getRpub());
+                        iconImageView.setImageBitmap(bm);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -166,11 +157,9 @@ public class RecmdAdapter extends BaseAdapter {
             uthread.start();
         }
 
-        /**TODO 찜 도서 생성, 삭제 구현하기
         final int[] jjim = {0};
         String isbn = recmdBookItem.getRisbn();
 
-        btn.setImageResource(R.drawable.favorite_border_black);
         Retrofit retro_id = new Retrofit.Builder()
                 .baseUrl(retroBaseApiService.Base_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
@@ -181,7 +170,6 @@ public class RecmdAdapter extends BaseAdapter {
             public void onResponse(Call<UserBookUIDData> call, Response<UserBookUIDData> response) {
                 userbookUID = response.body();
 
-                jjim[0] =1;
                 int userbookuid = userbookUID.getUserBookUID();
                 recmdBookItem.setUserBookUID(userbookuid);
 
@@ -190,6 +178,7 @@ public class RecmdAdapter extends BaseAdapter {
             }
             @Override
             public void onFailure(Call<UserBookUIDData> call, Throwable t) {
+                btn.setImageResource(R.drawable.favorite_border_black);
                 Log.d(TAG, "찜 도서 정보 없음 ");
             }
         });
@@ -197,7 +186,7 @@ public class RecmdAdapter extends BaseAdapter {
         //찜 버튼 클릭
         btn.setTag(pos);
         btn.setOnClickListener(jjimOnClickListener);
-        */
+
 
         return convertView;
     }
@@ -227,8 +216,14 @@ public class RecmdAdapter extends BaseAdapter {
                 retroBaseApiService.delUBook(ubuid).enqueue(new Callback<UserBookData>() {
                     @Override
                     public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                        btn.setImageResource(R.drawable.favorite_border_black);
-                        Toast.makeText(context.getApplicationContext(), "찜 도서 제거 성공", Toast.LENGTH_SHORT).show();
+                        ((MainActivity)context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                btn.setImageResource(R.drawable.favorite_border_black);
+                            }
+                        });
+
+                        Toast.makeText(context.getApplicationContext(), reitem.getRbname()+"찜 도서 제거 성공", Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onFailure(Call<UserBookData> call, Throwable t) {
@@ -245,8 +240,13 @@ public class RecmdAdapter extends BaseAdapter {
                 retroBaseApiService.postUBook(map).enqueue(new Callback<UserBookData>() {
                     @Override
                     public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                        btn.setImageResource(R.drawable.favorite_black);
-                        Toast.makeText(context.getApplicationContext(), "찜 도서 추가 성공", Toast.LENGTH_SHORT).show();
+                        ((MainActivity)context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                btn.setImageResource(R.drawable.favorite_black);
+                            }
+                        });
+                        Toast.makeText(context.getApplicationContext(), reitem.getRbname()+"찜 도서 추가 성공", Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onFailure(Call<UserBookData> call, Throwable t) {

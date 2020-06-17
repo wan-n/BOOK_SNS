@@ -112,35 +112,28 @@ public class SearchdbActivity extends AppCompatActivity {
                             mb = new SearchBookItem(b, author, p, url, is);
                             books.add(mb);
 
-                            Thread bdthread = new Thread(new Runnable() {
+                            BookListAdapter blAdapter = new BookListAdapter(getBaseContext(),
+                                    R.layout.listview_searchbook, books);
+                            ListView listview = (ListView) findViewById(R.id.listview);
+
+                            runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    BookListAdapter blAdapter = new BookListAdapter(getBaseContext(),
-                                            R.layout.listview_searchbook, books);
-                                    ListView listview = (ListView) findViewById(R.id.listview);
-
-                                    listview.post(new Runnable() {
+                                    listview.setAdapter(blAdapter);
+                                    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                         @Override
-                                        public void run() {
-                                            listview.setAdapter(blAdapter);
-                            /*
-                            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    String t = books.get(position).title;
-                                    String is = books.get(position).isbn;
+                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                            String t = books.get(position).title;
+                                            String is = books.get(position).isbn;
 
-                                    Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
-                                    intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
-                                    intent.putExtra("isbn", is);
-                                    //startActivity(intent);
-                                }
-                            }); */
+                                            //Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
+                                            //intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+                                            // intent.putExtra("isbn", is);
+                                            // startActivity(intent);
                                         }
                                     });
                                 }
                             });
-                            bdthread.start();
                         }
 
                         @Override
@@ -148,7 +141,7 @@ public class SearchdbActivity extends AppCompatActivity {
                             mb = new SearchBookItem(b, " ", p, url, is);
                             books.add(mb);
 
-                            Thread bdthread = new Thread(new Runnable() {
+                            runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     BookListAdapter blAdapter = new BookListAdapter(getBaseContext(),
@@ -159,24 +152,22 @@ public class SearchdbActivity extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             listview.setAdapter(blAdapter);
-                            /*
-                            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    String t = books.get(position).title;
-                                    String is = books.get(position).isbn;
+                                            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                    String t = books.get(position).title;
+                                                    String is = books.get(position).isbn;
 
-                                    Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
-                                    intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
-                                    intent.putExtra("isbn", is);
-                                    //startActivity(intent);
-                                }
-                            }); */
+                                                    //Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
+                                                    //intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+                                                    //intent.putExtra("isbn", is);
+                                                    //startActivity(intent);
+                                                }
+                                            });
                                         }
                                     });
                                 }
                             });
-                            bdthread.start();
                         }
                     });
                 }
@@ -230,37 +221,29 @@ public class SearchdbActivity extends AppCompatActivity {
                         }
                     });
 
-                    Thread bdthread = new Thread(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             BookListAdapter blAdapter = new BookListAdapter(getBaseContext(),
                                     R.layout.listview_searchbook, books);
                             ListView listview = (ListView) findViewById(R.id.listview);
+                            listview.setAdapter(blAdapter);
 
-                            listview.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    listview.setAdapter(blAdapter);
-                            /*
                             listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                     String t = books.get(position).title;
                                     String is = books.get(position).isbn;
 
-                                    Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
-                                    intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
-                                    intent.putExtra("isbn", is);
+                                    //Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
+                                    //intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+                                    //intent.putExtra("isbn", is);
                                     //startActivity(intent);
-                                }
-                            }); */
                                 }
                             });
                         }
                     });
-                    bdthread.start();
                 }
-
                 Toast.makeText(getBaseContext(), "네이버 도서로 검색", Toast.LENGTH_SHORT).show();
             }
         });
@@ -269,7 +252,6 @@ public class SearchdbActivity extends AppCompatActivity {
     String text = null;
     boolean initem = false, intitle = false, inlink = false, inimage = false, inauthor = false, inprice = false, indiscount = false,
             inpublisher = false, inpubdate = false, inisbn = false, indescription = false;
-
 
     public void getNaverSearch(final String keyword) {
         Log.d(TAG, "위치 getNaverSearch");
