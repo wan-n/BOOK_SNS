@@ -44,7 +44,8 @@
         <activity android:name=".Activity.Pre.FindPwdActivity" />
         <activity android:name=".Activity.Pre.FindIdActivity" />
         <activity android:name=".Activity.Pre.RegisterActivity" />
-        <activity android:name=".Activity.MainActivity" />
+        <activity android:name=".Activity.MainActivity"
+            android:configChanges="orientation|screenSize"/>
         <activity android:name=".Activity.Pre.LoginActivity" />
         <activity android:name=".Activity.Pre.FirstAuthActivity">
             <intent-filter>

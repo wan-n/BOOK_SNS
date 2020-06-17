@@ -454,16 +454,7 @@ public class InfoFragment extends Fragment {
                     Bitmap photo = extras.getParcelable("data"); // CROP된 BITMAP
 
                     //jpg로 확장자 변경, userid로 파일명 변경 후 서버에 업로드까지
-                    //saveBitmapToJpeg(getActivity(), photo, useruid);
-
-                    // 레이아웃의 이미지칸에 CROP된 BITMAP을 보여줌
-                    info_pimg.setImageBitmap(photo);
-
-                    //이미지 동그랗게 보이기
-                    info_pimg.setBackground(new ShapeDrawable(new OvalShape()));
-                    info_pimg.setClipToOutline(true);
-
-
+                    saveBitmapToJpeg(getActivity(), photo, useruid);
 
                     break;
                 }
