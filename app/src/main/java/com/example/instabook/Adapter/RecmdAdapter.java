@@ -67,6 +67,10 @@ public class RecmdAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(this.context);
     }
 
+    static class ViewHolder {
+
+    }
+
     // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
     @Override
     public int getCount() {
@@ -220,6 +224,7 @@ public class RecmdAdapter extends BaseAdapter {
                             @Override
                             public void run() {
                                 btn.setImageResource(R.drawable.favorite_border_black);
+                                notifyDataSetChanged();
                             }
                         });
 
@@ -244,6 +249,7 @@ public class RecmdAdapter extends BaseAdapter {
                             @Override
                             public void run() {
                                 btn.setImageResource(R.drawable.favorite_black);
+                                notifyDataSetChanged();
                             }
                         });
                         Toast.makeText(context.getApplicationContext(), reitem.getRbname()+"찜 도서 추가 성공", Toast.LENGTH_SHORT).show();
