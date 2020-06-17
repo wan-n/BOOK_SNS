@@ -344,9 +344,6 @@ public class InfoFragment extends Fragment {
             }
         });
 
-
-
-
     }
 
     private void checkSelfPermission() {

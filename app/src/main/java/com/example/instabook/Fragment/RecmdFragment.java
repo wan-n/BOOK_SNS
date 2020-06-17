@@ -2,6 +2,8 @@ package com.example.instabook.Fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.example.instabook.Activity.ForHome.UserBookUIDData;
 import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
@@ -34,6 +37,7 @@ public class RecmdFragment extends Fragment {
     private static final String TAG = "RecmdFragment";
     List<RecmdBookItem> recmdlist;
     ArrayList<RecmdBookItem> items;
+    UserBookUIDData userbookUID;
     RecmdBookItem rb;
     SaveSharedPreference sp;
     View rootView;
@@ -70,20 +74,41 @@ public class RecmdFragment extends Fragment {
                     String url = recmdlist.get(i).getRimguri();
                     String p = recmdlist.get(i).getRpub();
 
-                    rb = new RecmdBookItem(b, isbn, url, p);
-                    items.add(rb);
-                    Log.d(TAG,"추천 도서 정보 items에 넣음");
+                    Retrofit retro_id = new Retrofit.Builder()
+                            .baseUrl(retroBaseApiService.Base_URL)
+                            .addConverterFactory(GsonConverterFactory.create()).build();
+                    retroBaseApiService = retro_id.create(RetroBaseApiService.class);
 
-                    initView();
+                    retroBaseApiService.getUBid(useruid,isbn).enqueue(new Callback<UserBookUIDData>() {
+                        @Override
+                        public void onResponse(Call<UserBookUIDData> call, Response<UserBookUIDData> response) {
+                            userbookUID = response.body();
+
+                            int bid = userbookUID.getUserBookUID();
+                            rb = new RecmdBookItem(b, isbn, url, p, bid);
+                            items.add(rb);
+                            Log.d(TAG,"찜 도서 정보 있음");
+                            Log.d(TAG,"추천 도서 정보 items에 넣음");
+                            initView();
+                        }
+                        @Override
+                        public void onFailure(Call<UserBookUIDData> call, Throwable t) {
+                            rb = new RecmdBookItem(b, isbn, url, p, 0);
+                            items.add(rb);
+                            Log.d(TAG, "찜 도서 정보 없음 ");
+                            Log.d(TAG,"추천 도서 정보 items에 넣음");
+                            initView();
+                        }
+                    });
+
                 }
+                initView();
             }
-
             @Override
             public void onFailure(Call<List<RecmdBookItem>> call, Throwable t) {
 
             }
         });
-
         // Inflate the layout for this fragment
         return rootView;
     }
@@ -101,7 +126,7 @@ public class RecmdFragment extends Fragment {
                 ((MainActivity)getContext()).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        rAdapter.notifyDataSetChanged();
+                        //rAdapter.notifyDataSetChanged();
                     }
                 });
             }

@@ -5,13 +5,14 @@ public class RecmdBookItem {
     String Publisher;
     String BookImageUrl;
     String ISBN13;
-    int UserBookUID;
+    int UserBookUID = 0;
 
-    public RecmdBookItem(String b, String isbn, String url, String p) {
+    public RecmdBookItem(String b, String isbn, String url, String p, int bid) {
         this.BookName = b;
         this.ISBN13 = isbn;
         this.BookImageUrl = url;
         this.Publisher = p;
+        this.UserBookUID = bid;
     }
 
     public void setUserBookUID(int userBookUID) {
