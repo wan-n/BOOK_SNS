@@ -356,6 +356,7 @@ public class InfoFragment extends Fragment {
     }
 
     private void checkSelfPermission() {
+
         String temp = ""; //파일 읽기 권한 확인
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             temp += Manifest.permission.READ_EXTERNAL_STORAGE + " ";
@@ -363,6 +364,9 @@ public class InfoFragment extends Fragment {
         //파일 쓰기 권한 확인
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " ";
+        }
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            temp += Manifest.permission.CAMERA + " ";
         }
         if (!TextUtils.isEmpty(temp)) {
             // 권한 요청
@@ -421,6 +425,7 @@ public class InfoFragment extends Fragment {
             case PICK_FROM_ALBUM: {
                 // 이후의 처리가 카메라와 같으므로 일단  break없이 진행
                 mImageCaptureUri = data.getData();
+                assert mImageCaptureUri != null;
                 Log.d("SmartWheel",mImageCaptureUri.getPath().toString());
 
                 Intent intent = new Intent("com.android.camera.action.CROP");
@@ -449,7 +454,15 @@ public class InfoFragment extends Fragment {
                     Bitmap photo = extras.getParcelable("data"); // CROP된 BITMAP
 
                     //jpg로 확장자 변경, userid로 파일명 변경 후 서버에 업로드까지
-                    saveBitmapToJpeg(getActivity(), photo, useruid);
+                    //saveBitmapToJpeg(getActivity(), photo, useruid);
+
+                    // 레이아웃의 이미지칸에 CROP된 BITMAP을 보여줌
+                    info_pimg.setImageBitmap(photo);
+
+                    //이미지 동그랗게 보이기
+                    info_pimg.setBackground(new ShapeDrawable(new OvalShape()));
+                    info_pimg.setClipToOutline(true);
+
 
 
                     break;
@@ -478,7 +491,7 @@ public class InfoFragment extends Fragment {
 
             FileOutputStream out = new FileOutputStream(photo_jpg);
 
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80 , out); //넘겨 받은 bitmap을 jpeg(손실압축)으로 저장해줌
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60 , out); //넘겨 받은 bitmap을 jpeg(손실압축)으로 저장해줌
 
             out.close(); //마무리로 닫아줌
 
@@ -496,7 +509,7 @@ public class InfoFragment extends Fragment {
     }
 
     //앨범에서 가져온 이미지 서버에 저장
-    public void registerImage(File photo_jpg, Bitmap photo_bitmap) {
+    private void registerImage(File photo_jpg, Bitmap photo_bitmap) {
 
         RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), photo_jpg);
         MultipartBody.Part body = MultipartBody.Part.createFormData("upload", photo_jpg.getName(), reqFile);
@@ -547,7 +560,7 @@ public class InfoFragment extends Fragment {
 
 
     //변경할 닉네임 중복 확인
-    void conNickName(String name, String id){
+    private void conNickName(String name, String id){
 
         Retrofit retro_name = new Retrofit.Builder()
                 .baseUrl(retroBaseApiService.Base_URL)
@@ -569,7 +582,7 @@ public class InfoFragment extends Fragment {
     }
 
     //닉네임 변경
-    void changeNickName(String name, String id){
+    private void changeNickName(String name, String id){
         Retrofit retro_name = new Retrofit.Builder()
                 .baseUrl(retroBaseApiService.Base_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
