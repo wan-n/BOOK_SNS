@@ -44,8 +44,7 @@ public class RecmdAdapter extends BaseAdapter {
     LayoutInflater inflater;
     SaveSharedPreference sp;
     Bitmap bm;
-    String imgurl;
-    int useruid2;
+    int useruid;
     int himge;
     RecmdBookItem recmdBookItem;
 
@@ -90,9 +89,10 @@ public class RecmdAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        final int uid = sp.getUserUid(context.getApplicationContext());
+        useruid = uid;
         ViewHolder hodler;
         int pos = position;
-        final int useruid = sp.getUserUid(context.getApplicationContext());
 
         // "listview_item" Layout을 inflate하여 convertView 참조 획득.
         if (convertView == null) {
@@ -141,7 +141,7 @@ public class RecmdAdapter extends BaseAdapter {
             Log.d(TAG,"선택된 유저 북아이디: "+ubuid);
 
             HashMap<String, Object> map = new HashMap<>();
-            map.put("uid",useruid2);
+            map.put("uid",useruid);
             map.put("isbn",isbn);
 
             if (ubuid > 0){ //찜 목록에서 없애기
@@ -156,8 +156,8 @@ public class RecmdAdapter extends BaseAdapter {
                         ((MainActivity)context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                //btn.setImageResource(R.drawable.favorite_border_black);
-                                //notifyDataSetChanged();
+                                //hodler.jjimbtn.setImageResource(R.drawable.favorite_border_black);
+                                notifyDataSetChanged();
                             }
                         });
 
@@ -182,7 +182,7 @@ public class RecmdAdapter extends BaseAdapter {
                             @Override
                             public void run() {
                                 //btn.setImageResource(R.drawable.favorite_black);
-                                //notifyDataSetChanged();
+                                notifyDataSetChanged();
                             }
                         });
                         Toast.makeText(context.getApplicationContext(), reitem.getRbname()+"찜 도서 추가 성공", Toast.LENGTH_SHORT).show();
@@ -197,15 +197,14 @@ public class RecmdAdapter extends BaseAdapter {
         }
     };
 
-    Bitmap bp = null;
+    Bitmap bp;
     private Bitmap setting(RecmdBookItem item) {
         String imgurll = item.getRimguri();
-
         int idx = imgurll.indexOf("?");
-        imgurl = imgurll.substring(0, idx);
+        String imgurl = imgurll.substring(0, idx);
 
         Thread uthread = new Thread(new Runnable() {
-            @Override
+           @Override
             public void run() {
                 try {
                     URL url = new URL(imgurl);
@@ -223,13 +222,12 @@ public class RecmdAdapter extends BaseAdapter {
                         height = resized.getHeight();
                         width = resized.getWidth();
                     }
-                   bp = resized;
+                    bp = resized;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
+           }
         });
-        uthread.start();
         return bp;
     }
 
