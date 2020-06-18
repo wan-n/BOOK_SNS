@@ -37,7 +37,7 @@ public interface RetroBaseApiService {
 
     @Multipart
     @POST("/image/upload")
-    Call<ResponseBody> postImage(@Part MultipartBody.Part image);
+    Call<ResponseBody> postImage(@Part MultipartBody.Part image, @Query("useruid") int useruid);
 
     @POST("/instabook/userinfo")
     Call<ResponseGet> postReg(@Body HashMap<String, Object> parameters);//<호출할 클래스명> ResponsePet()

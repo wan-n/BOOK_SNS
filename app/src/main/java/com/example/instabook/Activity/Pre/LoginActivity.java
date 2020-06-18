@@ -95,36 +95,6 @@ public class LoginActivity extends AppCompatActivity {
                                             //쉐어드프리퍼런스에 유저아이디, 유저UID, email 저장(이후엔 자동로그인)
                                             SaveSharedPreference.setUserName(LoginActivity.this, id, uid, email, nickname);
 
-                                            //프로필 이미지도 저장
-                                            Retrofit retro_img = new Retrofit.Builder()
-                                                    .baseUrl(retroBaseApiService.Base_URL)
-                                                    .addConverterFactory(GsonConverterFactory.create()).build();
-                                            retroBaseApiService = retro_img.create(RetroBaseApiService.class);
-
-                                            retroBaseApiService.getImage(uid).enqueue(new Callback<ResponseBody>() {
-                                            //retroBaseApiService.delImage(uid).enqueue(new Callback<ResponseBody>() {
-
-                                                @Override
-                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                    //서버에서 받아온 이미지 비트맵으로 변환
-                                                    assert response.body() != null;
-                                                    InputStream is = response.body().byteStream();
-                                                    Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
-
-                                                    //비트맵을 문자열로 변환
-                                                    String string_profile = bitMapToString(bitmap_profile);
-
-                                                    //쉐어드프리퍼런스에 저장
-                                                    SaveSharedPreference.setUserImage(LoginActivity.this, string_profile);
-
-                                                    //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
-                                                }
-
-                                                @Override
-                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                    //Toast.makeText(getApplicationContext(), "불러올 이미지 없음", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
 
                                            //홈탭으로 이동한다.
                                             Intent Success = new Intent(getApplicationContext(), MainActivity.class);
