@@ -286,7 +286,13 @@ public class InfoFragment extends Fragment {
 
         info_fr_pimg.setOnClickListener(listener);
         info_fr_editname.setOnClickListener(listener);
-        mybook.setOnClickListener(listener);
+        mybook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MyBookActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
 

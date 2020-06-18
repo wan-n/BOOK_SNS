@@ -1,16 +1,19 @@
 package com.example.instabook.ListView;
 
+import android.graphics.Bitmap;
+
 public class RecmdBookItem {
     String BookName;
     String Publisher;
     String BookImageUrl;
+    Bitmap Imgbm;
     String ISBN13;
     int UserBookUID = 0;
 
-    public RecmdBookItem(String b, String isbn, String url, String p, int bid) {
+    public RecmdBookItem(String b, String isbn, Bitmap url, String p, int bid) {
         this.BookName = b;
         this.ISBN13 = isbn;
-        this.BookImageUrl = url;
+        this.Imgbm = url;
         this.Publisher = p;
         this.UserBookUID = bid;
     }
@@ -39,5 +42,6 @@ public class RecmdBookItem {
         return Publisher;
     }
 
+    public Bitmap getRImgbm() { return Imgbm;}
 }
 

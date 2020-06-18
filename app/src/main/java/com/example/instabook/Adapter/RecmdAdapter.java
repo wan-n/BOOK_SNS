@@ -43,7 +43,6 @@ public class RecmdAdapter extends BaseAdapter {
     Context context;
     LayoutInflater inflater;
     SaveSharedPreference sp;
-    Bitmap bm;
     int useruid;
     int himge;
     RecmdBookItem recmdBookItem;
@@ -64,7 +63,6 @@ public class RecmdAdapter extends BaseAdapter {
         TextView isbnTextView;
         TextView pubTextView;
         ImageButton jjimbtn;
-        int position;
     }
 
     // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
@@ -113,10 +111,9 @@ public class RecmdAdapter extends BaseAdapter {
 
         //item 가져오기
         recmdBookItem = getItem(pos);
-        bm = setting(recmdBookItem);
         himge = setheart(recmdBookItem);
 
-        hodler.iconImageView.setImageBitmap(bm);
+        hodler.iconImageView.setImageBitmap(recmdBookItem.getRImgbm());
         hodler.titleTextView.setText(recmdBookItem.getRbname());
         hodler.isbnTextView.setText(recmdBookItem.getRisbn());
         hodler.pubTextView.setText(recmdBookItem.getRpub());
@@ -156,7 +153,6 @@ public class RecmdAdapter extends BaseAdapter {
                         ((MainActivity)context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                //hodler.jjimbtn.setImageResource(R.drawable.favorite_border_black);
                                 notifyDataSetChanged();
                             }
                         });
@@ -181,7 +177,6 @@ public class RecmdAdapter extends BaseAdapter {
                         ((MainActivity)context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                //btn.setImageResource(R.drawable.favorite_black);
                                 notifyDataSetChanged();
                             }
                         });
@@ -196,40 +191,6 @@ public class RecmdAdapter extends BaseAdapter {
             }
         }
     };
-
-    Bitmap bp;
-    private Bitmap setting(RecmdBookItem item) {
-        String imgurll = item.getRimguri();
-        int idx = imgurll.indexOf("?");
-        String imgurl = imgurll.substring(0, idx);
-
-        Thread uthread = new Thread(new Runnable() {
-           @Override
-            public void run() {
-                try {
-                    URL url = new URL(imgurl);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.connect();
-                    InputStream bis = conn.getInputStream();
-                    Bitmap bmm = BitmapFactory.decodeStream(bis);
-
-                    int height = bmm.getHeight();
-                    int width = bmm.getWidth();
-
-                    Bitmap resized = null;
-                    while(height>70){
-                        resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
-                        height = resized.getHeight();
-                        width = resized.getWidth();
-                    }
-                    bp = resized;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-           }
-        });
-        return bp;
-    }
 
     private int setheart(RecmdBookItem item){
         int himg;

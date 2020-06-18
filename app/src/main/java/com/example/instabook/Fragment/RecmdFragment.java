@@ -1,5 +1,7 @@
 package com.example.instabook.Fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,9 @@ import com.example.instabook.Adapter.RecmdAdapter;
 import com.example.instabook.ListView.RecmdBookItem;
 import com.example.instabook.R;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +46,7 @@ public class RecmdFragment extends Fragment {
     RecmdBookItem rb;
     SaveSharedPreference sp;
     View rootView;
+    Bitmap bp;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,8 +61,8 @@ public class RecmdFragment extends Fragment {
 
         //유저 UID 가져오기
         final int useruid = sp.getUserUid(getActivity());
-        Log.d(TAG,"현 사용자 uid  "+useruid);
 
+        //추천 도서 목록 가져오기
         Retrofit retro_rcmd = new Retrofit.Builder()
                 .baseUrl(retroBaseApiService.Base_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
@@ -66,7 +72,8 @@ public class RecmdFragment extends Fragment {
             @Override
             public void onResponse(Call<List<RecmdBookItem>> call, Response<List<RecmdBookItem>> response) {
                 recmdlist = response.body();
-                Log.d(TAG,"추천 도서 정보 응답 받음");
+                Log.d(TAG,"추천 도서 정보 있음");
+
                 items = new ArrayList<>();
                 for(int i = 0; i < recmdlist.size(); i++) {
                     String b = recmdlist.get(i).getRbname();
@@ -74,6 +81,7 @@ public class RecmdFragment extends Fragment {
                     String url = recmdlist.get(i).getRimguri();
                     String p = recmdlist.get(i).getRpub();
 
+                    //추천 도서 중 소유 도서에 저장된 정보 가져오기
                     Retrofit retro_id = new Retrofit.Builder()
                             .baseUrl(retroBaseApiService.Base_URL)
                             .addConverterFactory(GsonConverterFactory.create()).build();
@@ -83,20 +91,93 @@ public class RecmdFragment extends Fragment {
                         @Override
                         public void onResponse(Call<UserBookUIDData> call, Response<UserBookUIDData> response) {
                             userbookUID = response.body();
-
-                            int bid = userbookUID.getUserBookUID();
-                            rb = new RecmdBookItem(b, isbn, url, p, bid);
-                            items.add(rb);
                             Log.d(TAG,"찜 도서 정보 있음");
-                            Log.d(TAG,"추천 도서 정보 items에 넣음");
+
+                            //이미지 url 비트맵으로 변환
+                            int bid = userbookUID.getUserBookUID();
+                            int idx = url.indexOf("?");
+                            String imgurl = url.substring(0, idx);
+                            Thread uthread = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        URL url = new URL(imgurl);
+                                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                        conn.connect();
+                                        InputStream bis = conn.getInputStream();
+                                        Bitmap bmm = BitmapFactory.decodeStream(bis);
+
+                                        int height = bmm.getHeight();
+                                        int width = bmm.getWidth();
+
+                                        Bitmap resized = null;
+                                        while(height>70){
+                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                            height = resized.getHeight();
+                                            width = resized.getWidth();
+                                        }
+                                        bp = resized;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }); uthread.start();
+
+                            try {
+                                uthread.join();
+                                Log.d(TAG,"소유 도서 UID : "+bid+" , 도서 url : "+url+" , url을 비트맵으로 "+bp);
+                                rb = new RecmdBookItem(b, isbn, bp, p, bid);
+                                items.add(rb);
+                                Log.d(TAG,"추천 도서 정보 items에 넣음");
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
                             initView();
                         }
                         @Override
                         public void onFailure(Call<UserBookUIDData> call, Throwable t) {
-                            rb = new RecmdBookItem(b, isbn, url, p, 0);
-                            items.add(rb);
                             Log.d(TAG, "찜 도서 정보 없음 ");
-                            Log.d(TAG,"추천 도서 정보 items에 넣음");
+
+                            //이미지 url 비트맵으로 변환
+                            int idx = url.indexOf("?");
+                            String imgurl = url.substring(0, idx);
+                            Thread uthread = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        URL url = new URL(imgurl);
+                                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                        conn.connect();
+                                        InputStream bis = conn.getInputStream();
+                                        Bitmap bmm = BitmapFactory.decodeStream(bis);
+
+                                        int height = bmm.getHeight();
+                                        int width = bmm.getWidth();
+
+                                        Bitmap resized = null;
+                                        while(height>70){
+                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                            height = resized.getHeight();
+                                            width = resized.getWidth();
+                                        }
+                                        bp = resized;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }); uthread.start();
+
+                            try {
+                                uthread.join();
+                                Log.d(TAG,"도서 url : "+url+" , url을 비트맵으로 "+bp);
+                                rb = new RecmdBookItem(b, isbn, bp, p, 0);
+                                items.add(rb);
+                                Log.d(TAG,"추천 도서 정보 items에 넣음");
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
                             initView();
                         }
                     });
@@ -106,10 +187,10 @@ public class RecmdFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<List<RecmdBookItem>> call, Throwable t) {
-
+                Log.d(TAG,"추천 도서 정보 없음");
             }
         });
-        // Inflate the layout for this fragment
+
         return rootView;
     }
 
@@ -132,4 +213,5 @@ public class RecmdFragment extends Fragment {
             }
         });
     }
+
 }
