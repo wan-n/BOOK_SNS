@@ -22,9 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/rf_icon"
-        android:layout_toRightOf="@+id/rf_icon"
         android:hint="닉네임"
         android:textColor="#000000"
         android:textSize="18sp" />
@@ -40,7 +38,8 @@
         android:layout_marginTop="10dp"
         android:layout_toStartOf="@+id/rf_refuse"
         android:text="수락"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textColor="#000"/>
 
     <Button
         android:id="@+id/rf_refuse"
@@ -52,7 +51,8 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:text="거절"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textColor="#000"/>
 
 
 </RelativeLayout>

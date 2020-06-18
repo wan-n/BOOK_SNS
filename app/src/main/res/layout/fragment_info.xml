@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#222"
     tools:context=".Fragment.InfoFragment"
     android:orientation="vertical">
 
@@ -13,7 +14,7 @@
         android:id="@+id/rel_info"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="#26354A" >
+        android:background="#09121c" >
 
 
         <Button
@@ -109,15 +110,22 @@
 
     </RelativeLayout>
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#DDD"/>
+    <RelativeLayout
         android:id="@+id/rel_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="4dp"
+        >
 
             <ListView
                 android:id="@+id/info_listview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:dividerHeight="5dp"
+                android:divider="#222"/>
 
 
     </RelativeLayout>

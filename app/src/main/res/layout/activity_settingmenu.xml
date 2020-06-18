@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#26354A">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#26354A">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#0f1d2e"
+        android:orientation="horizontal">
     <FrameLayout
         android:id="@+id/set_fr_back"
+        android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="19dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginStart="30dp">
+
     <ImageView
         android:id="@+id/set_back"
-        android:layout_gravity="center_vertical"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/back_white" />
@@ -26,24 +34,20 @@
 
     <TextView
         android:id="@+id/textView13"
+        android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="17dp"
         android:text="설정"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/set_fr_back"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        android:textSize="20sp" />
+</LinearLayout>
     <FrameLayout
         android:id="@+id/set_fr_info"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_marginTop="50dp"
-        android:background="?android:attr/selectableItemBackground"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" >
+        android:layout_marginTop="20dp"
+        android:background="?android:attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/set_info"
@@ -61,7 +65,7 @@
         android:id="@+id/set_fr_friends"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="10dp"
         android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/set_fr_info" >
@@ -84,7 +88,7 @@
         android:id="@+id/set_rel_profile"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="10dp"
         android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/set_fr_friends" >
@@ -113,26 +117,31 @@
             android:thumb="@drawable/switch_thumb_selector" />
     </RelativeLayout>
 
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentBottom="true">
     <FrameLayout
         android:id="@+id/set_fr_logout"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="1dp"
         android:layout_marginStart="40dp"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/set_fr_withdrawal">
+        android:layout_marginBottom="5dp"
+        android:background="?attr/selectableItemBackgroundBorderless">
 
-    <TextView
-        android:id="@+id/set_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="로그아웃"
-        android:textColor="#FFFFFF"
-        android:textSize="17sp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/set_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="로그아웃"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp"
+            android:textStyle="bold" />
     </FrameLayout>
 
     <FrameLayout
@@ -140,22 +149,17 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-    <TextView
-        android:id="@+id/set_withdrawal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="계정 비활성화"
-        android:textColor="#C63C56"
-        android:textSize="15sp"
-        android:textStyle="bold"
-         />
+        android:layout_marginStart="40dp">
+
+        <TextView
+            android:id="@+id/set_withdrawal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="계정 비활성화"
+            android:textColor="#C63C56"
+            android:textSize="15sp"
+            android:textStyle="bold" />
     </FrameLayout>
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
+</RelativeLayout>

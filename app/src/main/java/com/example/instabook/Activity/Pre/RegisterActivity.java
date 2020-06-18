@@ -118,46 +118,52 @@ public class RegisterActivity extends AppCompatActivity {
                                     email.getBytes().length <= 0 || answer.getBytes().length <= 0) {
                                 Toast.makeText(getApplicationContext(), "빈 칸에 정보를 입력해주세요.", Toast.LENGTH_SHORT).show();
                             }
-                            //비밀번호와 비밀번호 확인값이 다를 경우
-                            else if (!userpwd.equals(conpwd)) {
-                                Toast.makeText(getApplicationContext(), "비밀번호 확인에 올바른 내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                            //비밀번호가 10자보다 짧을경우
+                            else if(userpwd.getBytes().length < 10){
+                                Toast.makeText(getApplicationContext(), "비밀번호는 10글자 이상이어야 합니다.", Toast.LENGTH_SHORT).show();
+                            }else{
+                                //비밀번호와 비밀번호 확인값이 다를 경우
+                                if (!userpwd.equals(conpwd)) {
+                                    Toast.makeText(getApplicationContext(), "비밀번호 확인에 올바른 내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
 
-                            }
-                            //모든 조건을 만족했을 경우
-                            else if (userpwd.equals(conpwd)) {
-                                //입력받은 정보 해시맵으로 받기
-                                HashMap<String, Object> userinfo = new HashMap<>();
-                                userinfo.put("id", userid);
-                                userinfo.put("pwd", userpwd);
-                                userinfo.put("email", email);
-                                userinfo.put("pwdQuestionUID", question);
-                                userinfo.put("pwdAnswer", answer);
+                                }
+                                //모든 조건을 만족했을 경우
+                                else if (userpwd.equals(conpwd)) {
+                                    //입력받은 정보 해시맵으로 받기
+                                    HashMap<String, Object> userinfo = new HashMap<>();
+                                    userinfo.put("id", userid);
+                                    userinfo.put("pwd", userpwd);
+                                    userinfo.put("email", email);
+                                    userinfo.put("pwdQuestionUID", question);
+                                    userinfo.put("pwdAnswer", answer);
 
 
-                                //retrofit 초기 설정
-                                Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl(retroBaseApiService.Base_URL)
-                                        .addConverterFactory(GsonConverterFactory.create()).build();   //gson converter 생성
-                                retroBaseApiService = retrofit.create(RetroBaseApiService.class);
+                                    //retrofit 초기 설정
+                                    Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(retroBaseApiService.Base_URL)
+                                            .addConverterFactory(GsonConverterFactory.create()).build();   //gson converter 생성
+                                    retroBaseApiService = retrofit.create(RetroBaseApiService.class);
 
-                                retroBaseApiService.postReg(userinfo).enqueue(new Callback<ResponseGet>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseGet> call, Response<ResponseGet> response) {
-                                        if (response.isSuccessful()) {  //통신이 성공적으로 완료되었다면 응답받을 내용
-                                            Toast.makeText(getApplicationContext(), "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    retroBaseApiService.postReg(userinfo).enqueue(new Callback<ResponseGet>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseGet> call, Response<ResponseGet> response) {
+                                            if (response.isSuccessful()) {  //통신이 성공적으로 완료되었다면 응답받을 내용
+                                                Toast.makeText(getApplicationContext(), "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
 
-                                            //로그인 화면으로 돌아간다.
-                                            Intent finish = new Intent(getApplicationContext(), LoginActivity.class);
-                                            startActivity(finish);
+                                                //로그인 화면으로 돌아간다.
+                                                Intent finish = new Intent(getApplicationContext(), LoginActivity.class);
+                                                startActivity(finish);
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFailure(Call<ResponseGet> call, Throwable t) {
-                                        Toast.makeText(getApplicationContext(), "통신오류", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                                        @Override
+                                        public void onFailure(Call<ResponseGet> call, Throwable t) {
+                                            Toast.makeText(getApplicationContext(), "통신오류", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
                             }
+
                             // 아이디 중복확인을 안했을 경우
                         } else if(check == false){
                             Toast.makeText(getApplicationContext(), "아이디 중복확인을 해주세요.", Toast.LENGTH_SHORT).show();

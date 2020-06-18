@@ -3,6 +3,7 @@ package com.example.instabook.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -77,6 +79,8 @@ public class SearchFriendActivity extends AppCompatActivity {
 
                         String re_search = sf_search.getText().toString().trim();
                         retroGet(re_search);
+
+
                         break;
                 }
             }
@@ -149,6 +153,7 @@ public class SearchFriendActivity extends AppCompatActivity {
 
                     //결과 화면 불러오기
                     sfAdapter.notifyDataSetChanged();
+
                     
                 }
 

@@ -40,7 +40,8 @@
         android:background="@drawable/custum_button_friend"
         android:hint="친구 신청"
         android:text="친구 신청"
-        android:textSize="12sp"/>
+        android:textSize="12sp"
+        android:textColor="#000"/>
 
 
 </RelativeLayout>

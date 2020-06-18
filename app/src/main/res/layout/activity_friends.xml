@@ -10,7 +10,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp">
+        android:layout_height="60dp"
+        android:background="#0f1d2e">
 
         <FrameLayout
             android:id="@+id/fr_fr_back"
@@ -18,7 +19,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="19dp"
+            android:layout_centerVertical="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -37,17 +38,20 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="16dp"
             android:layout_toEndOf="@+id/fr_fr_back"
-            android:layout_toRightOf="@+id/fr_fr_back"
+            android:layout_centerVertical="true"
             android:text="친구 관리"
             android:textColor="#FFFFFF"
             android:textSize="20dp" />
 
     </RelativeLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center"  >
 
         <ImageView
             android:id="@+id/fr_add"
@@ -72,12 +76,11 @@
             <requestFocus/>
         </EditText>
     </RelativeLayout>
-
+</FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:background="#FFFFFF">
 
 
@@ -87,6 +90,7 @@
             android:layout_height="wrap_content"
             app:tabIndicatorColor="#26354A"
             app:tabSelectedTextColor="#26354A"
+            app:tabTextColor="#111"
             app:tabGravity="fill"
             app:tabMode="fixed"/>
 

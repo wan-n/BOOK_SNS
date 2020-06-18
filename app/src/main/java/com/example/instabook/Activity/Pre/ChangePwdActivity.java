@@ -58,35 +58,40 @@ public class ChangePwdActivity extends AppCompatActivity {
                         if(userpwd.getBytes().length <= 0 || userconpwd.getBytes().length <= 0){
                             Toast.makeText(getApplicationContext(), "변경할 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
                         }
-                        //모든 칸에 입력했을 경우
-                        else if(userpwd.getBytes().length > 0 && userconpwd.getBytes().length > 0){
-                            //입력값이 동일하지 않을 경우
-                            if(userpwd.equals(userconpwd)){
+                        //비밀번호가 10글자보다 짧을경우
+                        else if(userpwd.getBytes().length < 10) {
+                            Toast.makeText(getApplicationContext(), "비밀번호는 10글자 이상이어야 합니다.", Toast.LENGTH_SHORT).show();
+                        }else{
+                            //모든 칸에 입력했을 경우
+                            if(userpwd.getBytes().length > 0 && userconpwd.getBytes().length > 0){
+                                //입력값이 동일하지 않을 경우
+                                if(userpwd.equals(userconpwd)){
 
-                                Retrofit ch_retro = new Retrofit.Builder()
-                                        .baseUrl(retroBaseApiService.Base_URL)
-                                        .addConverterFactory(GsonConverterFactory.create()).build();
-                                retroBaseApiService = ch_retro.create(RetroBaseApiService.class);
+                                    Retrofit ch_retro = new Retrofit.Builder()
+                                            .baseUrl(retroBaseApiService.Base_URL)
+                                            .addConverterFactory(GsonConverterFactory.create()).build();
+                                    retroBaseApiService = ch_retro.create(RetroBaseApiService.class);
 
-                                //PUT 요청으로 비밀번호 변경
-                                retroBaseApiService.putPwd(userinfo).enqueue(new Callback<ResponseGet>(){
-                                    @Override
-                                    public void onResponse(Call<ResponseGet> call, Response<ResponseGet> response) {
-                                        Toast.makeText(getApplicationContext(), "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                                    //PUT 요청으로 비밀번호 변경
+                                    retroBaseApiService.putPwd(userinfo).enqueue(new Callback<ResponseGet>(){
+                                        @Override
+                                        public void onResponse(Call<ResponseGet> call, Response<ResponseGet> response) {
+                                            Toast.makeText(getApplicationContext(), "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
-                                        //로그인 화면으로 돌아감
-                                        Intent finish = new Intent(getApplicationContext(), LoginActivity.class);
-                                        startActivity(finish);
-                                    }
+                                            //로그인 화면으로 돌아감
+                                            Intent finish = new Intent(getApplicationContext(), LoginActivity.class);
+                                            startActivity(finish);
+                                        }
 
-                                    @Override
-                                    public void onFailure(Call<ResponseGet> call, Throwable t) {
-                                        Toast.makeText(getApplicationContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                            else {
-                                Toast.makeText(getApplicationContext(), "비밀번호 확인에 올바른 내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                                        @Override
+                                        public void onFailure(Call<ResponseGet> call, Throwable t) {
+                                            Toast.makeText(getApplicationContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                                else {
+                                    Toast.makeText(getApplicationContext(), "비밀번호 확인에 올바른 내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
                         break;

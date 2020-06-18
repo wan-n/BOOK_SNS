@@ -36,17 +36,21 @@
             android:name=".Activity.ForUser.NotiBookDelActivity"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity android:name=".Activity.ForReview.ReviewActivity" />
-        <activity android:name=".Activity.SearchFriendActivity" />
+        <activity android:name=".Activity.SearchFriendActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name=".Activity.ForBook.SearchdbActivity" />
-        <activity android:name=".Activity.FriendsActivity" />
+        <activity android:name=".Activity.FriendsActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".Activity.MyInfoActivity" />
-        <activity android:name=".Activity.SettingMenuActivity" />
+        <activity android:name=".Activity.SettingMenuActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".Activity.Pre.ChangePwdActivity" />
         <activity android:name=".Activity.Pre.FindPwdActivity" />
         <activity android:name=".Activity.Pre.FindIdActivity" />
         <activity android:name=".Activity.Pre.RegisterActivity" />
         <activity android:name=".Activity.MainActivity"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name=".Activity.Pre.LoginActivity" />
         <activity android:name=".Activity.Pre.FirstAuthActivity">
             <intent-filter>
