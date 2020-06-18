@@ -38,12 +38,14 @@
             android:layout_marginStart="20dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             >
-        <ImageView
-            android:id="@+id/info_pimg"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/default_img"
-            />
+
+            <ImageView
+                android:id="@+id/info_pimg"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/default_img">
+            </ImageView>
+
         </FrameLayout>
 
         <LinearLayout

@@ -10,7 +10,6 @@ public class SaveSharedPreference {
     static final String USER_NAME = "username";
     static final String USER_UID = "useruid";
     static final String USER_EMAIL = "useremail";
-    static final String USER_IMAGE = "userimage";
     static final String USER_NICKNAME = "usernickname";
 
     private static SharedPreferences getSharedPreferences(Context ctx){
@@ -33,12 +32,7 @@ public class SaveSharedPreference {
         editor.commit();
     }
 
-    //프로필 이미지 저장
-    public static void setUserImage(Context ctx, String bitmap){
-        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
-        editor.putString(USER_IMAGE, bitmap);
-        editor.commit();
-    }
+
 
     // 저장된 정보 가져오기
     public static String getUserName(Context ctx) {
@@ -52,11 +46,6 @@ public class SaveSharedPreference {
     }
     public static String getUserNickname(Context ctx){
         return getSharedPreferences(ctx).getString(USER_NICKNAME, "");
-    }
-
-    //프로필 이미지 가져오기
-    public static String getUserImage(Context ctx){
-        return getSharedPreferences(ctx).getString(USER_IMAGE, "");
     }
 
 
