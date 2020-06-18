@@ -67,8 +67,6 @@ public class ReviewActivity extends AppCompatActivity {
     String title;
     String isbn;
     String review;
-    String img;
-    Bitmap bm;
     String commentstag = null;
     ArrayList<int[]> hashtagSpans;
 
@@ -104,33 +102,15 @@ public class ReviewActivity extends AppCompatActivity {
         binfo_fr_back.setOnClickListener(listener);
 
         //책 제목과 isbn 받아오기
-        Intent intent = getIntent(); //보내온 intent를 얻는다
-        tvTitle.setText(intent.getStringExtra("title"));
+        Bundle extras = getIntent().getExtras();
+        byte[] byteArray = getIntent().getByteArrayExtra("img");
+        Bitmap mp = BitmapFactory.decodeByteArray(byteArray, 0 , byteArray.length);
+        imBook.setImageBitmap(mp);
+        tvTitle.setText(extras.getString("title"));
+        isbn = extras.getString("isbn");
+
         title = tvTitle.getText().toString();
-        isbn = intent.getStringExtra("isbn");
-        img = intent.getStringExtra("img");
 
-        //이미지 가져오기
-        if(img == null){
-            imBook.setImageResource(R.drawable.default_img);
-        } else {
-            Thread uthread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        URL url = new URL(img);
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        conn.connect();
-                        InputStream bis = conn.getInputStream();
-                        bm = BitmapFactory.decodeStream(bis);
-                        imBook.setImageBitmap(bm);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }); uthread.start();
-        }
 
         //별점 점수 변화주기
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -182,7 +162,7 @@ public class ReviewActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
                         Toast.makeText(getBaseContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
-                        Intent in = new Intent(getBaseContext(), MainActivity.class);
+                        Intent in = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(in);
                     }
 

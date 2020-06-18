@@ -24,6 +24,7 @@ import com.example.instabook.ListView.SearchBookItem;
 import com.example.instabook.R;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -124,15 +125,18 @@ public class BookListAdapter extends BaseAdapter {
         public void onClick(View v) {
             int position = Integer.parseInt((v.getTag().toString()));
             SearchBookItem sbitem = items.get(position);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
             String t = sbitem.getTitle();
             String is = sbitem.getIsbn();
-            String url = sbitem.getImg();
+            Bitmap img  = sbitem.getImgbm();
+            img.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] bytes = stream.toByteArray();
 
             Intent intent = new Intent(context, ReviewActivity.class);
             intent.putExtra("title", t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
             intent.putExtra("isbn", is);
-            intent.putExtra("img",url);
+            intent.putExtra("img", bytes);
             context.startActivity(intent);
         }
     };

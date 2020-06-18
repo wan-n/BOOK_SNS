@@ -69,6 +69,7 @@ public class HomeFragment extends Fragment{
         //유저 UID 가져오기
         final int useruid1 = sp.getUserUid(getActivity());
 
+        //친구 리스트 가져오기
         Retrofit retro_id = new Retrofit.Builder()
                 .baseUrl(retroBaseApiService.Base_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
@@ -95,8 +96,9 @@ public class HomeFragment extends Fragment{
                     }
                 }
 
+                //각 유저마다의 정보 가져오기
                 for(int i = 0; i < allUserDataList.size(); i++){
-                    //각 유저마다의 정보 가져오기
+
                     Retrofit retro_info = new Retrofit.Builder()
                             .baseUrl(retroBaseApiService.Base_URL)
                             .addConverterFactory(GsonConverterFactory.create()).build();
@@ -166,7 +168,69 @@ public class HomeFragment extends Fragment{
 
             @Override
             public void onFailure(Call<List<UserData>> call, Throwable t) {
+                Retrofit retro_info = new Retrofit.Builder()
+                        .baseUrl(retroBaseApiService.Base_URL)
+                        .addConverterFactory(GsonConverterFactory.create()).build();
+                retroBaseApiService = retro_info.create(RetroBaseApiService.class);
+                //유저 UID로 유저 정보, 리뷰 정보, 도서 정보 가져오기
+                retroBaseApiService.getHreq(useruid1).enqueue(new Callback<List<HomeData>>() {
+                    @Override
+                    public void onResponse(Call<List<HomeData>> call, Response<List<HomeData>> response) {
+                        homeDataList = response.body();
+                        items = new ArrayList<>();
 
+                        for(int l = 0; l < homeDataList.size(); l++){
+
+                            int uid = homeDataList.get(l).getUserUID();
+                            String review = homeDataList.get(l).getReview();
+                            String redate = homeDataList.get(l).getReviewDate();
+                            String isbn = homeDataList.get(l).getISBN13();
+                            int rate = homeDataList.get(l).getRate();
+                            String bname = homeDataList.get(l).getBookName();
+                            String nname = homeDataList.get(l).getNickName();
+
+                            Date date = null;
+                            try {
+                                date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(redate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                            String redate_2 = sdf.format(date);
+
+                            //uid로 이미지 가져오기
+                            Retrofit retro_imgFirst = new Retrofit.Builder()
+                                    .baseUrl(retroBaseApiService.Base_URL)
+                                    .addConverterFactory(GsonConverterFactory.create()).build();
+                            retroBaseApiService = retro_imgFirst.create(RetroBaseApiService.class);
+
+                            retroBaseApiService.getImage(uid).enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    //서버에서 받아온 이미지 비트맵으로 변환
+                                    InputStream is = response.body().byteStream();
+                                    Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
+
+                                    //리스트뷰에 추가
+                                    item = new HomeReviewItem(bitmap_profile, uid, review, redate_2, isbn, rate, bname, nname);
+                                    Log.d(TAG,"유아이디: "+uid+"리뷰: "+review+"날짜: "+redate+"ISBN: "+isbn+"별점: "+rate+"제목: "+bname+"닉네임: "+nname);
+                                    items.add(item);
+
+                                    initView();
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<HomeData>> call, Throwable t) {
+                        Toast.makeText(getActivity(), "리뷰 정보 없음.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 

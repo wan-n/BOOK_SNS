@@ -510,22 +510,21 @@ public class SearchdbActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-/*
-                    //DB에 도서 정보 저장
-                    Retrofit naver_retro = new Retrofit.Builder()
-                            .baseUrl(retroBaseApiService.Base_URL)
-                            .addConverterFactory(GsonConverterFactory.create()).build();
-                    retroBaseApiService = naver_retro.create(RetroBaseApiService.class);
 
-                    retroBaseApiService.postNbook(map).enqueue(new Callback<NaverData>() {
-                        @Override
-                        public void onResponse(Call<NaverData> call, Response<NaverData> response) {
-                        }
-                        @Override
-                        public void onFailure(Call<NaverData> call, Throwable t) {
-                        }
-                    });
-*/
+            //DB에 도서 정보 저장
+            Retrofit naver_retro = new Retrofit.Builder()
+                    .baseUrl(retroBaseApiService.Base_URL)
+                    .addConverterFactory(GsonConverterFactory.create()).build();
+            retroBaseApiService = naver_retro.create(RetroBaseApiService.class);
+
+            retroBaseApiService.postNbook(map).enqueue(new Callback<NaverData>() {
+                @Override
+                public void onResponse(Call<NaverData> call, Response<NaverData> response) {
+                }
+                @Override
+                public void onFailure(Call<NaverData> call, Throwable t) {
+                }
+            });
         }
         Toast.makeText(getBaseContext(), "네이버 도서로 검색", Toast.LENGTH_SHORT).show();
     }
