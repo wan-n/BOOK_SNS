@@ -43,14 +43,14 @@ public class BookListAdapter extends BaseAdapter {
     int layout;
     Context context;
     LayoutInflater inflater;
-    Bitmap bm;
-    String imgurl;
-    ArrayList<SearchBookItem> books;
+    ArrayList<SearchBookItem> items = new ArrayList<SearchBookItem>();
+    SearchBookItem searchBookItem;
+    int himge;
 
     // ListViewAdapter의 생성자
     public BookListAdapter(Context context, int layout, ArrayList<SearchBookItem> books) {
         this.context = context;
-        this.books = books;
+        this.items = books;
         this.layout = layout;
 
         inflater = LayoutInflater.from(this.context);
@@ -59,13 +59,13 @@ public class BookListAdapter extends BaseAdapter {
     // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
     @Override
     public int getCount() {
-        return books.size();
+        return items.size();
     }
 
     // 지정한 위치(position)에 있는 데이터 리턴 : 필수 구현
     @Override
     public SearchBookItem getItem(int position) {
-        return books.get(position);
+        return items.get(position);
     }
 
     // 지정한 위치(position)에 있는 데이터와 관계된 아이템(row)의 ID를 리턴. : 필수 구현
@@ -74,93 +74,66 @@ public class BookListAdapter extends BaseAdapter {
         return position;
     }
 
+    static class ViewHolder {
+        ImageView bookImageView;
+        TextView titleTextView ;
+        TextView authorTextView;
+        TextView pubTextView;
+        Button choiceButton;
+    }
 
     // position에 위치한 데이터를 화면에 출력하는데 사용될 View를 리턴. : 필수 구현
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
         int pos = position;
 
         // "listview_item" Layout을 inflate하여 convertView 참조 획득.
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.listview_searchbook, parent, false);
-        }
+            holder = new ViewHolder();
+            // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
+            holder.bookImageView = (ImageView) convertView.findViewById(R.id.img_book) ;
+            holder.titleTextView = (TextView) convertView.findViewById(R.id.text_title) ;
+            holder.authorTextView = (TextView) convertView.findViewById(R.id.text_author) ;
+            holder.pubTextView = (TextView) convertView.findViewById(R.id.text_pub) ;
+            holder.choiceButton = (Button)convertView.findViewById(R.id.pick_btn);
 
-        // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-        ImageView bookImageView = (ImageView) convertView.findViewById(R.id.img_book) ;
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.text_title) ;
-        TextView authorTextView = (TextView) convertView.findViewById(R.id.text_author) ;
-        TextView pubTextView = (TextView) convertView.findViewById(R.id.text_pub) ;
-        Button btn = (Button)convertView.findViewById(R.id.pick_btn);
-
-        SearchBookItem searchBookItem = getItem(pos);
-        String imgurll = searchBookItem.getImg();
-
-        //이미지 가져오기
-        if(imgurll == null){
-            ((MainActivity)context).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    bookImageView.setImageResource(R.drawable.default_img);
-                    titleTextView.setText(searchBookItem.getTitle());
-                    authorTextView.setText(searchBookItem.getAuthor());
-                    pubTextView.setText(searchBookItem.getPublisher());
-                }
-            });
+            convertView.setTag(holder);
         } else {
-            //int idx = imgurll.indexOf("?");
-            //imgurl = imgurll.substring(0, idx);
-
-            Thread uthread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        URL url = new URL(imgurll);
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        conn.connect();
-                        InputStream bis = conn.getInputStream();
-                        bm = BitmapFactory.decodeStream(bis);
-                        int height = bm.getHeight();
-                        int width = bm.getWidth();
-
-                        Bitmap resized = null;
-                        while(height>70){
-                            resized = Bitmap.createScaledBitmap(bm,(width*70)/height,70,true);
-                            height = resized.getHeight();
-                            width = resized.getWidth();
-                        }
-
-                        ((MainActivity)context).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                titleTextView.setText(searchBookItem.getTitle());
-                                authorTextView.setText(searchBookItem.getAuthor());
-                                pubTextView.setText(searchBookItem.getPublisher());
-                                bookImageView.setImageBitmap(bm);
-                            }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }); uthread.start();
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        btn.setOnClickListener(new Button.OnClickListener() {
+        //item 가져오기
+        searchBookItem = getItem(pos);
 
-            @Override
-            public void onClick(View v) {
+        holder.bookImageView.setImageBitmap(searchBookItem.getImgbm());
+        holder.titleTextView.setText(searchBookItem.getTitle());
+        holder.authorTextView.setText(searchBookItem.getAuthor());
+        holder.pubTextView.setText(searchBookItem.getPublisher());
 
-                String t = searchBookItem.getTitle();
-                String is = searchBookItem.getIsbn();
+        holder.choiceButton.setTag(pos);
+        holder.choiceButton.setOnClickListener(ChoiceOnClickListener);
 
-                Intent intent = new Intent(context, ReviewActivity.class);
-                intent.putExtra("title", t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
-                intent.putExtra("isbn", is);
-                intent.putExtra("img",imgurll);
-                context.startActivity(intent);
-            }
-        });
         return convertView;
     }
+
+    final Button.OnClickListener ChoiceOnClickListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int position = Integer.parseInt((v.getTag().toString()));
+            SearchBookItem sbitem = items.get(position);
+
+            String t = sbitem.getTitle();
+            String is = sbitem.getIsbn();
+            String url = sbitem.getImg();
+
+            Intent intent = new Intent(context, ReviewActivity.class);
+            intent.putExtra("title", t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+            intent.putExtra("isbn", is);
+            intent.putExtra("img",url);
+            context.startActivity(intent);
+        }
+    };
 }

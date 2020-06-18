@@ -1,6 +1,8 @@
 package com.example.instabook.Activity.ForBook;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -52,12 +54,14 @@ public class SearchdbActivity extends AppCompatActivity {
     List<String> authorsam;
     String author = "";
     SearchBookItem mb;
+
     /**Naver 도서 정보 변수*/
     static List<NaverBookData> list;
     ArrayList<SearchBookItem> items;
     SearchBookItem sb;
 
     RetroBaseApiService retroBaseApiService;
+    Bitmap bm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +75,13 @@ public class SearchdbActivity extends AppCompatActivity {
         getBook(keyword);
     }
 
-    //DB에서 도서 정보 가져오는 함수
+    //DB에서 도서 정보 가져오기
     public void getBook(String keyword){
 
-        Retrofit retro_name = new Retrofit.Builder()
+        Retrofit retro_book = new Retrofit.Builder()
                 .baseUrl(retroBaseApiService.Base_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
-        retroBaseApiService = retro_name.create(RetroBaseApiService.class);
+        retroBaseApiService = retro_book.create(RetroBaseApiService.class);
 
         retroBaseApiService.getBook(keyword).enqueue(new Callback<List<BookData>>() {
             @Override
@@ -91,6 +95,7 @@ public class SearchdbActivity extends AppCompatActivity {
                     String is = bookDataList.get(i).getISBN13();
                     String url = bookDataList.get(i).getBookImageUrl();
 
+                    //저자 정보 가져오기
                     Retrofit retro_author = new Retrofit.Builder()
                             .baseUrl(retroBaseApiService.Base_URL)
                             .addConverterFactory(GsonConverterFactory.create()).build();
@@ -109,65 +114,117 @@ public class SearchdbActivity extends AppCompatActivity {
                             author = authorsam.toString();
                             author = String.join(" | ", authorsam);
 
-                            mb = new SearchBookItem(b, author, p, url, is);
-                            books.add(mb);
+                            if(url == null){
+                                //기본 이미지 비트맵으로 변환
+                                Bitmap bmm = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.default_img);
+                                int height = bmm.getHeight();
+                                int width = bmm.getWidth();
 
-                            BookListAdapter blAdapter = new BookListAdapter(getBaseContext(),
-                                    R.layout.listview_searchbook, books);
-                            ListView listview = (ListView) findViewById(R.id.listview);
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    listview.setAdapter(blAdapter);
-                                    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                        @Override
-                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                            String t = books.get(position).title;
-                                            String is = books.get(position).isbn;
-
-                                            //Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
-                                            //intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
-                                            // intent.putExtra("isbn", is);
-                                            // startActivity(intent);
-                                        }
-                                    });
+                                Bitmap resized = null;
+                                while(height>70){
+                                    resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                    height = resized.getHeight();
+                                    width = resized.getWidth();
                                 }
-                            });
+                                bm = resized;
+                                mb = new SearchBookItem(b, author, p, url, is, bm);
+                                books.add(mb);
+                                initView();
+                            } else {
+                                //이미지 url 비트맵으로 변환
+                                String imgurl = url;
+                                Thread bthread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            URL url = new URL(imgurl);
+                                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                            conn.connect();
+                                            InputStream bis = conn.getInputStream();
+                                            Bitmap bmm = BitmapFactory.decodeStream(bis);
+
+                                            int height = bmm.getHeight();
+                                            int width = bmm.getWidth();
+
+                                            Bitmap resized = null;
+                                            while(height>70){
+                                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                height = resized.getHeight();
+                                                width = resized.getWidth();
+                                            }
+                                            bm = resized;
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }); bthread.start();
+                                try {
+                                    bthread.join();
+                                    mb = new SearchBookItem(b, author, p, url, is, bm);
+                                    books.add(mb);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                initView();
+                            }
                         }
 
                         @Override
                         public void onFailure(Call<List<BookData>> call, Throwable t) {
-                            mb = new SearchBookItem(b, " ", p, url, is);
-                            books.add(mb);
+                            //저자 정보 없음
+                            if(url == null){
+                                //기본 이미지 비트맵으로 변환
+                                Bitmap bmm = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.default_img);
+                                int height = bmm.getHeight();
+                                int width = bmm.getWidth();
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    BookListAdapter blAdapter = new BookListAdapter(getBaseContext(),
-                                            R.layout.listview_searchbook, books);
-                                    ListView listview = (ListView) findViewById(R.id.listview);
-
-                                    listview.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            listview.setAdapter(blAdapter);
-                                            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                @Override
-                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                    String t = books.get(position).title;
-                                                    String is = books.get(position).isbn;
-
-                                                    //Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
-                                                    //intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
-                                                    //intent.putExtra("isbn", is);
-                                                    //startActivity(intent);
-                                                }
-                                            });
-                                        }
-                                    });
+                                Bitmap resized = null;
+                                while(height>70){
+                                    resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                    height = resized.getHeight();
+                                    width = resized.getWidth();
                                 }
-                            });
+                                bm = resized;
+                                mb = new SearchBookItem(b, " ", p, url, is, bm);
+                                books.add(mb);
+                                initView();
+                            } else {
+                                //이미지 url 비트맵으로 변환
+                                String imgurl = url;
+                                Thread bthread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            URL url = new URL(imgurl);
+                                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                            conn.connect();
+                                            InputStream bis = conn.getInputStream();
+                                            Bitmap bmm = BitmapFactory.decodeStream(bis);
+
+                                            int height = bmm.getHeight();
+                                            int width = bmm.getWidth();
+
+                                            Bitmap resized = null;
+                                            while(height>70){
+                                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                height = resized.getHeight();
+                                                width = resized.getWidth();
+                                            }
+                                            bm = resized;
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }); bthread.start();
+                                try {
+                                    bthread.join();
+                                    mb = new SearchBookItem(b, " ", p, url, is, bm);
+                                    books.add(mb);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                initView();
+                            }
                         }
                     });
                 }
@@ -175,6 +232,7 @@ public class SearchdbActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<BookData>> call, Throwable t) {
+                //네이버 도서 정보 가져오기
                 getNaverSearch(keyword);
 
                 HashMap<String, Object> map = new HashMap<>();
@@ -187,9 +245,10 @@ public class SearchdbActivity extends AppCompatActivity {
                     String pdate = list.get(i).getPubdate();
                     String price = list.get(i).getPrice();
                     String sale = list.get(i).getDiscount();
-                    String img = list.get(i).getImage();
+                    String url = list.get(i).getImage();
                     String author = list.get(i).getAuthor();
 
+                    //데이트 타임, isbn 변환
                     pdate += " 00:00:00.000";
                     String isbn = isbn26.substring(isbn26.length()-13, isbn26.length());
 
@@ -199,12 +258,65 @@ public class SearchdbActivity extends AppCompatActivity {
                     map.put("pdate", pdate);
                     map.put("price", price);
                     map.put("sale", sale);
-                    map.put("img", img);
+                    map.put("img", url);
                     map.put("author",author);
 
-                    sb = new SearchBookItem(bname, author, pub, img, isbn);
-                    items.add(sb);
+                    if(url == null){
+                        //기본 이미지 비트맵으로 변환
+                        Bitmap bmm = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.default_img);
+                        int height = bmm.getHeight();
+                        int width = bmm.getWidth();
 
+                        Bitmap resized = null;
+                        while(height>70){
+                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                            height = resized.getHeight();
+                            width = resized.getWidth();
+                        }
+                        bm = resized;
+                        sb = new SearchBookItem(bname, author, pub, url, isbn , bm);
+                        books.add(sb);
+                        initView();
+                    } else {
+                        //이미지 url 비트맵으로 변환
+                        int idx = url.indexOf("?");
+                        String imgurl = url.substring(0, idx);
+                        Thread bthread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    URL url = new URL(imgurl);
+                                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                    conn.connect();
+                                    InputStream bis = conn.getInputStream();
+                                    Bitmap bmm = BitmapFactory.decodeStream(bis);
+
+                                    int height = bmm.getHeight();
+                                    int width = bmm.getWidth();
+
+                                    Bitmap resized = null;
+                                    while(height>70){
+                                        resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                        height = resized.getHeight();
+                                        width = resized.getWidth();
+                                    }
+                                    bm = resized;
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }); bthread.start();
+                        try {
+                            bthread.join();
+                            sb = new SearchBookItem(bname, author, pub, url, isbn ,bm);
+                            books.add(sb);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        initView();
+                    }
+
+                    //DB에 도서 정보 저장
                     Retrofit naver_retro = new Retrofit.Builder()
                             .baseUrl(retroBaseApiService.Base_URL)
                             .addConverterFactory(GsonConverterFactory.create()).build();
@@ -213,38 +325,34 @@ public class SearchdbActivity extends AppCompatActivity {
                     retroBaseApiService.postNbook(map).enqueue(new Callback<NaverData>() {
                         @Override
                         public void onResponse(Call<NaverData> call, Response<NaverData> response) {
-
                         }
                         @Override
                         public void onFailure(Call<NaverData> call, Throwable t) {
-                            Toast.makeText(getBaseContext(), "도서 검색 실패", Toast.LENGTH_SHORT).show();
                         }
                     });
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            BookListAdapter blAdapter = new BookListAdapter(getBaseContext(),
-                                    R.layout.listview_searchbook, books);
-                            ListView listview = (ListView) findViewById(R.id.listview);
-                            listview.setAdapter(blAdapter);
-
-                            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    String t = books.get(position).title;
-                                    String is = books.get(position).isbn;
-
-                                    //Intent intent = new Intent(SearchdbActivity.this, ReviewActivity.class);
-                                    //intent.putExtra("title",t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
-                                    //intent.putExtra("isbn", is);
-                                    //startActivity(intent);
-                                }
-                            });
-                        }
-                    });
                 }
                 Toast.makeText(getBaseContext(), "네이버 도서로 검색", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initView() {
+        BookListAdapter bAdapter = new BookListAdapter(getApplicationContext(),
+                R.layout.listview_searchbook, books);
+        ListView listview = (ListView) findViewById(R.id.sb_listview);
+        Log.d(TAG,"검색 도서 정보 어댑터 선언");
+
+        listview.setAdapter(bAdapter);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //bAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
     }

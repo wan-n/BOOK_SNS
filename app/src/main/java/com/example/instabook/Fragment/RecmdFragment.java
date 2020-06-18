@@ -207,7 +207,7 @@ public class RecmdFragment extends Fragment {
                 ((MainActivity)getContext()).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //rAdapter.notifyDataSetChanged();
+                        rAdapter.notifyDataSetChanged();
                     }
                 });
             }

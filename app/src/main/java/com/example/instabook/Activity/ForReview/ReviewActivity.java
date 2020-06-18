@@ -113,19 +113,6 @@ public class ReviewActivity extends AppCompatActivity {
         //이미지 가져오기
         if(img == null){
             imBook.setImageResource(R.drawable.default_img);
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //별점 점수 변화주기
-                    ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                        @Override
-                        public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                            tvRating.setText(rating + "점");
-                        }
-                    });
-                }
-            });
         } else {
             Thread uthread = new Thread(new Runnable() {
                 @Override
@@ -136,20 +123,8 @@ public class ReviewActivity extends AppCompatActivity {
                         conn.connect();
                         InputStream bis = conn.getInputStream();
                         bm = BitmapFactory.decodeStream(bis);
+                        imBook.setImageBitmap(bm);
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                imBook.setImageBitmap(bm);
-                                //별점 점수 변화주기
-                                ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                                    @Override
-                                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                                        tvRating.setText(rating + "점");
-                                    }
-                                });
-                            }
-                        });
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -157,8 +132,13 @@ public class ReviewActivity extends AppCompatActivity {
             }); uthread.start();
         }
 
-        //별점 받아오기
-        int rate = (int) ratingBar.getRating();
+        //별점 점수 변화주기
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                tvRating.setText(rating + "점");
+            }
+        });
 
         //hashtagSpans = new ArrayList<>();
         //hashtagSpans = getSpans(commentstag, '#');
@@ -182,6 +162,9 @@ public class ReviewActivity extends AppCompatActivity {
                     //리뷰값 저장
                     review = edReview.getText().toString();
                 }
+                //별점 받아오기
+                int rate = (int) ratingBar.getRating();
+
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("Review", review);
                 map.put("ISBN13", isbn);
@@ -221,6 +204,9 @@ public class ReviewActivity extends AppCompatActivity {
                     //리뷰값 저장
                     review = edReview.getText().toString();
                 }
+                //별점 받아오기
+                int rate = (int) ratingBar.getRating();
+
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("Review", review);
                 map.put("ISBN13", isbn);
