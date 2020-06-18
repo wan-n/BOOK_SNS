@@ -46,7 +46,6 @@ public class BookListAdapter extends BaseAdapter {
     LayoutInflater inflater;
     ArrayList<SearchBookItem> items = new ArrayList<SearchBookItem>();
     SearchBookItem searchBookItem;
-    int himge;
 
     // ListViewAdapter의 생성자
     public BookListAdapter(Context context, int layout, ArrayList<SearchBookItem> books) {
@@ -137,7 +136,7 @@ public class BookListAdapter extends BaseAdapter {
             intent.putExtra("title", t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
             intent.putExtra("isbn", is);
             intent.putExtra("img", bytes);
-            context.startActivity(intent);
+            context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     };
 }

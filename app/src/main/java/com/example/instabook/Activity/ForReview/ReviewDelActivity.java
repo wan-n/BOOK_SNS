@@ -60,16 +60,13 @@ public class ReviewDelActivity extends Activity {
                     @Override
                     public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
                         Toast.makeText(getApplicationContext(), "리뷰 삭제 성공", Toast.LENGTH_SHORT).show();
-                        Intent in = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(in);
+                        finish();
                     }
-
                     @Override
                     public void onFailure(Call<ReviewData> call, Throwable t) {
                         Toast.makeText(getApplicationContext(), "리뷰 삭제 실패", Toast.LENGTH_SHORT).show();
                     }
                 });
-                finish();
             }
         });
     }

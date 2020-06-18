@@ -9,6 +9,7 @@ import com.example.instabook.Activity.ForHome.UserData;
 import com.example.instabook.Activity.ForReview.ReviewData;
 import com.example.instabook.Activity.ForUser.UserBookData;
 import com.example.instabook.ListView.RecmdBookItem;
+import com.example.instabook.ListView.UBookListItem;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +62,9 @@ public interface RetroBaseApiService {
     @POST("/instabook/reviews/tag")
     Call<ReviewData> postTag(@Body HashMap<String, Object> parameters);
     */
+
+    @GET("/instabook/userbooks/ublist")
+    Call<List<UBookListItem>> getUbinfo(@Query("uid") int useruid);
 
     @GET("/instabook/rcmbook")
     Call<List<RecmdBookItem>> getRcmd(@Query("UserUid") int useruid);

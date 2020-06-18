@@ -129,13 +129,11 @@ public class RecmdAdapter extends BaseAdapter {
     final Button.OnClickListener jjimOnClickListener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Log.d(TAG,"온 클릭 이벤트 들어옴");
             int position = Integer.parseInt((v.getTag().toString()));
             RecmdBookItem reitem = items.get(position);
 
             String isbn =reitem.getRisbn();
             int ubuid = reitem.getUserBookUID();
-            Log.d(TAG,"선택된 유저 북아이디: "+ubuid);
 
             HashMap<String, Object> map = new HashMap<>();
             map.put("uid",useruid);

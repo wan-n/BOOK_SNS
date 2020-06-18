@@ -55,7 +55,6 @@
             </intent-filter>
         </activity>
 
-
         <!-- crop activity -->
         <activity
             android:name="com.soundcloud.android.crop.CropImageActivity"

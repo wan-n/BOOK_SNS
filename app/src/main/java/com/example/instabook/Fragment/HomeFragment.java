@@ -145,7 +145,6 @@ public class HomeFragment extends Fragment{
 
                                         //리스트뷰에 추가
                                         item = new HomeReviewItem(bitmap_profile, uid, review, redate_2, isbn, rate, bname, nname);
-                                        Log.d(TAG,"유아이디: "+uid+"리뷰: "+review+"날짜: "+redate+"ISBN: "+isbn+"별점: "+rate+"제목: "+bname+"닉네임: "+nname);
                                         items.add(item);
 
                                         initView();
@@ -213,7 +212,6 @@ public class HomeFragment extends Fragment{
 
                                     //리스트뷰에 추가
                                     item = new HomeReviewItem(bitmap_profile, uid, review, redate_2, isbn, rate, bname, nname);
-                                    Log.d(TAG,"유아이디: "+uid+"리뷰: "+review+"날짜: "+redate+"ISBN: "+isbn+"별점: "+rate+"제목: "+bname+"닉네임: "+nname);
                                     items.add(item);
 
                                     initView();

@@ -72,7 +72,6 @@ public class RecmdFragment extends Fragment {
             @Override
             public void onResponse(Call<List<RecmdBookItem>> call, Response<List<RecmdBookItem>> response) {
                 recmdlist = response.body();
-                Log.d(TAG,"추천 도서 정보 있음");
 
                 items = new ArrayList<>();
                 for(int i = 0; i < recmdlist.size(); i++) {
@@ -91,7 +90,6 @@ public class RecmdFragment extends Fragment {
                         @Override
                         public void onResponse(Call<UserBookUIDData> call, Response<UserBookUIDData> response) {
                             userbookUID = response.body();
-                            Log.d(TAG,"찜 도서 정보 있음");
 
                             //이미지 url 비트맵으로 변환
                             int bid = userbookUID.getUserBookUID();
@@ -125,10 +123,8 @@ public class RecmdFragment extends Fragment {
 
                             try {
                                 uthread.join();
-                                Log.d(TAG,"소유 도서 UID : "+bid+" , 도서 url : "+url+" , url을 비트맵으로 "+bp);
                                 rb = new RecmdBookItem(b, isbn, bp, p, bid);
                                 items.add(rb);
-                                Log.d(TAG,"추천 도서 정보 items에 넣음");
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -137,8 +133,6 @@ public class RecmdFragment extends Fragment {
                         }
                         @Override
                         public void onFailure(Call<UserBookUIDData> call, Throwable t) {
-                            Log.d(TAG, "찜 도서 정보 없음 ");
-
                             //이미지 url 비트맵으로 변환
                             int idx = url.indexOf("?");
                             String imgurl = url.substring(0, idx);
@@ -170,10 +164,8 @@ public class RecmdFragment extends Fragment {
 
                             try {
                                 uthread.join();
-                                Log.d(TAG,"도서 url : "+url+" , url을 비트맵으로 "+bp);
                                 rb = new RecmdBookItem(b, isbn, bp, p, 0);
                                 items.add(rb);
-                                Log.d(TAG,"추천 도서 정보 items에 넣음");
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -198,7 +190,6 @@ public class RecmdFragment extends Fragment {
         RecmdAdapter rAdapter = new RecmdAdapter(getActivity(),
                 R.layout.listview_recmd, items);
         ListView listview = (ListView) getActivity().findViewById(R.id.recom_listview);
-        Log.d(TAG,"추천 도서 정보 어댑터 선언");
 
         listview.setAdapter(rAdapter);
         new Thread(new Runnable() {

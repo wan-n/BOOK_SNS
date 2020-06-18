@@ -13,7 +13,7 @@
         android:layout_height="60dp">
 
         <FrameLayout
-            android:id="@+id/sf_fr_back"
+            android:id="@+id/mb_fr_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -21,7 +21,7 @@
             android:layout_marginTop="18dp">
 
             <ImageView
-                android:id="@+id/sf_back"
+                android:id="@+id/mb_back"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center_vertical"
@@ -29,13 +29,12 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/textView16"
+            android:id="@+id/mb_list_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="17dp"
-            android:layout_toEndOf="@+id/sf_fr_back"
-            android:layout_toRightOf="@+id/sf_fr_back"
+            android:layout_toEndOf="@+id/mb_fr_back"
             android:text="찜 리스트"
             android:textColor="#FFFFFF"
             android:textSize="20dp" />
@@ -48,7 +47,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ListView
-            android:id="@+id/sf_list"
+            android:id="@+id/mb_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:dividerHeight="3dp"

@@ -361,7 +361,7 @@ public class InfoFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<HomeData>> call, Throwable t) {
-               // Toast.makeText(getActivity(), "리뷰 정보 없음.", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "리뷰 정보 없음.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -458,19 +458,19 @@ public class InfoFragment extends Fragment {
     private void cropImage(Uri photoUri){
 
         //갤러리에서 선택한 경우 tempFile이 없으므로 새로 생성해준다.
-            try{
-                tempFile = createImageFile();
+        try{
+            tempFile = createImageFile();
 
-                Log.d(TAG, "빈파일 경로 : " + tempFile);
-                //크롭 후 저장할 Uri
-                Uri savingUri = Uri.fromFile(tempFile);
+            Log.d(TAG, "빈파일 경로 : " + tempFile);
+            //크롭 후 저장할 Uri
+            Uri savingUri = Uri.fromFile(tempFile);
 
-                Crop.of(photoUri, savingUri).asSquare().start(getActivity(), InfoFragment.this, Crop.REQUEST_CROP);
-            }catch (IOException e){
-                Log.e(TAG, "이미지 처리 오류! 다시 시도해주세요.");
-                Toast.makeText(getActivity(), "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
+            Crop.of(photoUri, savingUri).asSquare().start(getContext(), InfoFragment.this, Crop.REQUEST_CROP);
+        }catch (IOException e){
+            Log.e(TAG, "이미지 처리 오류! 다시 시도해주세요.");
+            Toast.makeText(getActivity(), "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
 
 
 
@@ -529,36 +529,36 @@ public class InfoFragment extends Fragment {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                    retroBaseApiService.getImage(useruid).enqueue(new Callback<ResponseBody>() {
+                retroBaseApiService.getImage(useruid).enqueue(new Callback<ResponseBody>() {
 
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            assert response.body() != null;
-                            InputStream is = response.body().byteStream();
-                            Bitmap bitmap_prof = BitmapFactory.decodeStream(is);
-
-
-                            // 레이아웃의 이미지칸에 CROP된 BITMAP을 보여줌
-                            info_pimg.setImageBitmap(bitmap_prof);
-
-                            //이미지 동그랗게 보이기
-                            info_pimg.setBackground(new ShapeDrawable(new OvalShape()));
-                            info_pimg.setClipToOutline(true);
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        assert response.body() != null;
+                        InputStream is = response.body().byteStream();
+                        Bitmap bitmap_prof = BitmapFactory.decodeStream(is);
 
 
-                            tempFile = null;
+                        // 레이아웃의 이미지칸에 CROP된 BITMAP을 보여줌
+                        info_pimg.setImageBitmap(bitmap_prof);
+
+                        //이미지 동그랗게 보이기
+                        info_pimg.setBackground(new ShapeDrawable(new OvalShape()));
+                        info_pimg.setClipToOutline(true);
 
 
-                            //프래그먼트 새로고침
-                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-                            ft.detach(InfoFragment.this).attach(InfoFragment.this).commit();
-                        }
+                        tempFile = null;
 
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Toast.makeText(getActivity(), "실패", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+
+                        //프래그먼트 새로고침
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(InfoFragment.this).attach(InfoFragment.this).commit();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(getActivity(), "실패", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
             }
 
