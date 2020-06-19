@@ -303,6 +303,36 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
                 List<ResponseGet> uid_data = response.body();
                 int ruid = uid_data.get(0).getReviewUID();
 
+
+                //태그 받아오기
+                String str = edTag.getText().toString();
+                String delstr = "\\#";
+                String[] tags = str.split(delstr);
+                //태그 하나씩 저장
+                for(int i = 1; i <tags.length; i++){
+                    String singletag = tags[i];
+                    Log.d(TAG,"singletag : "+singletag);
+                    //태그 올리기
+                    Retrofit tag_retro = new Retrofit.Builder()
+                            .baseUrl(retroBaseApiService.Base_URL)
+                            .addConverterFactory(GsonConverterFactory.create()).build();
+                    retroBaseApiService = tag_retro.create(RetroBaseApiService.class);
+
+                    retroBaseApiService.postTag(ruid, singletag).enqueue(new Callback<ReviewData>() {
+                        @Override
+                        public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
+                            Log.d(TAG,"태그 올리기 성공");
+                            Toast.makeText(getBaseContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
+                        }
+                        @Override
+                        public void onFailure(Call<ReviewData> call, Throwable t) {
+                            Log.d(TAG,"태그 올리기 실패");
+                        }
+                    });
+                }
+
+
+
                 //UserUID와 ReviewUID를 카카오링크 파라미터로 전송
                 kakaolink(ruid, uuid);
                 Intent in = new Intent(getBaseContext(), MainActivity.class);
