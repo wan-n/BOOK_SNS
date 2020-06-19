@@ -73,7 +73,7 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
     private Button pbtn;
     private String isbn;
     private String review;
-    private ReviewUID getRuid;
+    private List<ReviewUID> getRuid;
     private HashTagHelper mEditTextHashTagHelper;
 
 
@@ -178,20 +178,19 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
                         public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
                             Log.d(TAG,"리뷰 올리기 성공");
 
-                            getRuid = new ReviewUID();
                             //리뷰 UID 가져오기
                             Retrofit ruid_retro = new Retrofit.Builder()
                                     .baseUrl(retroBaseApiService.Base_URL)
                                     .addConverterFactory(GsonConverterFactory.create()).build();
                             retroBaseApiService = ruid_retro.create(RetroBaseApiService.class);
 
-                            retroBaseApiService.getReuid(useruid, isbn).enqueue(new Callback<ReviewUID>() {
+                            retroBaseApiService.getReuid(useruid, isbn).enqueue(new Callback<List<ReviewUID>>() {
                                 @Override
-                                public void onResponse(Call<ReviewUID> call, Response<ReviewUID> response) {
+                                public void onResponse(Call<List<ReviewUID>> call, Response<List<ReviewUID>> response) {
                                     Log.d(TAG,"리뷰UID 가져오기 성공");
 
                                     getRuid = response.body();
-                                    int ruid = getRuid.getReviewUID();
+                                    int ruid = getRuid.get(0).getReviewUID();
                                     Log.d(TAG,"리뷰UID : "+ruid);
 
                                     //태그 하나씩 저장
@@ -219,7 +218,7 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
                                 }
 
                                 @Override
-                                public void onFailure(Call<ReviewUID> call, Throwable t) {
+                                public void onFailure(Call<List<ReviewUID>> call, Throwable t) {
 
                                 }
                             });

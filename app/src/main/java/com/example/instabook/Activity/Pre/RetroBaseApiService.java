@@ -63,7 +63,7 @@ public interface RetroBaseApiService {
     Call<ReviewData> postTag(@Query("ruid") int reviewuid, @Query("tag") String tag);
 
     @GET("/instabook/reviews/reviewuid")
-    Call<ReviewUID> getReuid(@Query("uid") int uid, @Query("isbn") String isbn);
+    Call<List<ReviewUID>> getReuid(@Query("uid") int uid, @Query("isbn") String isbn);
 
     @GET("/instabook/userbooks/ublist")
     Call<List<UBookListItem>> getUbinfo(@Query("uid") int useruid);
