@@ -232,7 +232,7 @@ public class SearchdbActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<BookData>> call, Throwable t) {
-                //네이버 도서 정보 가져오기
+                Log.d(TAG,"네이버 도서 정보 가져오기");
                 getNaverSearch(keyword);
             }
         });
@@ -413,16 +413,16 @@ public class SearchdbActivity extends AppCompatActivity {
         nbthread.start();
         try{
             nbthread.join();
-            Log.d(TAG,"nbthread.join이후");
+            Log.d(TAG, "join 후 setNaverSearch");
             setNaverBook();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
     public void setNaverBook(){
+        Log.d(TAG, "위치 setNaverSearch");
         HashMap<String, Object> map = new HashMap<>();
 
         books = new ArrayList<>();
@@ -433,7 +433,7 @@ public class SearchdbActivity extends AppCompatActivity {
             String pdate = nblist.get(i).getPubdate();
             String price = nblist.get(i).getPrice();
             String sale = nblist.get(i).getDiscount();
-            String url = nblist.get(i).getImage();
+            String burl = nblist.get(i).getImage();
             String author = nblist.get(i).getAuthor();
 
             //데이트 타임, isbn 변환
@@ -446,70 +446,9 @@ public class SearchdbActivity extends AppCompatActivity {
             map.put("pdate", pdate);
             map.put("price", price);
             map.put("sale", sale);
-            map.put("img", url);
+            map.put("img", burl);
             map.put("author",author);
             Log.d(TAG,"setNaverBook 함수 for문");
-
-            if(url == null){
-                //기본 이미지 비트맵으로 변환
-                Bitmap bmm = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.default_img);
-                int height = bmm.getHeight();
-                int width = bmm.getWidth();
-
-                Bitmap resized = null;
-                while(height>70){
-                    resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
-                    height = resized.getHeight();
-                    width = resized.getWidth();
-                }
-                bm = resized;
-
-                Log.d(TAG,"getNaverBook 함수 for문 안 if문 : "+bname+", "+author+", "+url+", "+bm);
-                sb = new SearchBookItem(bname, author, pub, url, isbn , bm);
-                books.add(sb);
-                Log.d(TAG,"setNaverBook 함수 for문 안 if문 books 추가");
-                initView();
-            } else {
-                //이미지 url 비트맵으로 변환
-                int idx = url.indexOf("?");
-                String imgurl = url.substring(0, idx);
-                Log.d(TAG,"setNaverBook 함수 for문 안 else문");
-                Thread bthread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            URL url = new URL(imgurl);
-                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                            conn.connect();
-                            InputStream bis = conn.getInputStream();
-                            Bitmap bmm = BitmapFactory.decodeStream(bis);
-                            Log.d(TAG,"setNaverBook 함수 for문 안 else문 안 thread");
-                            int height = bmm.getHeight();
-                            int width = bmm.getWidth();
-
-                            Bitmap resized = null;
-                            while(height>70){
-                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
-                                height = resized.getHeight();
-                                width = resized.getWidth();
-                            }
-                            bm = resized;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }); bthread.start();
-                try {
-                    bthread.join();
-                    Log.d(TAG,"setNaverBook 함수 for문 안 else문 : "+bname+", "+author+", "+url+", "+bm);
-                    sb = new SearchBookItem(bname, author, pub, url, isbn ,bm);
-                    books.add(sb);
-                    Log.d(TAG,"setNaverBook 함수 for문 안 else문 안 thread");
-                    initView();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
 
             //DB에 도서 정보 저장
             Retrofit naver_retro = new Retrofit.Builder()
@@ -520,11 +459,73 @@ public class SearchdbActivity extends AppCompatActivity {
             retroBaseApiService.postNbook(map).enqueue(new Callback<NaverData>() {
                 @Override
                 public void onResponse(Call<NaverData> call, Response<NaverData> response) {
+                    Log.d(TAG, "DB 저장 성공");
+                    if(burl == null){
+                        //기본 이미지 비트맵으로 변환
+                        Bitmap bmm = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.default_img);
+                        int height = bmm.getHeight();
+                        int width = bmm.getWidth();
+
+                        Bitmap resized = null;
+                        while(height>70){
+                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                            height = resized.getHeight();
+                            width = resized.getWidth();
+                        }
+                        bm = resized;
+
+                        Log.d(TAG,"getNaverBook 함수 기본 이미지 : "+bname+", "+author+", "+null+", "+bm);
+                        sb = new SearchBookItem(bname, author, pub, null, isbn , bm);
+                        books.add(sb);
+                        Log.d(TAG,"setNaverBook 함수 기본 이미지 books 추가");
+                        initView();
+                    } else {
+                        Log.d(TAG,"setNaverBook 함수 for문 안 이미지 있음");
+                        Thread bthread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    URL url = new URL(burl);
+                                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                    conn.connect();
+                                    InputStream bis = conn.getInputStream();
+                                    Bitmap bmm = BitmapFactory.decodeStream(bis);
+                                    int height = bmm.getHeight();
+                                    int width = bmm.getWidth();
+
+                                    Bitmap resized = null;
+                                    while(height>70){
+                                        resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                        height = resized.getHeight();
+                                        width = resized.getWidth();
+                                    }
+                                    bm = resized;
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }); bthread.start();
+                        try {
+                            bthread.join();
+                            Log.d(TAG,"setNaverBook 함수 도서 이미지 추가 : "+bname+", "+author+", "+burl+", "+bm);
+                            sb = new SearchBookItem(bname, author, pub, burl, isbn ,bm);
+                            books.add(sb);
+                            Log.d(TAG,"setNaverBook 함수 도서 이미지 books 추가");
+                            initView();
+
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
                 @Override
                 public void onFailure(Call<NaverData> call, Throwable t) {
+                    Log.d(TAG, "DB 저장 실패");
                 }
             });
+
+
         }
         Toast.makeText(getBaseContext(), "네이버 도서로 검색", Toast.LENGTH_SHORT).show();
     }

@@ -6,18 +6,16 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.instabook.Activity.ForHome.AllUserData;
 import com.example.instabook.Activity.ForHome.HomeData;
 import com.example.instabook.Activity.ForHome.UserData;
+import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.Adapter.HomeReviewAdapter;
@@ -43,16 +41,15 @@ import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseA
 public class HomeFragment extends Fragment{
     private static final String TAG = "HomeFragment";
     SaveSharedPreference sp;
-    private View rootView;
-    private Context context;
-    private List<UserData> frDataList;
-    private  List<AllUserData> allUserDataList;
-    private AllUserData alluserData;
-    private AllUserData alluserData2;
+    View rootView;
+    Context context;
+    List<UserData> frDataList;
+    List<UserData> allUserlist;
+    UserData uid;
 
-    private List<HomeData> homeDataList;
-    private ArrayList<HomeReviewItem> items;
-    private HomeReviewItem item;
+    List<HomeData> homeDataList;
+    ArrayList<HomeReviewItem> items;
+    HomeReviewItem item;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,47 +64,45 @@ public class HomeFragment extends Fragment{
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         //유저 UID 가져오기
-        final int useruid1 = sp.getUserUid(getActivity());
+        final int useruid = sp.getUserUid(getActivity());
 
         //친구 리스트 가져오기
         Retrofit retro_id = new Retrofit.Builder()
                 .baseUrl(retroBaseApiService.Base_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         retroBaseApiService = retro_id.create(RetroBaseApiService.class);
-        //유저 UID와 친구 UID 리스트 만들기
-        retroBaseApiService.getUid(useruid1).enqueue(new Callback<List<UserData>>() {
+
+        retroBaseApiService.getUid(useruid).enqueue(new Callback<List<UserData>>() {
             @Override
             public void onResponse(Call<List<UserData>> call, Response<List<UserData>> response) {
+                //친구 정보 있음
                 frDataList = response.body();
 
-                int w = 0;
+                //유저 UID + 친구 UID 리스트 만들기
+                allUserlist = new ArrayList<>();
                 for(int j = 0; j < frDataList.size(); j++){
-                    int fruid1 = frDataList.get(j).getFriendUID();
+                    int fruid = frDataList.get(j).getFriendUID();
+                    uid = new UserData(fruid);
 
-                    alluserData = new AllUserData(fruid1);
-                    int uruid1 = alluserData.getUserUID();
-
-                    allUserDataList = new ArrayList<>();
-                    allUserDataList.add(alluserData);
-
-                    if(w == 0){
-                        alluserData2 = new AllUserData(useruid1);
-                        allUserDataList.add(alluserData2);
-                    }
+                    allUserlist.add(uid);
                 }
+                uid = new UserData(useruid);
+                allUserlist.add(uid);
 
                 //각 유저마다의 정보 가져오기
-                for(int i = 0; i < allUserDataList.size(); i++){
+                for(int i = 0; i < allUserlist.size(); i++){
+                    //유저 UID로 유저 정보, 리뷰 정보, 도서 정보 가져오기
+                    int userUID = allUserlist.get(i).getUserUID();
 
                     Retrofit retro_info = new Retrofit.Builder()
                             .baseUrl(retroBaseApiService.Base_URL)
                             .addConverterFactory(GsonConverterFactory.create()).build();
                     retroBaseApiService = retro_info.create(RetroBaseApiService.class);
-                    //유저 UID로 유저 정보, 리뷰 정보, 도서 정보 가져오기
-                    int userUID = allUserDataList.get(i).getUserUID();
+
                     retroBaseApiService.getHreq(userUID).enqueue(new Callback<List<HomeData>>() {
                         @Override
                         public void onResponse(Call<List<HomeData>> call, Response<List<HomeData>> response) {
+                            //리뷰 정보 가져오기
                             homeDataList = response.body();
                             items = new ArrayList<>();
 
@@ -152,6 +147,7 @@ public class HomeFragment extends Fragment{
 
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+
                                     }
                                 });
                             }
@@ -172,7 +168,7 @@ public class HomeFragment extends Fragment{
                         .addConverterFactory(GsonConverterFactory.create()).build();
                 retroBaseApiService = retro_info.create(RetroBaseApiService.class);
                 //유저 UID로 유저 정보, 리뷰 정보, 도서 정보 가져오기
-                retroBaseApiService.getHreq(useruid1).enqueue(new Callback<List<HomeData>>() {
+                retroBaseApiService.getHreq(useruid).enqueue(new Callback<List<HomeData>>() {
                     @Override
                     public void onResponse(Call<List<HomeData>> call, Response<List<HomeData>> response) {
                         homeDataList = response.body();
@@ -241,7 +237,20 @@ public class HomeFragment extends Fragment{
 
     private void initView(){
         HomeReviewAdapter hrAdapter = new HomeReviewAdapter(getActivity(), R.layout.listview_homereview, items);
-        ListView listView = (ListView) getView().findViewById(R.id.home_listview);
-        listView.setAdapter(hrAdapter);
+        ListView listview = (ListView) getView().findViewById(R.id.home_listview);
+        listview.setAdapter(hrAdapter);
+
+        listview.setAdapter(hrAdapter);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ((MainActivity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        hrAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
     }
 }

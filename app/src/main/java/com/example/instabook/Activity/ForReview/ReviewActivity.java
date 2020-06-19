@@ -141,36 +141,38 @@ public class ReviewActivity extends AppCompatActivity {
                 } else { //공백이 아닐 때 처리할 내용
                     //리뷰값 저장
                     review = edReview.getText().toString();
+
+                    //별점 받아오기
+                    int rate = (int) ratingBar.getRating();
+
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("Review", review);
+                    map.put("ISBN13", isbn);
+                    map.put("UserUID", useruid);
+                    map.put("Rate", rate);
+                    Log.d(TAG," 리뷰 "+review+" isbn "+isbn+" 별점 "+rate);
+
+                    //리뷰 업로드
+                    Retrofit rview_retro = new Retrofit.Builder()
+                            .baseUrl(retroBaseApiService.Base_URL)
+                            .addConverterFactory(GsonConverterFactory.create()).build();
+                    retroBaseApiService = rview_retro.create(RetroBaseApiService.class);
+
+                    retroBaseApiService.postReview(map).enqueue(new Callback<ReviewData>() {
+                        @Override
+                        public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
+                            Toast.makeText(getBaseContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
+                            Intent in = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(in);
+                        }
+
+                        @Override
+                        public void onFailure(Call<ReviewData> call, Throwable t) {
+                            Toast.makeText(getBaseContext(), "리뷰 올리기 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
-                //별점 받아오기
-                int rate = (int) ratingBar.getRating();
 
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("Review", review);
-                map.put("ISBN13", isbn);
-                map.put("UserUID", useruid);
-                map.put("Rate", rate);
-                Log.d(TAG," 리뷰 "+review+" isbn "+isbn+" 별점 "+rate);
-
-                //리뷰 업로드
-                Retrofit rview_retro = new Retrofit.Builder()
-                        .baseUrl(retroBaseApiService.Base_URL)
-                        .addConverterFactory(GsonConverterFactory.create()).build();
-                retroBaseApiService = rview_retro.create(RetroBaseApiService.class);
-
-                retroBaseApiService.postReview(map).enqueue(new Callback<ReviewData>() {
-                    @Override
-                    public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
-                        Toast.makeText(getBaseContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
-                        Intent in = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(in);
-                    }
-
-                    @Override
-                    public void onFailure(Call<ReviewData> call, Throwable t) {
-                        Toast.makeText(getBaseContext(), "리뷰 올리기 실패", Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
         });
 
