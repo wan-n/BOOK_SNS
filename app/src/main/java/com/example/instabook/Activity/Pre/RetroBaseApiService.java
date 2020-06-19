@@ -7,6 +7,7 @@ import com.example.instabook.Activity.ForHome.HomeData;
 import com.example.instabook.Activity.ForHome.UserBookUIDData;
 import com.example.instabook.Activity.ForHome.UserData;
 import com.example.instabook.Activity.ForReview.ReviewData;
+import com.example.instabook.Activity.ForReview.ReviewUID;
 import com.example.instabook.Activity.ForUser.UserBookData;
 import com.example.instabook.ListView.RecmdBookItem;
 import com.example.instabook.ListView.UBookListItem;
@@ -58,10 +59,11 @@ public interface RetroBaseApiService {
     @POST("/instabook/books/naverbook")
     Call<NaverData> postNbook(@Body HashMap<String, Object> parameters);
 
-    /**TODO 태그데이터 서버 올리기
     @POST("/instabook/reviews/tag")
-    Call<ReviewData> postTag(@Body HashMap<String, Object> parameters);
-    */
+    Call<ReviewData> postTag(@Query("ruid") int reviewuid, @Query("tag") String tag);
+
+    @GET("/instabook/reviews/reviewuid")
+    Call<ReviewUID> getReuid(@Query("uid") int uid, @Query("isbn") String isbn);
 
     @GET("/instabook/userbooks/ublist")
     Call<List<UBookListItem>> getUbinfo(@Query("uid") int useruid);

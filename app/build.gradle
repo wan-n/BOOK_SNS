@@ -46,7 +46,7 @@ dependencies {
     //crop
     implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
 
-
+    implementation 'com.github.danylovolokh:hashtag-helper:1.1.0'
     implementation group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION
     //implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.29.0'
     implementation 'androidx.preference:preference:1.1.1'

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.instabook.Activity.ForHashTag.Hashtag;
 import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
@@ -34,6 +36,7 @@ import com.kakao.message.template.LinkObject;
 import com.kakao.network.ErrorResult;
 import com.kakao.network.callback.ResponseCallback;
 import com.kakao.util.helper.log.Logger;
+import com.volokh.danylo.hashtaghelper.HashTagHelper;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -42,38 +45,43 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
 
-public class ReviewActivity extends AppCompatActivity {
-
-    public static RetroBaseApiService retroBaseApiService;
+public class ReviewActivity extends AppCompatActivity implements HashTagHelper.OnHashTagClickListener{
     private static final String TAG = "ReviewActivity";
+    public static RetroBaseApiService retroBaseApiService;
     SaveSharedPreference sp;
-
     private RatingBar ratingBar;
-    FrameLayout binfo_fr_back;
-    ImageView binfo_back;
-    TextView tvTitle;
-    TextView tvRating;
-    ImageView imBook, sbtn;
-    EditText edReview;
-    EditText edTag;
-    Button pbtn;
-    String title;
-    String isbn;
-    String review;
-    String commentstag = null;
-    ArrayList<int[]> hashtagSpans;
+    private FrameLayout binfo_fr_back;
+    private ImageView binfo_back;
+    private TextView tvTitle;
+    private TextView tvRating;
+    private ImageView imBook, sbtn;
+    private EditText edReview;
+    private EditText edTag;
+    private Button pbtn;
+    private String isbn;
+    private String review;
+    private ReviewUID getRuid;
+    private HashTagHelper mEditTextHashTagHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
+
 
         binfo_back = findViewById(R.id.binfo_back);
         binfo_fr_back = findViewById(R.id.binfo_fr_back);
@@ -86,9 +94,12 @@ public class ReviewActivity extends AppCompatActivity {
         pbtn = findViewById(R.id.push_btn);
         sbtn = findViewById(R.id.share_btn); //SNS 공유 버튼
 
+
         //유저 UID 가져오기
         final int useruid = sp.getUserUid(ReviewActivity.this);
 
+
+        //뒤로가기
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,15 +112,16 @@ public class ReviewActivity extends AppCompatActivity {
         };
         binfo_fr_back.setOnClickListener(listener);
 
+
         //책 제목과 isbn 받아오기
         Bundle extras = getIntent().getExtras();
+
+        isbn = extras.getString("isbn");
         byte[] byteArray = getIntent().getByteArrayExtra("img");
         Bitmap mp = BitmapFactory.decodeByteArray(byteArray, 0 , byteArray.length);
+
         imBook.setImageBitmap(mp);
         tvTitle.setText(extras.getString("title"));
-        isbn = extras.getString("isbn");
-
-        title = tvTitle.getText().toString();
 
 
         //별점 점수 변화주기
@@ -120,16 +132,9 @@ public class ReviewActivity extends AppCompatActivity {
             }
         });
 
-        //hashtagSpans = new ArrayList<>();
-        //hashtagSpans = getSpans(commentstag, '#');
-        //태그 저장
-                /*
-                if(edTag.getText().toString().length() == 0) {
-                    Toast.makeText(getBaseContext(), "태그를 입력하세요", Toast.LENGTH_SHORT).show();;
-                } else {
-                    //받아온 text를 string으로 저장
-                    commentstag = edTag.getText().toString();
-                }   */
+        //태그 헬퍼퍼
+       mEditTextHashTagHelper = HashTagHelper.Creator.create(getResources().getColor(R.color.colorPrimaryDark), null);
+        mEditTextHashTagHelper.handle(edTag);
 
 
         //게시하기 버튼
@@ -145,12 +150,22 @@ public class ReviewActivity extends AppCompatActivity {
                     //별점 받아오기
                     int rate = (int) ratingBar.getRating();
 
+                    //태그 받아오기
+                    String str = edTag.getText().toString();
+                    String delstr = "\\#";
+                    String[] tags = str.split(delstr);
+                    Log.d(TAG,"태그 str :"+str);
+                    Log.d(TAG,"태그 tags[] : "+tags[1]);
+
+
+                    //리뷰 저장 hashmap
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("Review", review);
                     map.put("ISBN13", isbn);
                     map.put("UserUID", useruid);
                     map.put("Rate", rate);
-                    Log.d(TAG," 리뷰 "+review+" isbn "+isbn+" 별점 "+rate);
+                    Log.d(TAG,"리뷰정보 :"+review+", "+isbn+", "+useruid+", "+rate);
+
 
                     //리뷰 업로드
                     Retrofit rview_retro = new Retrofit.Builder()
@@ -161,9 +176,53 @@ public class ReviewActivity extends AppCompatActivity {
                     retroBaseApiService.postReview(map).enqueue(new Callback<ReviewData>() {
                         @Override
                         public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
-                            Toast.makeText(getBaseContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
-                            Intent in = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(in);
+                            Log.d(TAG,"리뷰 올리기 성공");
+
+                            getRuid = new ReviewUID();
+                            //리뷰 UID 가져오기
+                            Retrofit ruid_retro = new Retrofit.Builder()
+                                    .baseUrl(retroBaseApiService.Base_URL)
+                                    .addConverterFactory(GsonConverterFactory.create()).build();
+                            retroBaseApiService = ruid_retro.create(RetroBaseApiService.class);
+
+                            retroBaseApiService.getReuid(useruid, isbn).enqueue(new Callback<ReviewUID>() {
+                                @Override
+                                public void onResponse(Call<ReviewUID> call, Response<ReviewUID> response) {
+                                    Log.d(TAG,"리뷰UID 가져오기 성공");
+
+                                    getRuid = response.body();
+                                    int ruid = getRuid.getReviewUID();
+                                    Log.d(TAG,"리뷰UID : "+ruid);
+
+                                    //태그 하나씩 저장
+                                    for(int i = 1; i <tags.length; i++){
+                                        String singletag = tags[i];
+                                        Log.d(TAG,"singletag : "+singletag);
+                                        //태그 올리기
+                                        Retrofit tag_retro = new Retrofit.Builder()
+                                                .baseUrl(retroBaseApiService.Base_URL)
+                                                .addConverterFactory(GsonConverterFactory.create()).build();
+                                        retroBaseApiService = tag_retro.create(RetroBaseApiService.class);
+
+                                        retroBaseApiService.postTag(ruid, singletag).enqueue(new Callback<ReviewData>() {
+                                            @Override
+                                            public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
+                                                Log.d(TAG,"태그 올리기 성공");
+                                                Toast.makeText(getBaseContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
+                                            }
+                                            @Override
+                                            public void onFailure(Call<ReviewData> call, Throwable t) {
+                                                Log.d(TAG,"태그 올리기 실패");
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ReviewUID> call, Throwable t) {
+
+                                }
+                            });
                         }
 
                         @Override
@@ -172,7 +231,6 @@ public class ReviewActivity extends AppCompatActivity {
                         }
                     });
                 }
-
             }
         });
 
@@ -222,30 +280,13 @@ public class ReviewActivity extends AppCompatActivity {
 
     }
 
+
     //뒤로가기
     @Override
     public void onBackPressed(){
         super.onBackPressed();
 
     }
-
-    /*
-    public ArrayList<int[]> getSpans(String body, char prefix){
-        ArrayList<int[]> spans = new ArrayList<int[]>();
-
-        Pattern pattern = Pattern.compile(prefix + "\\w+");
-        Matcher matcher = pattern.matcher(body);
-
-        while (matcher.find()) {
-            int[]   currnetSpan = new int[2];
-            currnetSpan[0] = matcher.start();
-            currnetSpan[1] = matcher.end();
-            spans.add(currnetSpan);
-        }
-        return spans;
-    }
-
-     */
 
 
     public void shareKakao(HashMap<String, Object> map, int uuid){
@@ -308,8 +349,10 @@ public class ReviewActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
+    @Override
+    public void onHashTagClicked(String hashTag) {
 
+    }
 }
