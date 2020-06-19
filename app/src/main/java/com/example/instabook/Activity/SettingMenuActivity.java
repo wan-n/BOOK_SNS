@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +34,9 @@ public class SettingMenuActivity extends AppCompatActivity {
     private ImageView set_back;
     private TextView set_info, set_friends, set_logout, set_withdrawal;
     private Switch set_pub;
-    FrameLayout set_fr_info, set_fr_friends, set_fr_logout, set_fr_withdrawal, set_fr_back;
+    FrameLayout set_fr_logout, set_fr_withdrawal, set_fr_back;
+
+    LinearLayout set_fr_info, set_fr_friends;
 
     RetroBaseApiService retroBaseApiService;
     SaveSharedPreference sp;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorBase"
+    android:background="#fafdff"
     tools:context=".Activity.MakeDeepLink.LinkActivity">
     <LinearLayout
         android:id="@+id/top_linear"
@@ -52,7 +52,8 @@
         android:paddingBottom="5dp"
         android:padding="5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#fafdff">
 
         <LinearLayout
             android:id="@+id/box_user"
@@ -88,15 +89,15 @@
                         android:layout_height="wrap_content"
 
                         android:layout_alignParentBottom="true"
-                        android:textColor="@color/colorText"
-                        android:textSize="20sp" />
+                        android:textColor="#101010"
+                        android:textSize="19sp" />
 
                     <TextView
                         android:id="@+id/txt_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:textColor="@color/colorText"
+                        android:textColor="#000"
                         android:textSize="10sp" />
 
                 </RelativeLayout>
@@ -131,44 +132,58 @@
                 android:layout_height="wrap_content"
                 android:text="도서"
                 android:textAlignment="center"
-                android:background="@drawable/corner_shape_myinfo"
-                android:textColor="@color/colorText"
+                android:background="@drawable/corner_shape_link3"
+                android:textColor="#081424"
+                android:textStyle="bold"
                 android:textSize="13dp" />
 
             <TextView
                 android:id="@+id/txt_bname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="10dp"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/colorText"
+                android:textColor="#081424"
+                android:textStyle="bold"
                 android:textSize="13dp" />
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginHorizontal="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="#a3bccc"
+            android:layout_alignBottom="@+id/box_book"
+            android:layout_gravity="center_horizontal"/>
+
         <LinearLayout
-            android:layout_width="407dp"
-            android:layout_height="65dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/box_book"
             android:orientation="vertical"
-            android:padding="3dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp">
 
             <TextView
                 android:id="@+id/txt_review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/corner_shape_link2"
-                android:textColor="@color/colorText" />
+                android:scrollbars="vertical"
+                android:textColor="#000" />
 
 
             <TextView
                 android:id="@+id/txt_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="0.5dp"
                 android:paddingTop="0dp"
                 android:paddingBottom="0dp"
-                android:background="@drawable/corner_shape_myinfo" />
+                android:textColor="#000"
+                android:background="@drawable/corner_shape_link4" />
 
         </LinearLayout>
 

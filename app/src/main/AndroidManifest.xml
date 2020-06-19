@@ -42,7 +42,8 @@
         <activity android:name=".Activity.ForBook.SearchdbActivity" />
         <activity android:name=".Activity.FriendsActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name=".Activity.MyInfoActivity" />
+        <activity android:name=".Activity.MyInfoActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".Activity.SettingMenuActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".Activity.Pre.ChangePwdActivity" />

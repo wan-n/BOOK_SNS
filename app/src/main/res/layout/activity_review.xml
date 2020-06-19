@@ -21,10 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="19dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_gravity="center_vertical"
+            android:background="?attr/selectableItemBackgroundBorderless">
 
             <ImageView
                 android:id="@+id/binfo_back"
@@ -40,13 +38,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="17dp"
+            android:layout_gravity="center_vertical"
             android:text="새 리뷰 작성하기"
             android:textColor="#FFFFFF"
             android:textSize="20dp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/minfo_fr_back"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout

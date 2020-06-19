@@ -95,8 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                                             //쉐어드프리퍼런스에 유저아이디, 유저UID, email 저장(이후엔 자동로그인)
                                             SaveSharedPreference.setUserName(LoginActivity.this, id, uid, email, nickname);
 
-
-                                           //홈탭으로 이동한다.
+                                                                                          //홈탭으로 이동한다.
                                             Intent Success = new Intent(getApplicationContext(), MainActivity.class);
                                             startActivity(Success);
 

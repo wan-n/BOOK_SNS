@@ -9,19 +9,17 @@
     tools:context=".Activity.MyInfoActivity">
 
 <LinearLayout
-    android:id="@+id/top_linear"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="60dp"
+    android:background="#0f1d2e"
     android:orientation="horizontal">
     <FrameLayout
         android:id="@+id/minfo_fr_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="19dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginStart="30dp">
 
     <ImageView
         android:id="@+id/minfo_back"
@@ -36,85 +34,109 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="17dp"
+        android:layout_gravity="center_vertical"
         android:text="내 정보"
         android:textColor="#FFFFFF"
         android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/minfo_fr_back"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textStyle="bold" />
 </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="50dp"
-        android:text="회원 아이디"
-        android:textColor="#FFFFFF"
-        android:textSize="15dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top_linear" />
-
-    <FrameLayout
-        android:id="@+id/minfo_Fr_id"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="50dp"
-        android:background="@drawable/corner_shape_myinfo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/minfo_id"
+            android:id="@+id/textView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="user ID"
-            android:textColor="#000"
-            android:textSize="15dp" />
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="50dp"
+            android:text="회원 아이디"
+            android:textColor="#FFFFFF"
+            android:textSize="15dp"
+            android:textStyle="bold" />
 
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/minfo_Fr_id"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/corner_shape_myinfo">
+
+            <TextView
+                android:id="@+id/minfo_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="user ID"
+                android:textColor="#000"
+                android:textSize="15dp" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="30dp"
+            android:text="회원 닉네임"
+            android:textColor="#FFFFFF"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <FrameLayout
+            android:id="@+id/mnickname_Fr_id"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/corner_shape_myinfo">
+
+            <TextView
+                android:id="@+id/mnickname_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="user NAME"
+                android:textColor="#000"
+                android:textSize="15dp" />
+
+        </FrameLayout>
 
 
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="30dp"
-        android:text="등록된 이메일"
-        android:textColor="#FFFFFF"
-        android:textSize="15dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/minfo_Fr_id" />
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="30dp"
+            android:text="등록된 이메일"
+            android:textColor="#FFFFFF"
+            android:textSize="15dp"
+            android:textStyle="bold" />
 
-    <FrameLayout
-        android:id="@+id/minfo_fr_email"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="50dp"
-        android:background="@drawable/corner_shape_myinfo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView17">
+        <FrameLayout
+            android:id="@+id/minfo_fr_email"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/corner_shape_myinfo">
 
-    <TextView
-        android:id="@+id/minfo_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="user email"
-        android:textColor="#000"
-        android:textSize="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+            <TextView
+                android:id="@+id/minfo_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="user email"
+                android:textColor="#000"
+                android:textSize="15dp" />
+        </FrameLayout>
 
-    </FrameLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -126,72 +148,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/minfo_fr_email">
 
-        <TextView
-            android:id="@+id/textView18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="계정 연동"
-            android:layout_marginTop="30dp"
-            android:textColor="#FFFFFF"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:layout_marginStart="40dp"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_marginStart="45dp"
-            android:layout_marginTop="10dp">
-
-            <FrameLayout
-                android:id="@+id/btn_facebook"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/corner_shape_myinfo">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="?attr/selectableItemBackgroundBorderless">
-
-                    <ImageView
-                        android:id="@+id/img_facebook"
-                        android:src="@drawable/kakao_icon"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"/>
-
-                    <TextView
-                        android:id="@+id/tv_facebook"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_marginStart="5dp"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="#000"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/btn_facebook_logout"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp">
-                <TextView
-                    android:id="@+id/tv_facebook_logout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="#C63C56"
-                    android:text="연동 해제"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-            </FrameLayout>
-        </LinearLayout>
 
 
     </LinearLayout>

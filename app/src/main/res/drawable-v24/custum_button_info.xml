@@ -5,7 +5,7 @@
         tools:targetApi="lollipop"> <!-- ripple effect color -->
     <item android:id="@android:id/background">
         <shape>
-            <solid android:color="#09121c"
+            <solid android:color="#26354A"
                 android:background="?attr/selectableItemBackgroundBorderless" />
             <stroke android:color="#f7fcff"
                 android:width="0.9dp"/>

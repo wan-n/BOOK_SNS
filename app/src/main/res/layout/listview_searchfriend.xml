@@ -23,11 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/sf_icon"
-        android:layout_toRightOf="@+id/sf_icon"
         android:hint="닉네임"
-        android:textColor="#FFF"
+        android:textColor="#e4e8ed"
         android:textSize="18sp" />
 
     <Button

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,7 +75,7 @@ public class FriendListAdapter extends BaseAdapter {
         TextView nameTextView = convertView.findViewById(R.id.fl_name);
         nameTextView.setText(items.get(position).nameStr);
 
-        Button btn = convertView.findViewById(R.id.fl_del);
+        FrameLayout btn = convertView.findViewById(R.id.fl_del);
 
         btn.setOnClickListener(new Button.OnClickListener() {
             @Override

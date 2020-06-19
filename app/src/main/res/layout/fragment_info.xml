@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#222"
+    android:background="#c0c5cc"
     tools:context=".Fragment.InfoFragment"
     android:orientation="vertical">
 
@@ -14,7 +14,7 @@
         android:id="@+id/rel_info"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="#09121c" >
+        android:background="#26354A" >
 
 
         <Button
@@ -63,9 +63,9 @@
                 android:id="@+id/info_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:textColor="#FFFFFF"
+                android:textColor="#FDFDFD"
                 android:layout_gravity="center_vertical"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
 
@@ -77,8 +77,8 @@
                 android:background="?attr/selectableItemBackgroundBorderless">
             <ImageView
                 android:id="@+id/info_editname"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/edit_white" />
             </FrameLayout>
         </LinearLayout>
@@ -90,6 +90,7 @@
             android:layout_below="@+id/info_sort"
             android:layout_marginStart="22dp"
             android:layout_toEndOf="@+id/info_fr_pimg"
+            android:layout_marginTop="5dp"
             android:hint="user_id"
             android:textColor="#B8B6B6"
             android:textSize="12sp" />
@@ -100,7 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginStart="22dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="5dp"
             android:layout_toEndOf="@+id/info_fr_pimg"
             android:layout_below="@+id/info_id"
             android:hint="리뷰수"
@@ -125,7 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:dividerHeight="5dp"
-                android:divider="#222"/>
+                android:divider="#c0c5cc"/>
 
 
     </RelativeLayout>
