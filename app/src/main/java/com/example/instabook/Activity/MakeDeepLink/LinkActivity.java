@@ -102,15 +102,17 @@ public class LinkActivity extends AppCompatActivity {
                     txt_review.setText(get_rv.get(0).Review);   //리뷰내용
                     ratingbarSmall.setNumStars(get_rv.get(0).Rate);  //별점
 
+                    Date date = null;
                     try {
-                        Date date = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS.mmm'Z'").parse(get_rv.get(0).ReviewDate);
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                        String newdate = sdf.format(date);
+                        date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(get_rv.get(0).ReviewDate);
 
-                        txt_date.setText(newdate); //날짜
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                    String newdate = sdf.format(date);
+
+                    txt_date.setText(newdate); //날짜
                     //태그 추가
 
 

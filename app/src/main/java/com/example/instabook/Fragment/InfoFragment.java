@@ -335,6 +335,7 @@ public class InfoFragment extends Fragment {
                             InputStream is = response.body().byteStream();
                             Bitmap img_bit = BitmapFactory.decodeStream(is);
 
+
                             //Toast.makeText(getActivity(), "이미지 불러오기 성공", Toast.LENGTH_SHORT).show();
 
                             //리스트뷰에 추가
@@ -405,9 +406,15 @@ public class InfoFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
 
+
+
         switch(requestCode) {
             case PICK_FROM_ALBUM: {
                 // 이후의 처리가 카메라와 같으므로 일단  break없이 진행
+                if(data == null){  //앨범에서 뒤로가기 시
+                    Log.d("ALBUM", "앨범 : "+"이미지 선택 안함");
+                    break;
+                }
                 mImageCaptureUri = data.getData();
                 assert mImageCaptureUri != null;
 
@@ -444,7 +451,11 @@ public class InfoFragment extends Fragment {
 
             case Crop.REQUEST_CROP: {
                 //크롭된 이미지 받기
-                //File cropFile = new File(Crop.getOutput(data).getPath());
+
+                if(tempFile.length() <=0){  //크롭 도중 뒤로가기시 종료
+                    Log.d("cropfile", "crop : " + "크롭 취소");
+                    break;
+                }
 
                 Log.d("cropfile", "cropfile 경로 : " + tempFile);
 
@@ -509,6 +520,11 @@ public class InfoFragment extends Fragment {
 
 
     private void storeCropImage(File cropfile){
+
+        //빈파일인 경우 업로드 안함
+        if(cropfile.length() <=0){
+            return;
+        }
 
         //유저 UID 가져오기
         final int useruid = SaveSharedPreference.getUserUid(getActivity());
