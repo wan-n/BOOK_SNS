@@ -166,67 +166,55 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
                     map.put("Rate", rate);
                     Log.d(TAG,"리뷰정보 :"+review+", "+isbn+", "+useruid+", "+rate);
 
-
-                    //리뷰 업로드
-                    Retrofit rview_retro = new Retrofit.Builder()
+                    //리뷰 업로드하고 리뷰UID값 가져오기
+                    Retrofit retro_ruid = new Retrofit.Builder()
                             .baseUrl(retroBaseApiService.Base_URL)
                             .addConverterFactory(GsonConverterFactory.create()).build();
-                    retroBaseApiService = rview_retro.create(RetroBaseApiService.class);
+                    retroBaseApiService = retro_ruid.create(RetroBaseApiService.class);
 
-                    retroBaseApiService.postReview(map).enqueue(new Callback<ReviewData>() {
+                    retroBaseApiService.postRUID(map).enqueue(new Callback<List<ResponseGet>>() {
                         @Override
-                        public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
-                            Log.d(TAG,"리뷰 올리기 성공");
+                        public void onResponse(Call<List<ResponseGet>> call, Response<List<ResponseGet>> response) {
 
-                            //리뷰 UID 가져오기
-                            Retrofit ruid_retro = new Retrofit.Builder()
-                                    .baseUrl(retroBaseApiService.Base_URL)
-                                    .addConverterFactory(GsonConverterFactory.create()).build();
-                            retroBaseApiService = ruid_retro.create(RetroBaseApiService.class);
+                            List<ResponseGet> uid_data = response.body();
+                            int ruid = uid_data.get(0).getReviewUID();
 
-                            retroBaseApiService.getReuid(useruid, isbn).enqueue(new Callback<List<ReviewUID>>() {
-                                @Override
-                                public void onResponse(Call<List<ReviewUID>> call, Response<List<ReviewUID>> response) {
-                                    Log.d(TAG,"리뷰UID 가져오기 성공");
+                            //태그 받아오기
+                            String str = edTag.getText().toString();
+                            String delstr = "\\#";
+                            String[] tags = str.split(delstr);
 
-                                    getRuid = response.body();
-                                    int ruid = getRuid.get(0).getReviewUID();
-                                    Log.d(TAG,"리뷰UID : "+ruid);
+                            //태그 하나씩 저장
+                            for(int i = 1; i <tags.length; i++){
+                                String singletag = tags[i];
+                                Log.d(TAG,"singletag : "+singletag);
 
-                                    //태그 하나씩 저장
-                                    for(int i = 1; i <tags.length; i++){
-                                        String singletag = tags[i];
-                                        Log.d(TAG,"singletag : "+singletag);
-                                        //태그 올리기
-                                        Retrofit tag_retro = new Retrofit.Builder()
-                                                .baseUrl(retroBaseApiService.Base_URL)
-                                                .addConverterFactory(GsonConverterFactory.create()).build();
-                                        retroBaseApiService = tag_retro.create(RetroBaseApiService.class);
+                                //태그 올리기
+                                Retrofit tag_retro = new Retrofit.Builder()
+                                        .baseUrl(retroBaseApiService.Base_URL)
+                                        .addConverterFactory(GsonConverterFactory.create()).build();
+                                retroBaseApiService = tag_retro.create(RetroBaseApiService.class);
 
-                                        retroBaseApiService.postTag(ruid, singletag).enqueue(new Callback<ReviewData>() {
-                                            @Override
-                                            public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
-                                                Log.d(TAG,"태그 올리기 성공");
-                                                Toast.makeText(getBaseContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
-                                            }
-                                            @Override
-                                            public void onFailure(Call<ReviewData> call, Throwable t) {
-                                                Log.d(TAG,"태그 올리기 실패");
-                                            }
-                                        });
+                                retroBaseApiService.postTag(ruid, singletag).enqueue(new Callback<ReviewData>() {
+                                    @Override
+                                    public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
+                                        Log.d(TAG,"태그 올리기 성공");
+                                        Toast.makeText(getBaseContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
+
+                                        Intent in = new Intent(getBaseContext(), MainActivity.class);
+                                        startActivity(in);
                                     }
-                                }
-
-                                @Override
-                                public void onFailure(Call<List<ReviewUID>> call, Throwable t) {
-
-                                }
-                            });
+                                    @Override
+                                    public void onFailure(Call<ReviewData> call, Throwable t) {
+                                        Log.d(TAG,"태그 올리기 실패");
+                                    }
+                                });
+                            }
                         }
 
                         @Override
-                        public void onFailure(Call<ReviewData> call, Throwable t) {
-                            Toast.makeText(getBaseContext(), "리뷰 올리기 실패", Toast.LENGTH_SHORT).show();
+                        public void onFailure(Call<List<ResponseGet>> call, Throwable t) {
+                            Log.d(TAG,"리뷰 올리기 실패");
                         }
                     });
                 }

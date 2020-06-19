@@ -50,9 +50,6 @@ public interface RetroBaseApiService {
     @POST("/instabook/users/flist")
     Call<ResponseGet> postFrd(@Body HashMap<String, Object> parameters);
 
-    @POST("/instabook/reviews/review")
-    Call<ReviewData> postReview(@Body HashMap<String, Object> parameters);
-
     @POST("/instabook/users/userbook")
     Call<UserBookData> postUBook(@Body HashMap<String, Object> parameters);
 
@@ -61,9 +58,6 @@ public interface RetroBaseApiService {
 
     @POST("/instabook/reviews/tag")
     Call<ReviewData> postTag(@Query("ruid") int reviewuid, @Query("tag") String tag);
-
-    @GET("/instabook/reviews/reviewuid")
-    Call<List<ReviewUID>> getReuid(@Query("uid") int uid, @Query("isbn") String isbn);
 
     @GET("/instabook/userbooks/ublist")
     Call<List<UBookListItem>> getUbinfo(@Query("uid") int useruid);

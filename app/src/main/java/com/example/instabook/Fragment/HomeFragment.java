@@ -125,6 +125,10 @@ public class HomeFragment extends Fragment{
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
                                     String redate_2 = sdf.format(date);
 
+
+                                //ReviewUID로 Tag리스트 가져오기
+
+
                                 //uid로 이미지 가져오기
                                 Retrofit retro_imgFirst = new Retrofit.Builder()
                                         .baseUrl(retroBaseApiService.Base_URL)

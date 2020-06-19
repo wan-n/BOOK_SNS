@@ -2,6 +2,7 @@ package com.example.instabook.Activity.ForHome;
 
 public class HomeData {
     public int UserUID;
+    public int ReviewUID;
     public String Review;
     public String ReviewDate;
     public String ISBN13;
@@ -10,9 +11,10 @@ public class HomeData {
     public String NickName;
     public boolean isDeleted;
 
-    public HomeData(int uid, String review, String reviewDate, String isbn, int rate,
+    public HomeData(int uid, int ruid,String review, String reviewDate, String isbn, int rate,
                     String bookName, String nickName){
         this.UserUID = uid;
+        this.ReviewUID = ruid;
         this.Review = review;
         this.ReviewDate = reviewDate;
         this.ISBN13 = isbn;
@@ -42,5 +44,10 @@ public class HomeData {
     public String getNickName() {
         return NickName;
     }
+
+    public int getReviewUID() {
+        return ReviewUID;
+    }
+
     public boolean getIsDeleted(){return isDeleted;}
 }
