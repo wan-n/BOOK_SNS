@@ -134,7 +134,7 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
 
         //태그 헬퍼퍼
        mEditTextHashTagHelper = HashTagHelper.Creator.create(getResources().getColor(R.color.colorPrimaryDark), null);
-        mEditTextHashTagHelper.handle(edTag);
+       mEditTextHashTagHelper.handle(edTag);
 
 
         //게시하기 버튼
@@ -154,8 +154,6 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
                     String str = edTag.getText().toString();
                     String delstr = "\\#";
                     String[] tags = str.split(delstr);
-                    Log.d(TAG,"태그 str :"+str);
-                    Log.d(TAG,"태그 tags[] : "+tags[1]);
 
 
                     //리뷰 저장 hashmap

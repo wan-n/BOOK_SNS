@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 public class HomeReviewItem {
     public Bitmap iconDrawable;
     public int uId;
+    public int ruid;
     public String review;
     public String reDate;
     public String isbn13;
@@ -12,21 +13,22 @@ public class HomeReviewItem {
     public String bName;
     public String nName;
     public int UserBookUID;
+    public String tags;
 
-    public HomeReviewItem(Bitmap iconDrawable, int uid, String review, String redate, String isbn, int rate, String bname, String nName) {
+    public HomeReviewItem(Bitmap iconDrawable, int uid, int ruid,String review, String redate,
+                          String isbn, int rate, String bname, String nName, String tags) {
         this.iconDrawable = iconDrawable;
         this.uId = uid;
+        this.ruid = ruid;
         this.review = review;
         this.reDate = redate;
         this.isbn13 = isbn;
         this.rate = rate;
         this.bName = bname;
         this.nName = nName;
+        this.tags = tags;
     }
 
-    public void setUserBookUID(int userBookUID) {
-        UserBookUID = userBookUID;
-    }
 
     public Bitmap getIconDrawable() {
         return iconDrawable;
@@ -36,8 +38,16 @@ public class HomeReviewItem {
         return uId;
     }
 
+    public int getRuid() {
+        return ruid;
+    }
+
     public String getReview() {
         return review;
+    }
+
+    public String getTags() {
+        return tags;
     }
 
     public String getReDate() {

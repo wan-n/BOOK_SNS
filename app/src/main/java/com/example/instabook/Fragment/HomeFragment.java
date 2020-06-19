@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
 
@@ -43,13 +46,14 @@ public class HomeFragment extends Fragment{
     SaveSharedPreference sp;
     View rootView;
     Context context;
-    List<UserData> frDataList;
-    List<UserData> allUserlist;
-    UserData uid;
+    private List<UserData> frDataList;
+    private List<UserData> allUserlist;
+    private UserData uid;
 
-    List<HomeData> homeDataList;
-    ArrayList<HomeReviewItem> items;
-    HomeReviewItem item;
+    private List<HomeData> homeDataList;
+    private List<HomeData> taglist;
+    private ArrayList<HomeReviewItem> items;
+    private HomeReviewItem item;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +79,7 @@ public class HomeFragment extends Fragment{
         retroBaseApiService.getUid(useruid).enqueue(new Callback<List<UserData>>() {
             @Override
             public void onResponse(Call<List<UserData>> call, Response<List<UserData>> response) {
+                Log.d(TAG,"친구 있다!");
                 //친구 정보 있음
                 frDataList = response.body();
 
@@ -102,20 +107,21 @@ public class HomeFragment extends Fragment{
                     retroBaseApiService.getHreq(userUID).enqueue(new Callback<List<HomeData>>() {
                         @Override
                         public void onResponse(Call<List<HomeData>> call, Response<List<HomeData>> response) {
+                            Log.d(TAG,"친구 있고 리뷰 있다!");
                             //리뷰 정보 가져오기
                             homeDataList = response.body();
                             items = new ArrayList<>();
 
                             for(int l = 0; l < homeDataList.size(); l++){
-
+                                /**리뷰 정보에 ReviewUID 정보 추가해서 가져옴*/
                                 int uid = homeDataList.get(l).getUserUID();
+                                int ruid = homeDataList.get(l).getReviewUID();
                                 String review = homeDataList.get(l).getReview();
                                 String redate = homeDataList.get(l).getReviewDate();
                                 String isbn = homeDataList.get(l).getISBN13();
                                 int rate = homeDataList.get(l).getRate();
                                 String bname = homeDataList.get(l).getBookName();
                                 String nname = homeDataList.get(l).getNickName();
-
                                 Date date = null;
                                 try {
                                     date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(redate);
@@ -125,33 +131,85 @@ public class HomeFragment extends Fragment{
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
                                     String redate_2 = sdf.format(date);
 
-
                                 //ReviewUID로 Tag리스트 가져오기
-
-
-                                //uid로 이미지 가져오기
-                                Retrofit retro_imgFirst = new Retrofit.Builder()
+                                Retrofit retro_info = new Retrofit.Builder()
                                         .baseUrl(retroBaseApiService.Base_URL)
                                         .addConverterFactory(GsonConverterFactory.create()).build();
-                                retroBaseApiService = retro_imgFirst.create(RetroBaseApiService.class);
+                                retroBaseApiService = retro_info.create(RetroBaseApiService.class);
 
-                                retroBaseApiService.getImage(uid).enqueue(new Callback<ResponseBody>() {
+                                retroBaseApiService.getReviewtag(ruid).enqueue(new Callback<List<HomeData>>() {
                                     @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        //서버에서 받아온 이미지 비트맵으로 변환
-                                        InputStream is = response.body().byteStream();
-                                        Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
+                                    public void onResponse(Call<List<HomeData>> call, Response<List<HomeData>> response) {
+                                        Log.d(TAG,"친구 있고 리뷰 있고 태그 있다!");
+                                        taglist = response.body();
 
-                                        //리스트뷰에 추가
-                                        item = new HomeReviewItem(bitmap_profile, uid, review, redate_2, isbn, rate, bname, nname);
-                                        items.add(item);
+                                        String tags = new String();
+                                        for(int w =0; w<taglist.size(); w++){
+                                            tags += "#" + taglist.get(w).getTag();
+                                        }
+                                        Log.d(TAG,"태그 리스트 : "+tags);
 
-                                        initView();
+                                        //uid로 이미지 가져오기
+                                        Retrofit retro_imgFirst = new Retrofit.Builder()
+                                                .baseUrl(retroBaseApiService.Base_URL)
+                                                .addConverterFactory(GsonConverterFactory.create()).build();
+                                        retroBaseApiService = retro_imgFirst.create(RetroBaseApiService.class);
+
+                                        String finalTags = tags;
+                                        retroBaseApiService.getImage(uid).enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                //서버에서 받아온 이미지 비트맵으로 변환
+                                                InputStream is = response.body().byteStream();
+                                                Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
+                                                Log.d(TAG,"친구 있고 리뷰 있고 태그 있고 이미지 있다! ");
+                                                //리스트뷰에 추가
+                                                item = new HomeReviewItem(bitmap_profile, uid, ruid,
+                                                        review, redate_2, isbn, rate, bname, nname, finalTags);
+                                                items.add(item);
+
+                                                initView();
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Log.d(TAG,"친구 있고 리뷰 있고 태그 있고 이미지 없다!");
+                                            }
+                                        });
                                     }
 
                                     @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    public void onFailure(Call<List<HomeData>> call, Throwable t) {
+                                        Log.d(TAG,"친구 있고 리뷰 있고 태그 없다!");
 
+
+                                        //uid로 이미지 가져오기
+                                        Retrofit retro_imgFirst = new Retrofit.Builder()
+                                                .baseUrl(retroBaseApiService.Base_URL)
+                                                .addConverterFactory(GsonConverterFactory.create()).build();
+                                        retroBaseApiService = retro_imgFirst.create(RetroBaseApiService.class);
+
+                                        retroBaseApiService.getImage(uid).enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                //서버에서 받아온 이미지 비트맵으로 변환
+                                                InputStream is = response.body().byteStream();
+                                                Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
+                                                String tags = "";
+
+                                                //리스트뷰에 추가
+                                                item = new HomeReviewItem(bitmap_profile, uid, ruid,
+                                                        review, redate_2, isbn, rate, bname, nname, tags);
+                                                items.add(item);
+                                                Log.d(TAG,"친구 없고 리뷰 있고 태그 있고 이미지 있다!");
+                                                initView();
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Log.d(TAG,"친구 없고 리뷰 있고 태그 있고 이미지 없다");
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -159,6 +217,7 @@ public class HomeFragment extends Fragment{
 
                         @Override
                         public void onFailure(Call<List<HomeData>> call, Throwable t) {
+                            Log.d(TAG,"친구 있고 리뷰 없다!");
                             Toast.makeText(getActivity(), "리뷰 정보 없음.", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -167,20 +226,24 @@ public class HomeFragment extends Fragment{
 
             @Override
             public void onFailure(Call<List<UserData>> call, Throwable t) {
+                Log.d(TAG,"친구 없다!");
                 Retrofit retro_info = new Retrofit.Builder()
                         .baseUrl(retroBaseApiService.Base_URL)
                         .addConverterFactory(GsonConverterFactory.create()).build();
                 retroBaseApiService = retro_info.create(RetroBaseApiService.class);
-                //유저 UID로 유저 정보, 리뷰 정보, 도서 정보 가져오기
+
                 retroBaseApiService.getHreq(useruid).enqueue(new Callback<List<HomeData>>() {
                     @Override
                     public void onResponse(Call<List<HomeData>> call, Response<List<HomeData>> response) {
+                        Log.d(TAG,"친구 없고 리뷰 있다!");
+                        //리뷰 정보 가져오기
                         homeDataList = response.body();
                         items = new ArrayList<>();
 
                         for(int l = 0; l < homeDataList.size(); l++){
-
+                            /**리뷰 정보에 ReviewUID 정보 추가해서 가져옴*/
                             int uid = homeDataList.get(l).getUserUID();
+                            int ruid = homeDataList.get(l).getReviewUID();
                             String review = homeDataList.get(l).getReview();
                             String redate = homeDataList.get(l).getReviewDate();
                             String isbn = homeDataList.get(l).getISBN13();
@@ -197,28 +260,85 @@ public class HomeFragment extends Fragment{
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
                             String redate_2 = sdf.format(date);
 
-                            //uid로 이미지 가져오기
-                            Retrofit retro_imgFirst = new Retrofit.Builder()
+                            //ReviewUID로 Tag리스트 가져오기
+                            Retrofit retro_info = new Retrofit.Builder()
                                     .baseUrl(retroBaseApiService.Base_URL)
                                     .addConverterFactory(GsonConverterFactory.create()).build();
-                            retroBaseApiService = retro_imgFirst.create(RetroBaseApiService.class);
+                            retroBaseApiService = retro_info.create(RetroBaseApiService.class);
 
-                            retroBaseApiService.getImage(uid).enqueue(new Callback<ResponseBody>() {
+                            retroBaseApiService.getReviewtag(ruid).enqueue(new Callback<List<HomeData>>() {
                                 @Override
-                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    //서버에서 받아온 이미지 비트맵으로 변환
-                                    InputStream is = response.body().byteStream();
-                                    Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
+                                public void onResponse(Call<List<HomeData>> call, Response<List<HomeData>> response) {
+                                    Log.d(TAG,"친구 없고 리뷰 있고 태그 있다!");
+                                    taglist = response.body();
 
-                                    //리스트뷰에 추가
-                                    item = new HomeReviewItem(bitmap_profile, uid, review, redate_2, isbn, rate, bname, nname);
-                                    items.add(item);
+                                    String tags = new String();
+                                    for(int w =0; w<taglist.size(); w++){
+                                        tags += "#" + taglist.get(w).getTag();
+                                    }
+                                    Log.d(TAG,"태그 리스트 : "+tags);
 
-                                    initView();
+                                    //uid로 이미지 가져오기
+                                    Retrofit retro_im = new Retrofit.Builder()
+                                            .baseUrl(retroBaseApiService.Base_URL)
+                                            .addConverterFactory(GsonConverterFactory.create()).build();
+                                    retroBaseApiService = retro_im.create(RetroBaseApiService.class);
+
+                                    String finalTags = tags;
+                                    retroBaseApiService.getImage(uid).enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            Log.d(TAG,"친구 없고 리뷰 있고 태그 있고 이미지 있다!");
+                                            //서버에서 받아온 이미지 비트맵으로 변환
+                                            InputStream is = response.body().byteStream();
+                                            Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
+
+                                            //리스트뷰에 추가
+                                            item = new HomeReviewItem(bitmap_profile, uid, ruid,
+                                                    review, redate_2, isbn, rate, bname, nname, finalTags);
+                                            items.add(item);
+                                            initView();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Log.d(TAG,"친구 없고 리뷰 있고 태그 있고 이미지 없다");
+                                        }
+                                    });
                                 }
 
                                 @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                public void onFailure(Call<List<HomeData>> call, Throwable t) {
+                                    Log.d(TAG,"친구 없고 리뷰 있고 태그 없다!");
+
+
+                                    //uid로 이미지 가져오기
+                                    Retrofit retro_imgFi = new Retrofit.Builder()
+                                            .baseUrl(retroBaseApiService.Base_URL)
+                                            .addConverterFactory(GsonConverterFactory.create()).build();
+                                    retroBaseApiService = retro_imgFi.create(RetroBaseApiService.class);
+
+                                    retroBaseApiService.getImage(uid).enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            Log.d(TAG,"친구 없고 리뷰 있고 태그 있고 이미지 있다!");
+                                            //서버에서 받아온 이미지 비트맵으로 변환
+                                            InputStream is = response.body().byteStream();
+                                            Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
+                                            String tags = "";
+
+                                            //리스트뷰에 추가
+                                            item = new HomeReviewItem(bitmap_profile, uid, ruid,
+                                                    review, redate_2, isbn, rate, bname, nname, tags);
+                                            items.add(item);
+                                            initView();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Log.d(TAG,"친구 없고 리뷰 있고 태그 있고 이미지 없다");
+                                        }
+                                    });
                                 }
                             });
                         }
@@ -226,6 +346,7 @@ public class HomeFragment extends Fragment{
 
                     @Override
                     public void onFailure(Call<List<HomeData>> call, Throwable t) {
+                        Log.d(TAG,"친구 없고 리뷰 없다!");
                         Toast.makeText(getActivity(), "리뷰 정보 없음.", Toast.LENGTH_SHORT).show();
                     }
                 });

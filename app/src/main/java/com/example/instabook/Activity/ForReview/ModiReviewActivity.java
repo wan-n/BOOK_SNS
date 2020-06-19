@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,16 +37,15 @@ public class ModiReviewActivity extends AppCompatActivity {
     ImageView binfo_back;
     TextView tvTitle;
     TextView tvRating;
-    ImageView imBook, sbtn;
+    ImageView imBook;
     EditText edReview;
     EditText edTag;
     Button pbtn;
     String new_review;
     int rate;
-    int new_rate;
     int uid;
+    int rid;
     String isbn;
-    String commentstag = null;
     SaveSharedPreference sp;
 
     ArrayList<int[]> hashtagSpans;
@@ -57,11 +58,13 @@ public class ModiReviewActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         isbn = intent.getStringExtra("isbn");
+        String tags = intent.getStringExtra("tags");
         String review = intent.getStringExtra("review");
         String title = intent.getStringExtra("title");
         uid = intent.getIntExtra("uid", 0);
+        rid = intent.getIntExtra("rid",0);
         rate = intent.getIntExtra("rate", 0);
-
+        Log.d(TAG,"intent 받고 수정 전 : "+rid+", "+tags);
         binfo_back = findViewById(R.id.binfo_back);
         binfo_fr_back = findViewById(R.id.binfo_fr_back);
         tvTitle = findViewById(R.id.text_title);
@@ -86,9 +89,11 @@ public class ModiReviewActivity extends AppCompatActivity {
             }
         };
         binfo_fr_back.setOnClickListener(listener);
+
         tvTitle.setText(title);
         edReview.setText(review);
         ratingBar.setNumStars(rate);
+        edTag.setText(tags);
 
         //별점 점수 변화주기
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -114,6 +119,11 @@ public class ModiReviewActivity extends AppCompatActivity {
                     new_review = reView.trim();
                     int new_rate = (int) ratingBar.getRating();
 
+                    //태그 받아오기
+                    String str = edTag.getText().toString();
+                    String delstr = "\\#";
+                    String[] tags = str.split(delstr);
+
                     HashMap<String, Object> map = new HashMap<>();
 
                     map.put("Review", new_review);
@@ -131,8 +141,37 @@ public class ModiReviewActivity extends AppCompatActivity {
                     retroBaseApiService.putMoRe(map).enqueue(new Callback<ReviewData>() {
                         @Override
                         public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
-                            Toast.makeText(getApplicationContext(), "리뷰 수정 성공", Toast.LENGTH_SHORT).show();
-                            finish();
+                            //태그 받아오기
+                            String str = edTag.getText().toString();
+                            String delstr = "\\#";
+                            String[] tags = str.split(delstr);
+
+                            //태그 하나씩 저장
+                            for(int i = 1; i <tags.length; i++){
+                                String singletag = tags[i];
+                                Log.d(TAG,"singletag : "+singletag);
+
+                                //태그 올리기
+                                Retrofit tag_retro = new Retrofit.Builder()
+                                        .baseUrl(retroBaseApiService.Base_URL)
+                                        .addConverterFactory(GsonConverterFactory.create()).build();
+                                retroBaseApiService = tag_retro.create(RetroBaseApiService.class);
+
+                                retroBaseApiService.postTag(rid, singletag).enqueue(new Callback<ReviewData>() {
+                                    @Override
+                                    public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
+                                        Log.d(TAG,"태그 올리기 성공");
+                                        Toast.makeText(getBaseContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
+
+                                        Intent in = new Intent(getBaseContext(), MainActivity.class);
+                                        startActivity(in);
+                                    }
+                                    @Override
+                                    public void onFailure(Call<ReviewData> call, Throwable t) {
+                                        Log.d(TAG,"태그 올리기 실패");
+                                    }
+                                });
+                            }
                         }
                         @Override
                         public void onFailure(Call<ReviewData> call, Throwable t) {
@@ -142,6 +181,5 @@ public class ModiReviewActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 }

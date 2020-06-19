@@ -312,12 +312,14 @@ public class InfoFragment extends Fragment {
                 for(int l = 0; l < infoDataList.size(); l++){
 
                     int uid = infoDataList.get(l).getUserUID();
+                    int ruid = infoDataList.get(l).getReviewUID();
                     String review = infoDataList.get(l).getReview();
                     String redate = infoDataList.get(l).getReviewDate();
                     String isbn = infoDataList.get(l).getISBN13();
                     int rate = infoDataList.get(l).getRate();
                     String bname = infoDataList.get(l).getBookName();
                     String nname = infoDataList.get(l).getNickName();
+                    String tags = infoDataList.get(l).getTag();
 
                     Date date = null;
                     try {
@@ -339,7 +341,7 @@ public class InfoFragment extends Fragment {
                             //Toast.makeText(getActivity(), "이미지 불러오기 성공", Toast.LENGTH_SHORT).show();
 
                             //리스트뷰에 추가
-                            item = new HomeReviewItem(img_bit, uid, review, redate_2, isbn, rate, bname, nname);
+                            item = new HomeReviewItem(img_bit, uid, ruid, review, redate_2, isbn, rate, bname, nname, tags);
                             items.add(item);
                             //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
 

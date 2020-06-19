@@ -10,11 +10,11 @@ public class HomeData {
     public String BookName;
     public String NickName;
     public boolean isDeleted;
+    public String Tag;
 
-    public HomeData(int uid, int ruid,String review, String reviewDate, String isbn, int rate,
+    public HomeData(int uid, String review, String reviewDate, String isbn, int rate,
                     String bookName, String nickName){
         this.UserUID = uid;
-        this.ReviewUID = ruid;
         this.Review = review;
         this.ReviewDate = reviewDate;
         this.ISBN13 = isbn;
@@ -47,6 +47,10 @@ public class HomeData {
 
     public int getReviewUID() {
         return ReviewUID;
+    }
+
+    public String getTag() {
+        return Tag;
     }
 
     public boolean getIsDeleted(){return isDeleted;}

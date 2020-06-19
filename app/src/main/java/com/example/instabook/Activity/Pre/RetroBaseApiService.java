@@ -119,6 +119,9 @@ public interface RetroBaseApiService {
     @GET("/instabook/reviews/count")
     Call<List<ResponseGet>> getReviewcnt(@Query("useruid") int useruid);
 
+    @GET("/instabook/reviews/taglist")
+    Call<List<HomeData>> getReviewtag(@Query("ruid") int reviewuid);
+
     @PUT("/instabook/users/userpwd")
     Call<ResponseGet> putPwd(@Body HashMap<String, Object> parameters);
 
@@ -134,6 +137,9 @@ public interface RetroBaseApiService {
     @PUT("/instabook/reviews/modify")
     Call<ReviewData> putMoRe(@Body HashMap<String, Object> parameters);
 
+    @PUT("/instabook/reviews/delete")
+    Call<ReviewData> putDel(@Query("ruid") int reviewuid);
+
     @DELETE("/image/delimg")
     Call<ResponseBody> delImage(@Query("useruid") int useruid);
 
@@ -145,9 +151,6 @@ public interface RetroBaseApiService {
 
     @DELETE("/instabook/users/delubook")
     Call<UserBookData> delUBook(@Query("ubid") int ubid);
-
-    @DELETE("/instabook/reviews/delrev")
-    Call<ReviewData> delRev(@Query("uid") int uid, @Query("isbn") String isbn);
 
 }
 
