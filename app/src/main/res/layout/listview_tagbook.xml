@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:padding="5dp"
-    android:background="@color/colorBase"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <!-- TODO: LAYOUT 꾸미기 -->
+    android:background="@color/colorBase">
 
     <ImageView
         android:id="@+id/img_book"
@@ -43,23 +41,25 @@
             android:textColor="@color/colorText"
             android:textSize="10dp" />
 
+
         <TextView
-            android:id="@+id/text_pub"
+            android:id="@+id/text_tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/colorText"
             android:textSize="10dp" />
+
     </LinearLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/pick_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="10dp"
-        android:background="@color/colorButton"
-        android:text="선택"
+        android:text="정보 보기"
         android:textColor="#FFFFFF" />
+
 
 </RelativeLayout>

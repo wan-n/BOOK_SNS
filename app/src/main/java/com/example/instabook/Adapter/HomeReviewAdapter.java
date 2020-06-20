@@ -2,6 +2,7 @@ package com.example.instabook.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
@@ -84,7 +85,6 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
         TextView TagTextView;
     }
 
-
     @Override
     public int getCount() {
         return items.size();
@@ -142,7 +142,7 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
         hodler.TagTextView.setText(commentsContent);
 
 
-        //item 내용 set
+        //item 내용 setting
         hodler.CImagetView.setImageBitmap(homeReviewItem.getIconDrawable());
         hodler.NickTextView.setText(homeReviewItem.getnName());
         hodler.DateTextView.setText(homeReviewItem.getReDate());
@@ -207,6 +207,7 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
         final int uuid = item.getuId();
         final int rrid = item.getRuid();
         final String iisbn = item.getIsbn13();
+        final Bitmap uurl = item.getIconDrawable();
         final int rrate = item.getRate();
         final String rreview = item.getReview();
         final String bbname = item.getbName();
@@ -233,6 +234,7 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
                             in.putExtra("rate", rrate);
                             in.putExtra("review", rreview);
                             in.putExtra("title", bbname);
+                            in.putExtra("url",uurl);
                             in.putExtra("tags",tags);
                             Log.d(TAG,"intent 후 수정 : "+rrid+", "+tags);
                             context.startActivity(in);

@@ -3,6 +3,7 @@ package com.example.instabook.Activity.ForReview;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -61,6 +62,7 @@ public class ModiReviewActivity extends AppCompatActivity {
         String tags = intent.getStringExtra("tags");
         String review = intent.getStringExtra("review");
         String title = intent.getStringExtra("title");
+        Bitmap bp = (Bitmap)intent.getParcelableExtra("url");
         uid = intent.getIntExtra("uid", 0);
         rid = intent.getIntExtra("rid",0);
         rate = intent.getIntExtra("rate", 0);
@@ -91,6 +93,7 @@ public class ModiReviewActivity extends AppCompatActivity {
         };
         binfo_fr_back.setOnClickListener(listener);
 
+        imBook.setImageBitmap(bp);
         tvTitle.setText(title);
         edReview.setText(review);
         ratingBar.setRating(rate);

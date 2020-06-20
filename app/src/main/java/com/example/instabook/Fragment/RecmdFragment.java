@@ -1,5 +1,6 @@
 package com.example.instabook.Fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,9 +14,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.instabook.Activity.ForBook.SearchdbActivity;
 import com.example.instabook.Activity.ForHome.UserBookUIDData;
+import com.example.instabook.Activity.ForTag.SearchTagActivity;
 import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
@@ -40,6 +45,9 @@ import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseA
 
 public class RecmdFragment extends Fragment {
     private static final String TAG = "RecmdFragment";
+    Button sbtn;
+    EditText stxt;
+
     List<RecmdBookItem> recmdlist;
     ArrayList<RecmdBookItem> items;
     UserBookUIDData userbookUID;
@@ -47,6 +55,7 @@ public class RecmdFragment extends Fragment {
     SaveSharedPreference sp;
     View rootView;
     Bitmap bp;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -205,4 +214,24 @@ public class RecmdFragment extends Fragment {
         });
     }
 
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        sbtn = (Button) getView().findViewById(R.id.searchBookBtn);
+
+        sbtn.setOnClickListener((View.OnClickListener) v -> {
+
+            stxt = (EditText) getView().findViewById(R.id.searchtag);
+            String inputkey = stxt.getText().toString(); //editView의 텍스트를 String으로 keyword에 저장
+            String key = inputkey.trim();
+
+            //intent로 데이터 전달
+            Intent intent = new Intent(getActivity(), SearchTagActivity.class);
+            intent.putExtra("keyword",key);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+            startActivity(intent);
+        });
+    }
 }

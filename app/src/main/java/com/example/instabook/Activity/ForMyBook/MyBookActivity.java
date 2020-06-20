@@ -49,6 +49,7 @@ public class MyBookActivity extends AppCompatActivity {
     SaveSharedPreference sp;
     FrameLayout binfo_fr_back;
     ImageView binfo_back;
+
     List<UBookListItem> blist = new ArrayList<UBookListItem>();
     ArrayList<UserBookItem> items;
     List<BookData> authorDataList;
@@ -119,7 +120,7 @@ public class MyBookActivity extends AppCompatActivity {
                             for(int j = 0; j < authorlist.size(); j++){
                                 authorsam.add(authorlist.get(j).getAuthor());
                             }
-                            author = authorsam.toString();
+                            //author = authorsam.toString();
                             author = String.join(" | ", authorsam);
 
                             //이미지 비트맵으로 변환
@@ -136,7 +137,7 @@ public class MyBookActivity extends AppCompatActivity {
                                     width = resized.getWidth();
                                 }
                                 bp = resized;
-                                Log.d(TAG,"저자 정보 있음, 기본 이미지 : "+bp);
+
                                 //items listview 넣기
                                 ub = new UserBookItem(ubname, ubpub, bp, author, ubisbn, ubookuid);
                                 items.add(ub);
@@ -170,7 +171,7 @@ public class MyBookActivity extends AppCompatActivity {
                                 }); thread.start();
                                 try {
                                     thread.join();
-                                    Log.d(TAG,"저자 정보 있음, 도서 이미지 : "+bp);
+
                                     //items listview 넣기
                                     ub = new UserBookItem(ubname, ubpub, bp, author, ubisbn, ubookuid);
                                     items.add(ub);
@@ -192,7 +193,7 @@ public class MyBookActivity extends AppCompatActivity {
 
                                 Bitmap resized = null;
                                 while(height>70){
-                                    resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                    resized = Bitmap.createScaledBitmap(bmm,70,70,true);
                                     height = resized.getHeight();
                                     width = resized.getWidth();
                                 }

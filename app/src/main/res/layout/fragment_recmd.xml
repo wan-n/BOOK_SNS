@@ -24,7 +24,7 @@
                 android:id="@+id/searchtag"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:hint="태그를 입력해주세요" />
+                android:hint="태그로 책을 검색할 수 있어요!" />
 
             <Button
                 android:id="@+id/searchtagBtn"

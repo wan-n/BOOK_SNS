@@ -8,6 +8,7 @@ import com.example.instabook.Activity.ForHome.UserBookUIDData;
 import com.example.instabook.Activity.ForHome.UserData;
 import com.example.instabook.Activity.ForReview.ReviewData;
 import com.example.instabook.Activity.ForReview.ReviewUID;
+import com.example.instabook.Activity.ForTag.TagData;
 import com.example.instabook.Activity.ForUser.UserBookData;
 import com.example.instabook.ListView.RecmdBookItem;
 import com.example.instabook.ListView.UBookListItem;
@@ -121,6 +122,23 @@ public interface RetroBaseApiService {
 
     @GET("/instabook/reviews/taglist")
     Call<List<HomeData>> getReviewtag(@Query("ruid") int reviewuid);
+
+    @GET("/instabook/search/ruids")
+    Call<List<TagData>> getruidlist(@Query("key") String key);
+
+    @GET("/instabook/search/tags")
+    Call<List<TagData>> getTags(@Query("ruid") int ruid);
+
+    @GET("/instabook/search/books")
+    Call<List<TagData>> getbooks(@Query("isbn") String isbn);
+
+    @GET("/instabook/search/ubuid")
+    Call<List<TagData>> getUbuid(@Query("isbn") String isbn, @Query("uid") int uid);
+
+    @GET("/instabook/search/author")
+    Call<List<TagData>> getAuthort(@Query("isbn") String isbn);
+
+
 
     @PUT("/instabook/users/userpwd")
     Call<ResponseGet> putPwd(@Body HashMap<String, Object> parameters);
