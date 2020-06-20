@@ -5,10 +5,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
+import com.example.instabook.Activity.Pre.RetroBaseApiService;
+import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.R;
 
 public class BookInfoActivity extends AppCompatActivity {
+    private static final String TAG = "ReviewActivity";
+    public static RetroBaseApiService retroBaseApiService;
+    SaveSharedPreference sp;
+    private FrameLayout bi_fr_back;
+    private ImageView bi_back;
+    private ImageView imBook;
+    private TextView tvTitle;
+    private TextView tvAuthor;
+    private TextView tvPub;
+    private TextView tvPubdate;
+    private TextView tvDescription;
+    private TextView tvTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

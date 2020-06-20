@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
     android:background="@color/colorBase"
     tools:context=".Activity.ForBook.BookInfoActivity">
 
     <LinearLayout
+        android:id="@+id/box_back"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/colorBaseDark"
         android:orientation="horizontal">
         <FrameLayout
-            android:id="@+id/minfo_fr_back"
+            android:id="@+id/bi_fr_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -21,7 +23,7 @@
             android:layout_marginStart="30dp">
 
             <ImageView
-                android:id="@+id/minfo_back"
+                android:id="@+id/bi_back"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center_vertical"
@@ -30,7 +32,7 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/textView14"
+            android:id="@+id/bi_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -41,7 +43,74 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/img_book"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/box_back"/>
 
+    <LinearLayout
+        android:id="@+id/box_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txt_description"
+        android:layout_below="@+id/box_back"
+        android:layout_toEndOf="@+id/img_book"
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/txt_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/txt_pub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/txt_pubdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText"
+            android:textSize="15dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img_book"
+        android:textColor="@color/colorText"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/txt_tag_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:text="이 책에 등록된 태그"
+        android:textSize="15dp"
+        android:layout_below="@+id/txt_description"/>
+
+    <TextView
+        android:id="@+id/txt_tag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="15dp"
+        android:layout_below="@+id/txt_tag_title"/>
 
 </RelativeLayout>
