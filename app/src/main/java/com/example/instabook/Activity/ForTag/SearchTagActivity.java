@@ -39,16 +39,16 @@ public class SearchTagActivity extends AppCompatActivity {
     SaveSharedPreference sp;
     FrameLayout tag_fr_back;
     ImageView tag_back;
-    List<TagData> ruidlist = new ArrayList<>();
-    List<TagData> taglist = new ArrayList<>();
-    List<TagData> blist = new ArrayList<>();
-    List<TagData> ubuidlist = new ArrayList<>();
-    List<TagData> authorlist = new ArrayList<>();
+    List<TagData> ruidlist = new ArrayList<TagData>();
+    List<TagData> taglist = new ArrayList<TagData>();
+    List<TagData> blist = new ArrayList<TagData>();
+    List<TagData> ubuidlist = new ArrayList<TagData>();
+    List<TagData> authorlist = new ArrayList<TagData>();
     Bitmap bp;
     TagBookItem tb;
     TagData tagdata = new TagData();
 
-    ArrayList<TagBookItem> items;
+    ArrayList<TagBookItem> items = new ArrayList<TagBookItem>();
 
 
     @Override
@@ -92,16 +92,16 @@ public class SearchTagActivity extends AppCompatActivity {
                 Log.d(TAG,"리뷰 uid 받아옴");
                 //리뷰 uid 받아옴
                 ruidlist = response.body();
-                int[] ruids = new int[ruidlist.size()];
+                ArrayList<Integer> ruids = new ArrayList<>();
 
                 for(int i = 0; i < ruidlist.size(); i++){
-                    ruids[i] = ruidlist.get(i).getReviewUID();
+                    ruids.add(ruidlist.get(i).getReviewUID());
                 }
 
 
                 //리뷰 uid로 리뷰 태그와 isbn 가져오기
-                for(int i = 0; i < ruids.length; i++){
-                    int reviewuid = ruids[i];
+                for(int i = 0; i < ruids.size(); i++){
+                    int reviewuid = ruids.get(i);
 
                     Retrofit retro_tag = new Retrofit.Builder()
                             .baseUrl(retroBaseApiService.Base_URL)

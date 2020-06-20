@@ -192,6 +192,24 @@ public class RecmdFragment extends Fragment {
             }
         });
 
+
+        sbtn = (Button) rootView.findViewById(R.id.searchtagBtn);
+
+        sbtn.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stxt = (EditText) rootView.findViewById(R.id.searchtag);
+                String inputkey = stxt.getText().toString(); //editView의 텍스트를 String으로 keyword에 저장
+                String key = inputkey.trim();
+
+                //intent로 데이터 전달
+                Intent intent = new Intent(getActivity(), SearchTagActivity.class);
+                intent.putExtra("keyword",key);  //Intent는 데이터를 extras 키-값 쌍으로 전달
+                startActivity(intent);
+            }
+        });
+
+
         return rootView;
     }
 
@@ -220,18 +238,5 @@ public class RecmdFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        sbtn = (Button) getView().findViewById(R.id.searchBookBtn);
-
-        sbtn.setOnClickListener((View.OnClickListener) v -> {
-
-            stxt = (EditText) getView().findViewById(R.id.searchtag);
-            String inputkey = stxt.getText().toString(); //editView의 텍스트를 String으로 keyword에 저장
-            String key = inputkey.trim();
-
-            //intent로 데이터 전달
-            Intent intent = new Intent(getActivity(), SearchTagActivity.class);
-            intent.putExtra("keyword",key);  //Intent는 데이터를 extras 키-값 쌍으로 전달
-            startActivity(intent);
-        });
     }
 }
