@@ -98,6 +98,12 @@ public class FRequestFragment extends Fragment {
                             mi = new SearchFriendItem(bitmap_profile, lv_name);
                             items.add(mi);
                             //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
+
+                            rfAdapter = new RequestFriendAdapter(getActivity(), R.layout.listview_requestfriend, items);
+
+                            ListView myList;
+                            myList = (ListView) getView().findViewById(R.id.fr_list);
+                            myList.setAdapter(rfAdapter);
                         }
 
                         @Override
@@ -108,11 +114,7 @@ public class FRequestFragment extends Fragment {
                     });
                 }
 
-                rfAdapter = new RequestFriendAdapter(getActivity(), R.layout.listview_requestfriend, items);
 
-                ListView myList;
-                myList = (ListView) getView().findViewById(R.id.fr_list);
-                myList.setAdapter(rfAdapter);
 
             }
 

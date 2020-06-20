@@ -135,6 +135,16 @@ public class SearchFriendActivity extends AppCompatActivity {
                                 mi = new SearchFriendItem(bitmap_profile, lv_name);
                                 items.add(mi);
                                 //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
+
+
+                                sfAdapter = new SearchFriendAdapter(SearchFriendActivity.this, R.layout.listview_searchfriend, items);
+
+                                ListView myList;
+                                myList = findViewById(R.id.sf_list);
+                                myList.setAdapter(sfAdapter);
+
+                                //결과 화면 불러오기
+                                sfAdapter.notifyDataSetChanged();
                             }
 
                             @Override
@@ -145,16 +155,9 @@ public class SearchFriendActivity extends AppCompatActivity {
                         });
                     }
 
-                    sfAdapter = new SearchFriendAdapter(SearchFriendActivity.this, R.layout.listview_searchfriend, items);
 
-                    ListView myList;
-                    myList = findViewById(R.id.sf_list);
-                    myList.setAdapter(sfAdapter);
 
-                    //결과 화면 불러오기
-                    sfAdapter.notifyDataSetChanged();
 
-                    
                 }
 
                 @Override

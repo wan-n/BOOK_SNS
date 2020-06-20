@@ -101,6 +101,12 @@ public class FListFragment extends Fragment {
                             mi = new SearchFriendItem(bitmap_profile, lv_name);
                             items.add(mi);
                             //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
+
+                            flAdapter = new FriendListAdapter(getActivity(), R.layout.listview_friendlist, items);
+
+                            ListView myList;
+                            myList = (ListView) getView().findViewById(R.id.fl_list);
+                            myList.setAdapter(flAdapter);
                         }
 
                         @Override
@@ -111,11 +117,7 @@ public class FListFragment extends Fragment {
                     });
                 }
 
-                flAdapter = new FriendListAdapter(getActivity(), R.layout.listview_friendlist, items);
 
-                ListView myList;
-                myList = (ListView) getView().findViewById(R.id.fl_list);
-                myList.setAdapter(flAdapter);
 
             }
 

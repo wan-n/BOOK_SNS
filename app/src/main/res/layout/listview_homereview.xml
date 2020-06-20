@@ -112,14 +112,16 @@
 
         <TextView
             android:id="@+id/txt_bname"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/imgbtn_favorite"
             android:layout_toEndOf="@+id/txt_name"
             android:textColor="#081424"
-            android:textStyle="bold"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/imgbtn_favorite"
@@ -127,7 +129,7 @@
             android:layout_height="25dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="18dp"
+            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:onClick="onClick"
             android:tint="#E91E63" />
@@ -138,7 +140,6 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginHorizontal="3dp"
-        android:layout_marginBottom="3dp"
         android:background="#a3bccc"
         android:layout_alignBottom="@+id/box_book"
         android:layout_gravity="center_horizontal"/>
@@ -148,7 +149,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/box_book"
         android:orientation="vertical"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="15dp"
         android:layout_marginHorizontal="5dp">
 
@@ -165,8 +166,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0.5dp"
-            android:paddingTop="0dp"
-            android:paddingBottom="0dp"
             android:textColor="#000"
             android:background="@drawable/corner_shape_link4" />
 

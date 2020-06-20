@@ -41,14 +41,8 @@ public class InfoReviewAdapter extends BaseAdapter {
     ImageButton MemuImageButton;
     ImageButton favButton;
     ArrayList<HomeReviewItem> items;
-    String iisbn;
-    int uuid;
-    int ubuid;
-    int rrate;
     int useruid2;
-    String rreview;
-    String bbname;
-    String btag;
+    String str;
 
     UserBookUIDData uBookData;
     HomeReviewItem homeReviewItem;
@@ -88,8 +82,6 @@ public class InfoReviewAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.listview_inforeview, parent, false);
         }
 
-        homeReviewItem = getItem(pos);
-
         MemuImageButton = (ImageButton) convertView.findViewById(R.id.btn_menu);
         MemuImageButton.setOnClickListener(this::menuOnClick);
         favButton = (ImageButton) convertView.findViewById(R.id.imgbtn_favorite);
@@ -102,6 +94,18 @@ public class InfoReviewAdapter extends BaseAdapter {
         TextView ReviewTextView = (TextView) convertView.findViewById(R.id.txt_review);
         TextView TagTextView = (TextView) convertView.findViewById(R.id.txt_tag);
 
+
+        homeReviewItem = getItem(pos);
+
+        //태그
+        str = homeReviewItem.getTags();
+        ArrayList<int[]> hashtagSpan = getSpans(str,'#');
+        SpannableString commentsContent = new SpannableString(str);
+        setSpanComment(commentsContent,hashtagSpan) ;
+        TagTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        TagTextView.setText(commentsContent);
+
+
         CImagetView.setImageBitmap(homeReviewItem.getIconDrawable());
         NickTextView.setText(homeReviewItem.getnName());
         DateTextView.setText(homeReviewItem.getReDate());
@@ -109,65 +113,15 @@ public class InfoReviewAdapter extends BaseAdapter {
         ReviewTextView.setText(homeReviewItem.getReview());
         ReviewTextView.setMovementMethod(new ScrollingMovementMethod());
         ratingBar.setNumStars(homeReviewItem.getRate());
-        TagTextView.setText(homeReviewItem.getTags());
 
-        iisbn = homeReviewItem.getIsbn13();
-        uuid = homeReviewItem.getuId();
-        rrate = homeReviewItem.getRate();
-        rreview = homeReviewItem.getReview();
-        bbname = homeReviewItem.getbName();
-        btag = homeReviewItem.getTags();
+        MemuImageButton.setTag(pos);
+        MemuImageButton.setOnClickListener(this::menuOnClick);
 
 
-        //태그
-        ArrayList<int[]> hashtagSpan = getSpans(btag,'#');
-        SpannableString commentsContent = new SpannableString(btag);
-        setSpanComment(commentsContent,hashtagSpan) ;
-        TagTextView.setMovementMethod(LinkMovementMethod.getInstance());
-        TagTextView.setText(commentsContent);
 
         return convertView;
     }
 
-    public void menuOnClick(View v) {
-        //버튼이 눌렸을때 여기로옴
-        PopupMenu popup = new PopupMenu(context, v);
-
-        //xml파일에 메뉴 정의한것을 가져오기위해서 전개자 선언
-        MenuInflater inflater = popup.getMenuInflater();
-        Menu menu = popup.getMenu();
-
-        //실제 메뉴 정의한것을 가져오는 부분 menu 객체에 넣어줌
-        inflater.inflate(R.menu.homefragment_menu, menu);
-
-        //메뉴가 클릭했을때 처리하는 부분
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.modify:
-                        Intent in = new Intent(context, ModiReviewActivity.class);
-                        in.putExtra("isbn", iisbn);
-                        in.putExtra("uid", uuid);
-                        in.putExtra("rate", rrate);
-                        in.putExtra("review", rreview);
-                        in.putExtra("title", bbname);
-                        context.startActivity(in);
-
-                        break;
-                    case R.id.remove:
-                        Intent intent = new Intent(context, ReviewDelActivity.class);
-                        intent.putExtra("isbn", iisbn);
-                        intent.putExtra("uid", uuid);
-                        context.startActivity(intent);
-
-                        break;
-                }
-                return false;
-            }
-        });
-        popup.show();
-    }
 
     public ArrayList<int[]> getSpans(String body, char prefix) {
         ArrayList<int[]> spans = new ArrayList<int[]>();
@@ -198,4 +152,61 @@ public class InfoReviewAdapter extends BaseAdapter {
         }
 
     }
+
+
+    public void menuOnClick(View v) {
+        //버튼이 눌렸을때 여기로옴
+        PopupMenu popup = new PopupMenu(context, v);
+
+        int position = Integer.parseInt((v.getTag().toString()));
+        HomeReviewItem item = items.get(position);
+
+        final String iisbn = item.getIsbn13();
+        final int rrid = item.getRuid();
+        final int uuid = item.getuId();
+        final int rrate = item.getRate();
+        final String rreview = item.getReview();
+        final String bbname = item.getbName();
+        final String btag = item.getTags();
+
+
+
+        //xml파일에 메뉴 정의한것을 가져오기위해서 전개자 선언
+        MenuInflater inflater = popup.getMenuInflater();
+        Menu menu = popup.getMenu();
+
+        //실제 메뉴 정의한것을 가져오는 부분 menu 객체에 넣어줌
+        inflater.inflate(R.menu.homefragment_menu, menu);
+
+        //메뉴가 클릭했을때 처리하는 부분
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.modify:
+                        Intent in = new Intent(context, ModiReviewActivity.class);
+                        in.putExtra("isbn", iisbn);
+                        in.putExtra("uid", uuid);
+                        in.putExtra("rid",rrid);
+                        in.putExtra("rate", rrate);
+                        in.putExtra("review", rreview);
+                        in.putExtra("title", bbname);
+                        in.putExtra("tags", btag);
+                        context.startActivity(in);
+
+                        break;
+                    case R.id.remove:
+                        Intent intent = new Intent(context, ReviewDelActivity.class);
+                        intent.putExtra("isbn", iisbn);
+                        intent.putExtra("uid", uuid);
+                        context.startActivity(intent);
+
+                        break;
+                }
+                return false;
+            }
+        });
+        popup.show();
+    }
+
 }

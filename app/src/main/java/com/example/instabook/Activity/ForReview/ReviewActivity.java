@@ -50,11 +50,11 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
     public static RetroBaseApiService retroBaseApiService;
     SaveSharedPreference sp;
     private RatingBar ratingBar;
-    private FrameLayout binfo_fr_back;
+    private FrameLayout binfo_fr_back, sbtn;
     private ImageView binfo_back;
     private TextView tvTitle;
     private TextView tvRating;
-    private ImageView imBook, sbtn;
+    private ImageView imBook;
     private EditText edReview;
     private EditText edTag;
     private Button pbtn;

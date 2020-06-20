@@ -2,7 +2,6 @@ package com.example.instabook.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -20,11 +19,11 @@ public class MyInfoActivity extends AppCompatActivity {
 
     SaveSharedPreference sp;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myinfo);
-
 
 
 
@@ -58,13 +57,7 @@ public class MyInfoActivity extends AppCompatActivity {
         };
         minfo_fr_back.setOnClickListener(listener);
 
-
-
-
-
     }
-
-
 
 
     @Override

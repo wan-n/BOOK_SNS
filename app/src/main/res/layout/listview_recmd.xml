@@ -3,12 +3,14 @@
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:padding="5dp"
+    android:background="@drawable/corner_shape_review"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
         android:orientation="horizontal"
         android:padding="5dp">
 
@@ -33,19 +35,21 @@
                 android:id="@+id/text_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="13dp" />
+                android:textColor="@color/colorPrimary"
+                android:layout_marginBottom="5dp"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/text_isbn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="8dp" />
+                android:textSize="8sp" />
 
             <TextView
                 android:id="@+id/text_pub"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="13dp" />
+                android:textSize="13sp" />
         </LinearLayout>
 
         <ImageButton

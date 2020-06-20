@@ -155,7 +155,7 @@ public class HomeFragment extends Fragment{
 
                                         String tags = new String();
                                         for(int w =0; w<taglist.size(); w++){
-                                            tags += "#" + taglist.get(w).getTag();
+                                            tags += "#" + taglist.get(w).getTag() +" ";
                                         }
                                         String secondTags = tags;
 

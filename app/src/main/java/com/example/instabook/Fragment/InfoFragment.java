@@ -53,6 +53,9 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -78,10 +81,12 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
     private FrameLayout info_fr_pimg,info_fr_editname;
     private Uri mImageCaptureUri;
     private File tempFile;
-    private String absoultePath;
+
     Button mybook;
     View rootView;
     private ProfileDialog profileDialog;
+
+    private InfoReviewAdapter infoAdapter;
 
     private static final int PICK_FROM_ALBUM = 0;
 
@@ -244,7 +249,8 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
                                     //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
 
 
-                                    InfoReviewAdapter infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
+
+                                    infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
                                     ListView listView = (ListView) getView().findViewById(R.id.info_listview);
                                     listView.setAdapter(infoAdapter);
 
@@ -260,7 +266,7 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
                                     //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
 
 
-                                    InfoReviewAdapter infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
+                                    infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
                                     ListView listView = (ListView) getView().findViewById(R.id.info_listview);
                                     listView.setAdapter(infoAdapter);
                                 }
@@ -284,6 +290,7 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
                 // Toast.makeText(getActivity(), "리뷰 정보 없음.", Toast.LENGTH_SHORT).show();
             }
         });
+
 
     }
 

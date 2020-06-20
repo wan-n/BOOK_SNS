@@ -45,38 +45,39 @@
 
     </RelativeLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp">
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"  >
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
 
-        <ImageView
-            android:id="@+id/fr_add"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@+id/fr_search"
-            android:layout_toRightOf="@+id/fr_search"
-            app:srcCompat="@drawable/add_icon" />
-
-        <EditText
-            android:id="@+id/fr_search"
-            android:layout_width="278dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#FFFFFF"
-            android:ems="10"
-            android:hint="친구 검색"
-            android:inputType="textPersonName"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#DDD">
-            <requestFocus/>
-        </EditText>
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true">
+
+            <EditText
+                android:id="@+id/fr_search"
+                android:layout_width="278dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:backgroundTint="#FFF"
+                android:ems="10"
+                android:hint="친구 검색"
+                android:inputType="textPersonName"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#CDCDCD" />
+
+            <ImageView
+                android:id="@+id/fr_add"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                app:srcCompat="@drawable/add_icon" />
+        </LinearLayout>
     </RelativeLayout>
-</FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -63,7 +63,7 @@
             android:hint="친구 검색"
             android:inputType="textPersonName"
             android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF" />
+            android:textColorHint="#CDCDCD" />
 
             <ImageView
                 android:id="@+id/sf_add"

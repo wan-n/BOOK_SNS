@@ -19,9 +19,9 @@ import com.google.android.material.tabs.TabLayout;
 
 public class FriendsActivity extends AppCompatActivity {
 
-    private ImageView fr_back, fr_add;
-    private EditText fr_search;
     private FrameLayout fr_fr_back;
+    private ImageView fr_add;
+    private EditText fr_search;
     private FriendsPagerAdapter fpAdapter;
     private ViewPager viewPager;
     private TabLayout tabs;
@@ -35,12 +35,11 @@ public class FriendsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friends);
 
 
-        fr_back = findViewById(R.id.fr_back);
+
+        fr_fr_back = findViewById(R.id.fr_fr_back);
         fr_add = findViewById(R.id.fr_add);
         fr_search = findViewById(R.id.fr_search);
-        fr_fr_back = findViewById(R.id.fr_fr_back);
 
-        fr_search.requestFocus();
 
 
         View.OnClickListener listener = new View.OnClickListener() {
@@ -64,6 +63,8 @@ public class FriendsActivity extends AppCompatActivity {
                             startActivity(get_tv);
                         }
                         break;
+
+
                 }
 
             }

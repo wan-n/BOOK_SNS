@@ -1,30 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBase"
+    android:background="#fafdff"
+    android:orientation="vertical"
     tools:context=".Fragment.SearchFragment">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/search_box"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="도서를 검색하여 리뷰를 작성해보세요!"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18dp" />
+
     <LinearLayout
+        android:id="@+id/search_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:orientation="vertical">
+
         <EditText
             android:id="@+id/searchBook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/colortxtBaseDark"
-            android:hint="책 제목을 입력해주세요" />
+            android:layout_marginHorizontal="15dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:hint="책 제목을 입력해주세요"
+            android:textColorHint="#666" />
 
         <Button
             android:id="@+id/searchBookBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorButton"
-            android:textColor="#FFFFFF"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
-            android:text="검색" />
+            android:layout_marginTop="15dp"
+            android:background="@drawable/custom_button_pre"
+            android:text="검색"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
 
     </LinearLayout>
-</FrameLayout>
+</RelativeLayout>

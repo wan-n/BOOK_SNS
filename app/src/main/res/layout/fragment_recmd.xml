@@ -1,58 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#c0c5cc"
     tools:context=".Fragment.RecmdFragment">
-
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorBase"
-        android:padding="5dp">
+        android:layout_height="wrap_content"
+        android:background="#fafdff">
 
-        <LinearLayout
-            android:id="@+id/tagserch_box"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/tagserch_box"
+        android:layout_width="382dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="10dp">
+
+        <EditText
+            android:id="@+id/searchtag"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
-            android:padding="5dp">
+            android:layout_gravity="center_vertical"
+            android:backgroundTint="@color/colorPrimary"
+            android:hint="태그로 리뷰를 검색할 수 있습니다."
+            android:textColorHint="#666" />
 
-            <EditText
-                android:id="@+id/searchtag"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:hint="태그로 책을 검색할 수 있어요!" />
+        <Button
+            android:id="@+id/searchtagBtn"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/custom_button_pre"
+            android:padding="1dp"
+            android:text="검색"
+            android:textColor="#FFFFFF" />
 
-            <Button
-                android:id="@+id/searchtagBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorButton"
-                android:textColor="#FFFFFF"
-                android:padding="1dp"
-                android:text="검색" />
-
-        </LinearLayout>
+    </LinearLayout>
+    </FrameLayout>
 
         <TextView
             android:id="@+id/tv_recnd"
             android:text="이달의 추천 도서"
-            android:textSize="15dp"
+            android:textSize="16sp"
             android:gravity="center"
-            android:background="@color/colortxtBaseDark"
-            android:textColor="@color/colorText"
-            android:layout_below="@+id/tagserch_box"
+            android:background="#a3bccc"
+            android:textColor="#000"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="35dp"/>
         <ListView
             android:id="@+id/recom_listview"
-            android:layout_below="@+id/tv_recnd"
+            android:layout_marginTop="3dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:dividerHeight="3dp"
+            android:divider="#c0c5cc"/>
 
-    </RelativeLayout>
 
-</FrameLayout>
+</LinearLayout>
