@@ -4,27 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="320dp"
-    android:layout_height="160dp"
+    android:layout_height="wrap_content"
     tools:context=".Activity.ForUser.NotiBookDelActivity">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/colorBaseDark"
-        android:gravity="start|center_horizontal|center_vertical"
-        android:paddingLeft="20dp"
-        android:textColor="@color/colorText" />
+        android:background="@color/colorPrimary"
+        android:gravity="center_horizontal|center_vertical"
+        android:textSize="18sp"
+        android:textColor="#FDFDFD" />
 
     <TextView
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:background="@color/colorBase"
+        android:layout_height="wrap_content"
+        android:background="#f0f6fc"
         android:gravity="start|center_horizontal|center_vertical"
-        android:paddingLeft="20dp"
-        android:textColor="@color/colorText"
-        android:textSize="20sp" />
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
+        android:textColor="#000"
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,9 +37,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/custom_dialog_button"
             android:gravity="center"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/colorPrimary" />
     </LinearLayout>
 
 </LinearLayout>

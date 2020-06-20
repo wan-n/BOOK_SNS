@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,22 +23,16 @@ import android.widget.Toast;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.instabook.Activity.CircularImageView;
+import com.example.instabook.Activity.ForHashTag.HashTagHelper;
 import com.example.instabook.Activity.ForHashTag.Hashtag;
-import com.example.instabook.Activity.ForHome.UserBookUIDData;
 import com.example.instabook.Activity.ForReview.ModiReviewActivity;
 import com.example.instabook.Activity.ForReview.ReviewDelActivity;
-import com.example.instabook.Activity.ForUser.NotiBookActivity;
-import com.example.instabook.Activity.ForUser.NotiBookDelActivity;
 import com.example.instabook.Activity.ForUser.UserBookData;
 import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
-import com.example.instabook.Fragment.HomeFragment;
 import com.example.instabook.ListView.HomeReviewItem;
-import com.example.instabook.ListView.RecmdBookItem;
 import com.example.instabook.R;
-import com.volokh.danylo.hashtaghelper.HashTagHelper;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -50,8 +43,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static android.app.PendingIntent.getActivity;
 import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
 
 public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHashTagClickListener{

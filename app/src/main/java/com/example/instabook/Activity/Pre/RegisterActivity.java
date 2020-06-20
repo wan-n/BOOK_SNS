@@ -3,6 +3,11 @@ package com.example.instabook.Activity.Pre;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.instabook.Activity.Dialog.ConIdDialog;
+import com.example.instabook.Activity.Dialog.PMIdDialog;
+import com.example.instabook.Activity.Dialog.ProfileDialog;
+import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.R;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,13 +27,14 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener  {
     private EditText reg_id, reg_pw, reg_pwcon, reg_email, reg_answer;
     private Spinner reg_question;
     private Button reg_ok, reg_idcon;
     private ImageView reg_back;
     int question;
     Boolean check = false;
+    private String fin_userid = null;
 
     public static RetroBaseApiService retroBaseApiService;
 
@@ -47,6 +53,10 @@ public class RegisterActivity extends AppCompatActivity {
         reg_ok = findViewById(R.id.reg_ok);
         reg_back = findViewById(R.id.reg_back);
         reg_idcon = findViewById(R.id.reg_idcon);
+
+        //커스텀 다이얼로그 이벤트 연결
+        reg_idcon.setOnClickListener(this);
+
 
         //스피너 아이템 번호 받아오기(질문UID 값)
         reg_question.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -69,6 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String useremail = reg_email.getText().toString();
                 String questionanswer = reg_answer.getText().toString();
 
+
                 //입력값 좌우 공백 제거
                 final String userid = id.trim();
                 final String userpwd = pwd.trim();
@@ -76,43 +87,15 @@ public class RegisterActivity extends AppCompatActivity {
                 final String email = useremail.trim();
                 final String answer = questionanswer.trim();
 
-                switch (v.getId())
-                {
-                    case R.id.reg_idcon:  //아이디 중복확인 버튼
-                        Retrofit dup_retro = new Retrofit.Builder()
-                                .baseUrl(retroBaseApiService.Base_URL)
-                                .addConverterFactory(GsonConverterFactory.create()).build();
-                        retroBaseApiService = dup_retro.create(RetroBaseApiService.class);
-
-                        retroBaseApiService.getDup(userid).enqueue(new Callback<List<ResponseGet>>() {
-                            @Override
-                            public void onResponse(Call<List<ResponseGet>> call, Response<List<ResponseGet>> response) {
-                                List<ResponseGet> dup_id = response.body();
-
-                                if(userid.equals(dup_id.get(0).getUserId())) {
-                                    AlertDialog.Builder alarm = new AlertDialog.Builder(RegisterActivity.this);
-                                    alarm.setTitle("알림");
-                                    alarm.setMessage("중복된 아이디입니다.");
-                                    alarm.setNeutralButton("뒤로가기", null);
-                                    alarm.create().show();
-                                    check = false;
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<List<ResponseGet>> call, Throwable t) {
-                                AlertDialog.Builder incorrect = new AlertDialog.Builder(RegisterActivity.this);
-                                incorrect.setTitle("알림");
-                                incorrect.setMessage("이 아이디를 사용하실 수 있습니다.");
-                                incorrect.setNeutralButton("뒤로가기", null);
-                                incorrect.create().show();
-                                check = true;
-                            }
-                        });
-                        break;
+                switch (v.getId()) {
                     case R.id.reg_ok:   //회원가입 버튼
                         //아이디 중복확인을 완료했을 경우
                         if(check == true) {
+                            if(!fin_userid.equals(userid)){  //중복확인 후 아이디를 고쳤을경우
+                                check = false;
+                                Toast.makeText(getApplicationContext(), "아이디 중복확인을 해주세요.", Toast.LENGTH_SHORT).show();
+                                break;
+                            }
                             //빈칸으로 제출했을 경우
                             if (userid.getBytes().length <= 0 || userpwd.getBytes().length <= 0 || conpwd.getBytes().length <= 0 ||
                                     email.getBytes().length <= 0 || answer.getBytes().length <= 0) {
@@ -178,10 +161,53 @@ public class RegisterActivity extends AppCompatActivity {
         };
 
         //버튼을 누르면 리스너의 onClick이 호출
-        reg_idcon.setOnClickListener(listener);
         reg_ok.setOnClickListener(listener);
         reg_back.setOnClickListener(listener);
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.reg_idcon:
+                String userid = reg_id.getText().toString();
+
+                if(userid.getBytes().length <=0){
+                    Toast.makeText(getApplicationContext(), "아이디를 입력해주세요.", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    Retrofit dup_retro = new Retrofit.Builder()
+                            .baseUrl(retroBaseApiService.Base_URL)
+                            .addConverterFactory(GsonConverterFactory.create()).build();
+                    retroBaseApiService = dup_retro.create(RetroBaseApiService.class);
+
+                    retroBaseApiService.getDup(userid).enqueue(new Callback<List<ResponseGet>>() {
+                        @Override
+                        public void onResponse(Call<List<ResponseGet>> call, Response<List<ResponseGet>> response) {
+                            List<ResponseGet> dup_id = response.body();
+
+                            if(userid.equals(dup_id.get(0).getUserId())) {
+                                ConIdDialog cdialog = new ConIdDialog(RegisterActivity.this);
+                                cdialog.setDialogListener(() -> {
+                                });
+                                cdialog.show();
+                                check = false;
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<ResponseGet>> call, Throwable t) {
+                            PMIdDialog pdialog = new PMIdDialog(RegisterActivity.this);
+                            pdialog.setDialogListener(() -> {
+                            });
+                            pdialog.show();
+                            check = true;
+                            fin_userid = userid;
+                        }
+                    });
+                }
+                break;
+        }
     }
 }
 

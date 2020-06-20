@@ -43,6 +43,7 @@ public class InfoReviewAdapter extends BaseAdapter {
     int useruid2;
     String rreview;
     String bbname;
+    String btag;
 
     UserBookUIDData uBookData;
     HomeReviewItem homeReviewItem;
@@ -102,12 +103,14 @@ public class InfoReviewAdapter extends BaseAdapter {
         ReviewTextView.setText(homeReviewItem.getReview());
         ReviewTextView.setMovementMethod(new ScrollingMovementMethod());
         ratingBar.setNumStars(homeReviewItem.getRate());
+        TagTextView.setText(homeReviewItem.getTags());
 
         iisbn = homeReviewItem.getIsbn13();
         uuid = homeReviewItem.getuId();
         rrate = homeReviewItem.getRate();
         rreview = homeReviewItem.getReview();
         bbname = homeReviewItem.getbName();
+        btag = homeReviewItem.getTags();
 
         return convertView;
     }

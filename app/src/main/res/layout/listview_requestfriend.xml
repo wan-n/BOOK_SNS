@@ -29,7 +29,7 @@
 
     <Button
         android:id="@+id/rf_accept"
-        android:background="@drawable/custum_button_friend"
+        android:background="@drawable/custom_button_friend"
         android:layout_width="50dp"
         android:layout_height="30dp"
         android:layout_alignParentEnd="true"
@@ -43,7 +43,7 @@
 
     <Button
         android:id="@+id/rf_refuse"
-        android:background="@drawable/custum_button_friend"
+        android:background="@drawable/custom_button_friend"
         android:layout_width="50dp"
         android:layout_height="30dp"
         android:layout_alignParentEnd="true"

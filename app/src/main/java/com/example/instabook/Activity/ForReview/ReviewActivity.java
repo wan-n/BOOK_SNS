@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,17 +14,17 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.instabook.Activity.ForHashTag.Hashtag;
+import com.example.instabook.Activity.Dialog.LogoutDialog;
+import com.example.instabook.Activity.Dialog.ShareDialog;
+import com.example.instabook.Activity.ForHashTag.HashTagHelper;
 import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
-import com.example.instabook.Fragment.SearchFragment;
+import com.example.instabook.Activity.SettingMenuActivity;
 import com.example.instabook.R;
 import com.kakao.kakaolink.v2.KakaoLinkResponse;
 import com.kakao.kakaolink.v2.KakaoLinkService;
@@ -36,29 +35,17 @@ import com.kakao.message.template.LinkObject;
 import com.kakao.network.ErrorResult;
 import com.kakao.network.callback.ResponseCallback;
 import com.kakao.util.helper.log.Logger;
-import com.volokh.danylo.hashtaghelper.HashTagHelper;
-
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Query;
 
-public class ReviewActivity extends AppCompatActivity implements HashTagHelper.OnHashTagClickListener{
+public class ReviewActivity extends AppCompatActivity implements HashTagHelper.OnHashTagClickListener, View.OnClickListener {
     private static final String TAG = "ReviewActivity";
     public static RetroBaseApiService retroBaseApiService;
     SaveSharedPreference sp;
@@ -73,7 +60,6 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
     private Button pbtn;
     private String isbn;
     private String review;
-    private List<ReviewUID> getRuid;
     private HashTagHelper mEditTextHashTagHelper;
 
 
@@ -93,6 +79,9 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
         edTag = findViewById(R.id.edit_tag);
         pbtn = findViewById(R.id.push_btn);
         sbtn = findViewById(R.id.share_btn); //SNS 공유 버튼
+
+        //커스텀 다이얼로그 이벤트 연결
+        sbtn.setOnClickListener(this);
 
 
         //유저 UID 가져오기
@@ -184,7 +173,7 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
 
                             //태그 하나씩 저장
                             for(int i = 1; i <tags.length; i++){
-                                String singletag = tags[i];
+                                String singletag = tags[i].trim();
                                 Log.d(TAG,"singletag : "+singletag);
 
                                 //태그 올리기
@@ -219,50 +208,6 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
             }
         });
 
-        //공유하기 버튼
-        sbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (edReview.getText().toString().length() == 0) {  //공백일 때 처리할 내용
-                    Toast.makeText(getBaseContext(), "리뷰를 입력하세요", Toast.LENGTH_SHORT).show();
-                } else { //공백이 아닐 때 처리할 내용
-                    //리뷰값 저장
-                    review = edReview.getText().toString();
-                }
-                //별점 받아오기
-                int rate = (int) ratingBar.getRating();
-
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("Review", review);
-                map.put("ISBN13", isbn);
-                map.put("UserUID", useruid);
-                map.put("Rate", rate);
-
-                //리뷰 공유
-                DialogInterface.OnClickListener share = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        shareKakao(map, useruid);
-                    }
-                };
-                //취소
-                DialogInterface.OnClickListener cancel = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                };
-
-                new AlertDialog.Builder(ReviewActivity.this)
-                        .setTitle("카카오톡으로 리뷰를 공유하시겠습니까?")
-                        .setPositiveButton("공유", share)
-                        .setNegativeButton("취소", cancel)
-                        .show();
-            }
-        });
-
-
-
     }
 
 
@@ -296,7 +241,7 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
                 String[] tags = str.split(delstr);
                 //태그 하나씩 저장
                 for(int i = 1; i <tags.length; i++){
-                    String singletag = tags[i];
+                    String singletag = tags[i].trim();
                     Log.d(TAG,"singletag : "+singletag);
                     //태그 올리기
                     Retrofit tag_retro = new Retrofit.Builder()
@@ -309,6 +254,11 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
                         public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
                             Log.d(TAG,"태그 올리기 성공");
                             Toast.makeText(getBaseContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
+
+                            //UserUID와 ReviewUID를 카카오링크 파라미터로 전송
+                            kakaolink(ruid, uuid);
+                            Intent in = new Intent(getBaseContext(), MainActivity.class);
+                            startActivity(in);
                         }
                         @Override
                         public void onFailure(Call<ReviewData> call, Throwable t) {
@@ -317,12 +267,6 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
                     });
                 }
 
-
-
-                //UserUID와 ReviewUID를 카카오링크 파라미터로 전송
-                kakaolink(ruid, uuid);
-                Intent in = new Intent(getBaseContext(), MainActivity.class);
-                startActivity(in);
             }
 
             @Override
@@ -369,5 +313,42 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
     @Override
     public void onHashTagClicked(String hashTag) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.share_btn:
+                ShareDialog sdialog = new ShareDialog(this);
+                sdialog.setDialogListener(new ShareDialog.ShareDialogListener() {
+                    @Override
+                    public void onPositiveClicked() {
+                        int useruid = SaveSharedPreference.getUserUid(ReviewActivity.this);
+
+                        if (edReview.getText().toString().length() == 0) {  //공백일 때 처리할 내용
+                            Toast.makeText(getBaseContext(), "리뷰를 입력하세요", Toast.LENGTH_SHORT).show();
+                        } else { //공백이 아닐 때 처리할 내용
+                            //리뷰값 저장
+                            review = edReview.getText().toString();
+                        }
+                        //별점 받아오기
+                        int rate = (int) ratingBar.getRating();
+
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("Review", review);
+                        map.put("ISBN13", isbn);
+                        map.put("UserUID", useruid);
+                        map.put("Rate", rate);
+
+                        shareKakao(map, useruid);
+                    }
+
+                    @Override
+                    public void onNegativeClicked() {
+                    }
+                });
+                sdialog.show();
+                break;
+        }
     }
 }
