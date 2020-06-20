@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -68,6 +69,7 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         binfo_back = findViewById(R.id.binfo_back);
         binfo_fr_back = findViewById(R.id.binfo_fr_back);

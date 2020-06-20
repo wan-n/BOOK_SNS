@@ -266,7 +266,7 @@ public class SearchdbActivity extends AppCompatActivity {
 
         final String clientId = "q9rD74qm2NEUevZOZ0HA";
         final String clientSecret = "KVrwN1NIGi";
-        int display = 10;
+        int display = 20;
 
         Thread nbthread = new Thread(){
             @Override
