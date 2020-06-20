@@ -138,7 +138,7 @@ public class ModiReviewActivity extends AppCompatActivity {
                             .addConverterFactory(GsonConverterFactory.create()).build();
                     retroBaseApiService = re_retro.create(RetroBaseApiService.class);
 
-                    retroBaseApiService.putMoRe(map).enqueue(new Callback<ReviewData>() {
+                    retroBaseApiService.putMoRe(map,rid).enqueue(new Callback<ReviewData>() {
                         @Override
                         public void onResponse(Call<ReviewData> call, Response<ReviewData> response) {
                             //태그 받아오기
