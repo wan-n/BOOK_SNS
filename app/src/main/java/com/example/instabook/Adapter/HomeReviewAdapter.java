@@ -244,8 +244,8 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
                             in.putExtra("rate", rrate);
                             in.putExtra("review", rreview);
                             in.putExtra("title", bbname);
-                            in.putExtra("url",b);
                             in.putExtra("tags",tags);
+                            in.putExtra("url",b);
                             Log.d(TAG,"intent 후 수정 : "+rrid+", "+tags);
                             context.startActivity(in);
                         }

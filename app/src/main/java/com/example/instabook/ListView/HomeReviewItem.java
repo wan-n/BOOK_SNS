@@ -33,10 +33,11 @@ public class HomeReviewItem {
         this.ubuid = ubuid;
     }
 
-    public HomeReviewItem(Bitmap img_bit, int uid, int ruid, String review, String redate_2, String isbn, int rate, String bname, String nname, String tags) {
+    public HomeReviewItem(Bitmap img_bit, int uid, int ruid, Bitmap bitmap, String review, String redate_2, String isbn, int rate, String bname, String nname, String tags) {
         this.iconDrawable = img_bit;
         this.uId = uid;
         this.ruid = ruid;
+        this.bitmap = bitmap;
         this.review = review;
         this.reDate = redate_2;
         this.isbn13 = isbn;

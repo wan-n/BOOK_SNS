@@ -2,6 +2,7 @@ package com.example.instabook.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
@@ -28,6 +29,7 @@ import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.ListView.HomeReviewItem;
 import com.example.instabook.R;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -168,8 +170,12 @@ public class InfoReviewAdapter extends BaseAdapter {
         final String rreview = item.getReview();
         final String bbname = item.getbName();
         final String btag = item.getTags();
+        Bitmap bitmap = item.getBitmap();
 
-
+        //비트맵 이미지 byte로 변환
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+        byte[] b = stream.toByteArray();
 
         //xml파일에 메뉴 정의한것을 가져오기위해서 전개자 선언
         MenuInflater inflater = popup.getMenuInflater();
@@ -192,6 +198,7 @@ public class InfoReviewAdapter extends BaseAdapter {
                         in.putExtra("review", rreview);
                         in.putExtra("title", bbname);
                         in.putExtra("tags", btag);
+                        in.putExtra("url",b);
                         context.startActivity(in);
 
                         break;

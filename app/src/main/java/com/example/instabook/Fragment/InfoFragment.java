@@ -50,6 +50,8 @@ import com.soundcloud.android.crop.Crop;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,6 +84,7 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
     private Uri mImageCaptureUri;
     private File tempFile;
 
+    Bitmap bm;
     Button mybook;
     View rootView;
     private ProfileDialog profileDialog;
@@ -207,6 +210,7 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
                     String review = infoDataList.get(l).getReview();
                     String redate = infoDataList.get(l).getReviewDate();
                     String isbn = infoDataList.get(l).getISBN13();
+                    String url = infoDataList.get(l).getBookImageUrl();
                     int rate = infoDataList.get(l).getRate();
                     String bname = infoDataList.get(l).getBookName();
                     String nname = infoDataList.get(l).getNickName();
@@ -243,17 +247,76 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
                                     Log.d(TAG, "태그 리스트 : " + tags);
 
 
-                                    //리스트뷰에 추가
-                                    item = new HomeReviewItem(img_bit, uid, ruid, review, redate_2, isbn, rate, bname, nname, tags);
-                                    items.add(item);
-                                    //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
+                                    if(url == null){
+                                        //기본 이미지 비트맵으로 변환
+                                        Bitmap bmm = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_img);
+                                        int height = bmm.getHeight();
+                                        int width = bmm.getWidth();
 
+                                        Bitmap resized = null;
+                                        while(height>70){
+                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                            height = resized.getHeight();
+                                            width = resized.getWidth();
+                                        }
+                                        bm = resized;
 
+                                        //리스트뷰에 추가
+                                        item = new HomeReviewItem(img_bit, uid, ruid, bm,
+                                                review, redate_2, isbn, rate, bname, nname, tags);
+                                        items.add(item);
 
-                                    infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
-                                    ListView listView = (ListView) getView().findViewById(R.id.info_listview);
-                                    listView.setAdapter(infoAdapter);
+                                        infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
+                                        ListView listView = (ListView) getView().findViewById(R.id.info_listview);
+                                        listView.setAdapter(infoAdapter);
+                                    } else {
+                                        Thread bthread = new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    URL urll = new URL(url);
+                                                    HttpURLConnection conn = (HttpURLConnection) urll.openConnection();
+                                                    conn.connect();
+                                                    InputStream bis = conn.getInputStream();
+                                                    Bitmap bmm = BitmapFactory.decodeStream(bis);
+                                                    int height = bmm.getHeight();
+                                                    int width = bmm.getWidth();
 
+                                                    Bitmap resized = null;
+                                                    if(height>width){
+                                                        while(height>70){
+                                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                            height = resized.getHeight();
+                                                            width = resized.getWidth();
+                                                        }
+                                                    } else {
+                                                        while(width>70){
+                                                            resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                                            height = resized.getHeight();
+                                                            width = resized.getWidth();
+                                                        }
+                                                    }
+
+                                                    bm = resized;
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }); bthread.start();
+                                        try {
+                                            bthread.join();
+                                            //리스트뷰에 추가
+                                            item = new HomeReviewItem(img_bit, uid, ruid, bm,
+                                                    review, redate_2, isbn, rate, bname, nname, tags);
+                                            items.add(item);
+
+                                            infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
+                                            ListView listView = (ListView) getView().findViewById(R.id.info_listview);
+                                            listView.setAdapter(infoAdapter);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
                                 }
 
                                 @Override
@@ -261,14 +324,78 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
                                     String tags = "";
                                     //리스트뷰에 추가, 태그가 없을경우
                                     Log.d(TAG, "태그 리스트 : " + "태그 없음");
-                                    item = new HomeReviewItem(img_bit, uid, ruid, review, redate_2, isbn, rate, bname, nname, tags);
-                                    items.add(item);
+
+                                    if(url == null){
+                                        //기본 이미지 비트맵으로 변환
+                                        Bitmap bmm = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_img);
+                                        int height = bmm.getHeight();
+                                        int width = bmm.getWidth();
+
+                                        Bitmap resized = null;
+                                        while(height>70){
+                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                            height = resized.getHeight();
+                                            width = resized.getWidth();
+                                        }
+                                        bm = resized;
+
+                                        //리스트뷰에 추가
+                                        item = new HomeReviewItem(img_bit, uid, ruid, bm,
+                                                review, redate_2, isbn, rate, bname, nname, tags);
+                                        items.add(item);
+
+                                        infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
+                                        ListView listView = (ListView) getView().findViewById(R.id.info_listview);
+                                        listView.setAdapter(infoAdapter);
+                                    } else {
+                                        Thread bthread = new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    URL urll = new URL(url);
+                                                    HttpURLConnection conn = (HttpURLConnection) urll.openConnection();
+                                                    conn.connect();
+                                                    InputStream bis = conn.getInputStream();
+                                                    Bitmap bmm = BitmapFactory.decodeStream(bis);
+                                                    int height = bmm.getHeight();
+                                                    int width = bmm.getWidth();
+
+                                                    Bitmap resized = null;
+                                                    if(height>width){
+                                                        while(height>70){
+                                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                            height = resized.getHeight();
+                                                            width = resized.getWidth();
+                                                        }
+                                                    } else {
+                                                        while(width>70){
+                                                            resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                                            height = resized.getHeight();
+                                                            width = resized.getWidth();
+                                                        }
+                                                    }
+
+                                                    bm = resized;
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }); bthread.start();
+                                        try {
+                                            bthread.join();
+                                            //리스트뷰에 추가
+                                            item = new HomeReviewItem(img_bit, uid, ruid, bm,
+                                                    review, redate_2, isbn, rate, bname, nname, tags);
+                                            items.add(item);
+
+                                            infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
+                                            ListView listView = (ListView) getView().findViewById(R.id.info_listview);
+                                            listView.setAdapter(infoAdapter);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
                                     //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
-
-
-                                    infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
-                                    ListView listView = (ListView) getView().findViewById(R.id.info_listview);
-                                    listView.setAdapter(infoAdapter);
                                 }
                             });
 
