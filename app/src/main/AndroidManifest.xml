@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.ForBook.BookInfoActivity"></activity>
+        <activity android:name=".Activity.ForTag.BookInfoActivity"></activity>
         <activity android:name=".Activity.ForTag.SearchTagActivity" />
         <activity android:name=".Activity.ForMyBook.MyBookActivity" />
         <activity

@@ -1,4 +1,4 @@
-package com.example.instabook.Activity.ForBook;
+package com.example.instabook.Activity.ForTag;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,30 +6,32 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.instabook.Activity.ForHashTag.HashTagHelper;
-import com.example.instabook.Activity.ForReview.ReviewActivity;
+import com.example.instabook.Activity.ForHashTag.Hashtag;
 import com.example.instabook.Activity.ForUser.UserBookData;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
 
 public class BookInfoActivity extends AppCompatActivity implements HashTagHelper.OnHashTagClickListener{
     private static final String TAG = "ReviewActivity";
@@ -87,10 +89,13 @@ public class BookInfoActivity extends AppCompatActivity implements HashTagHelper
         tvPub.setText(pub);
         tvPubdate.setText(pubdate);
 
-
-        //태그 헬퍼퍼
-        mTextHashTagHelper = HashTagHelper.Creator.create(getResources().getColor(R.color.colorPrimaryDark), null);
-        mTextHashTagHelper.handle(tvTag);
+        //태그
+        ArrayList<int[]> hashtagSpan = getSpans(tag,'#');
+        SpannableString commentsContent = new SpannableString(tag);
+        setSpanComment(commentsContent,hashtagSpan) ;
+        tvTag.setMovementMethod(LinkMovementMethod.getInstance());
+        tvTag.setText(commentsContent);
+        
 
         btnChoice.setOnClickListener(ChoiceOnClickListener);
 
@@ -131,6 +136,36 @@ public class BookInfoActivity extends AppCompatActivity implements HashTagHelper
 
     @Override
     public void onHashTagClicked(String hashTag) {
+
+    }
+
+    public ArrayList<int[]> getSpans(String body, char prefix) {
+        ArrayList<int[]> spans = new ArrayList<int[]>();
+
+        Pattern pattern = Pattern.compile(prefix + "\\w+");
+        Matcher matcher = pattern.matcher(body);
+
+        // Check all occurrences
+        while (matcher.find()) {
+            int[] currentSpan = new int[2];
+            currentSpan[0] = matcher.start();
+            currentSpan[1] = matcher.end();
+            spans.add(currentSpan);
+        }
+
+        return  spans;
+    }
+
+
+    private void setSpanComment(SpannableString commentsContent, ArrayList<int[]> hashtagSpans) {
+        for(int i = 0; i < hashtagSpans.size(); i++) {
+            int[] span = hashtagSpans.get(i);
+            int hashTagStart = span[0];
+            int hashTagEnd = span[1];
+
+            commentsContent.setSpan(new Hashtag(this), hashTagStart, hashTagEnd, 0);
+
+        }
 
     }
 }

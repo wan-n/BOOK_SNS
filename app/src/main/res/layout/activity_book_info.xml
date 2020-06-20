@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="5dp"
     android:background="@color/colorBase"
-    tools:context=".Activity.ForBook.BookInfoActivity">
+    tools:context=".Activity.ForTag.BookInfoActivity">
 
     <LinearLayout
         android:id="@+id/box_back"

@@ -3,10 +3,8 @@ package com.example.instabook.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,26 +12,18 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.example.instabook.Activity.CircularImageView;
-import com.example.instabook.Activity.ForBook.BookInfoActivity;
+import com.example.instabook.Activity.ForTag.BookInfoActivity;
 import com.example.instabook.Activity.ForHashTag.HashTagHelper;
 import com.example.instabook.Activity.ForHashTag.Hashtag;
-import com.example.instabook.Activity.ForReview.ReviewDelActivity;
 import com.example.instabook.Activity.ForTag.SearchTagActivity;
 import com.example.instabook.Activity.SaveSharedPreference;
-import com.example.instabook.ListView.HomeReviewItem;
 import com.example.instabook.ListView.TagBookItem;
 import com.example.instabook.R;
 
 import java.io.ByteArrayOutputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

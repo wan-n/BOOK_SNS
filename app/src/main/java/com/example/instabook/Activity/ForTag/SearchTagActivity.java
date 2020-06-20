@@ -22,7 +22,10 @@ import com.example.instabook.R;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -141,7 +144,17 @@ public class SearchTagActivity extends AppCompatActivity {
                                         final String burl = blist.get(i).getBookImageUrl();
                                         final String bname = blist.get(i).getBookName();
                                         final String pub = blist.get(i).getPublisher();
-                                        final String pubdate = blist.get(i).getPublishDate();
+                                        String pubdate1 = blist.get(i).getPublishDate();
+
+                                        //날짜변환
+                                        Date date = null;
+                                        try {
+                                            date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(pubdate1);
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                                        String pubdate = sdf.format(date);
 
 
                                         //useruid와 isbn으로 찜 도서 uid 가져오기
