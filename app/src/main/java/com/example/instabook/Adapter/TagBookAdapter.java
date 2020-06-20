@@ -28,6 +28,7 @@ import com.example.instabook.ListView.HomeReviewItem;
 import com.example.instabook.ListView.TagBookItem;
 import com.example.instabook.R;
 
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -135,15 +136,22 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
             Bitmap bm = tagitem.getBp();
             String title = tagitem.getBname();
             String author = "저자 <"+tagitem.getAuthor()+">";
+            String isbn = tagitem.getIsbn();
             String pub = "출판사 <"+pubdate2+">";
             String pubdate = "출판일 <"+tagitem.getPubdate()+">";
             String tag = tagitem.getTag();
             int ubuid = tagitem.getUbuid();
 
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG,100,stream);
+            byte[] b = stream.toByteArray();
+
+
             Intent intent = new Intent(context.getApplicationContext(), BookInfoActivity.class);
-            intent.putExtra("bm",bm);
+            intent.putExtra("bm",b);
             intent.putExtra("title",title);
             intent.putExtra("author",author);
+            intent.putExtra("isbn",isbn);
             intent.putExtra("pub",pub);
             intent.putExtra("pubdate",pubdate);
             intent.putExtra("tag",tag);
