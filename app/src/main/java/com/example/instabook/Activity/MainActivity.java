@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings: //설정 메뉴 화면으로 이동
                 Intent set = new Intent(getApplicationContext(), SettingMenuActivity.class);
                 startActivity(set);
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

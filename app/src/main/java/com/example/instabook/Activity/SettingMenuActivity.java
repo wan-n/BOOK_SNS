@@ -177,6 +177,9 @@ public class SettingMenuActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+        Intent in = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(in);
+        finish();
     }
 
     @Override
