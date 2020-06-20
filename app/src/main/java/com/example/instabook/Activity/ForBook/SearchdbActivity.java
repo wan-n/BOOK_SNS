@@ -404,6 +404,7 @@ public class SearchdbActivity extends AppCompatActivity {
                         }
                         eventType = xpp.next();
                         nblist = booklist;
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -414,6 +415,12 @@ public class SearchdbActivity extends AppCompatActivity {
         try{
             nbthread.join();
             Log.d(TAG, "join 후 setNaverSearch");
+            Log.d(TAG,"네이버 도서 : "+nblist.get(0).getTitle()+", "+nblist.get(0).getAuthor()+", "+nblist.get(0).getIsbn()+", "+
+                            nblist.get(0).getPublisher()+", "+nblist.get(0).getPubdate()+", "+nblist.get(0).getDiscount()+", "+
+                            nblist.get(0).getPrice()+", "+nblist.get(0).getImage());
+            Log.d(TAG,"네이버 도서 : "+nblist.get(1).getTitle()+", "+nblist.get(1).getAuthor()+", "+nblist.get(1).getIsbn()+", "+
+                    nblist.get(1).getPublisher()+", "+nblist.get(1).getPubdate()+", "+nblist.get(1).getDiscount()+", "+
+                    nblist.get(1).getPrice()+", "+nblist.get(1).getImage());
             setNaverBook();
         } catch (Exception e) {
             e.printStackTrace();
@@ -432,7 +439,7 @@ public class SearchdbActivity extends AppCompatActivity {
             String pub = nblist.get(i).getPublisher();
             String pdate = nblist.get(i).getPubdate();
             String price = nblist.get(i).getPrice();
-            String sale = nblist.get(i).getDiscount();
+            int sale = 0;
             String burl = nblist.get(i).getImage();
             String author = nblist.get(i).getAuthor();
 

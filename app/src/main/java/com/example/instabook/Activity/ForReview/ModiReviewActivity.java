@@ -63,12 +63,11 @@ public class ModiReviewActivity extends AppCompatActivity {
         String tags = intent.getStringExtra("tags");
         String review = intent.getStringExtra("review");
         String title = intent.getStringExtra("title");
-        byte[] b = intent.getByteArrayExtra("url");
+        byte[]  b = intent.getByteArrayExtra("url");
         uid = intent.getIntExtra("uid", 0);
         rid = intent.getIntExtra("rid",0);
         rate = intent.getIntExtra("rate", 0);
 
-        //byte 이미지 bitmap으로 변환
         Bitmap bp = BitmapFactory.decodeByteArray(b,0,b.length);
 
         binfo_back = findViewById(R.id.binfo_back);

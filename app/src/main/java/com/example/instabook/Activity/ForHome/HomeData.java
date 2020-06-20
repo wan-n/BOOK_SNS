@@ -7,6 +7,7 @@ public class HomeData {
     public String ReviewDate;
     public String ISBN13;
     public int Rate;
+    public String BookImageUrl;
     public String BookName;
     public String NickName;
     public boolean isDeleted;
@@ -47,6 +48,10 @@ public class HomeData {
 
     public int getReviewUID() {
         return ReviewUID;
+    }
+
+    public String getBookImageUrl() {
+        return BookImageUrl;
     }
 
     public String getTag() {

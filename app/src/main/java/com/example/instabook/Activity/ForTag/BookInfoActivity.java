@@ -95,7 +95,7 @@ public class BookInfoActivity extends AppCompatActivity implements HashTagHelper
         setSpanComment(commentsContent,hashtagSpan) ;
         tvTag.setMovementMethod(LinkMovementMethod.getInstance());
         tvTag.setText(commentsContent);
-        
+
 
         btnChoice.setOnClickListener(ChoiceOnClickListener);
 

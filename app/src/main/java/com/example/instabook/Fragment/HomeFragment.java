@@ -23,9 +23,12 @@ import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.Adapter.HomeReviewAdapter;
 import com.example.instabook.ListView.HomeReviewItem;
+import com.example.instabook.ListView.SearchBookItem;
 import com.example.instabook.R;
 
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,6 +60,8 @@ public class HomeFragment extends Fragment{
     private List<HomeData> taglist;
     private ArrayList<HomeReviewItem> items;
     private HomeReviewItem item;
+
+    Bitmap bm;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -126,6 +131,7 @@ public class HomeFragment extends Fragment{
                                 String review = homeDataList.get(l).getReview();
                                 String redate = homeDataList.get(l).getReviewDate();
                                 String isbn = homeDataList.get(l).getISBN13();
+                                String url = homeDataList.get(l).getBookImageUrl();
                                 int rate = homeDataList.get(l).getRate();
                                 String bname = homeDataList.get(l).getBookName();
                                 String nname = homeDataList.get(l).getNickName();
@@ -190,12 +196,72 @@ public class HomeFragment extends Fragment{
                                                         InputStream is = response.body().byteStream();
                                                         Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
 
-                                                        //리스트뷰에 추가
-                                                        item = new HomeReviewItem(bitmap_profile, uid, ruid,
-                                                                review, redate_2, isbn, rate, bname, nname, finalTags , ubid);
-                                                        items.add(item);
 
-                                                        initView();
+                                                        if(url == null){
+                                                            //기본 이미지 비트맵으로 변환
+                                                            Bitmap bmm = BitmapFactory.decodeResource(context.getApplicationContext().getResources(), R.drawable.default_img);
+                                                            int height = bmm.getHeight();
+                                                            int width = bmm.getWidth();
+
+                                                            Bitmap resized = null;
+                                                            while(height>70){
+                                                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                                height = resized.getHeight();
+                                                                width = resized.getWidth();
+                                                            }
+                                                            bm = resized;
+
+                                                            //리스트뷰에 추가
+                                                            item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                    review, redate_2, isbn, rate, bname, nname, finalTags, ubid);
+                                                            items.add(item);
+                                                            initView();
+                                                        } else {
+                                                            Thread bthread = new Thread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    try {
+                                                                        URL urll = new URL(url);
+                                                                        HttpURLConnection conn = (HttpURLConnection) urll.openConnection();
+                                                                        conn.connect();
+                                                                        InputStream bis = conn.getInputStream();
+                                                                        Bitmap bmm = BitmapFactory.decodeStream(bis);
+                                                                        int height = bmm.getHeight();
+                                                                        int width = bmm.getWidth();
+
+                                                                        Bitmap resized = null;
+                                                                        if(height>width){
+                                                                            while(height>70){
+                                                                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                                                height = resized.getHeight();
+                                                                                width = resized.getWidth();
+                                                                            }
+                                                                        } else {
+                                                                            while(width>70){
+                                                                                resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                                                                height = resized.getHeight();
+                                                                                width = resized.getWidth();
+                                                                            }
+                                                                        }
+
+                                                                        bm = resized;
+                                                                    } catch (Exception e) {
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                }
+                                                            }); bthread.start();
+                                                            try {
+                                                                bthread.join();
+                                                                //리스트뷰에 추가
+                                                                item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                        review, redate_2, isbn, rate, bname, nname, finalTags, ubid);
+                                                                items.add(item);
+                                                                initView();
+                                                            } catch (InterruptedException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
+
                                                     }
 
                                                     @Override
@@ -226,12 +292,72 @@ public class HomeFragment extends Fragment{
                                                         InputStream is = response.body().byteStream();
                                                         Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
 
-                                                        //리스트뷰에 추가
-                                                        item = new HomeReviewItem(bitmap_profile, uid, ruid,
-                                                                review, redate_2, isbn, rate, bname, nname, finalTags , 0);
-                                                        items.add(item);
 
-                                                        initView();
+                                                        if(url == null){
+                                                            //기본 이미지 비트맵으로 변환
+                                                            Bitmap bmm = BitmapFactory.decodeResource(context.getApplicationContext().getResources(), R.drawable.default_img);
+                                                            int height = bmm.getHeight();
+                                                            int width = bmm.getWidth();
+
+                                                            Bitmap resized = null;
+                                                            while(height>70){
+                                                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                                height = resized.getHeight();
+                                                                width = resized.getWidth();
+                                                            }
+                                                            bm = resized;
+
+                                                            //리스트뷰에 추가
+                                                            item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                    review, redate_2, isbn, rate, bname, nname, finalTags, 0);
+                                                            items.add(item);
+                                                            initView();
+                                                        } else {
+                                                            Thread bthread = new Thread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    try {
+                                                                        URL urll = new URL(url);
+                                                                        HttpURLConnection conn = (HttpURLConnection) urll.openConnection();
+                                                                        conn.connect();
+                                                                        InputStream bis = conn.getInputStream();
+                                                                        Bitmap bmm = BitmapFactory.decodeStream(bis);
+                                                                        int height = bmm.getHeight();
+                                                                        int width = bmm.getWidth();
+
+                                                                        Bitmap resized = null;
+                                                                        if(height>width){
+                                                                            while(height>70){
+                                                                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                                                height = resized.getHeight();
+                                                                                width = resized.getWidth();
+                                                                            }
+                                                                        } else {
+                                                                            while(width>70){
+                                                                                resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                                                                height = resized.getHeight();
+                                                                                width = resized.getWidth();
+                                                                            }
+                                                                        }
+
+                                                                        bm = resized;
+                                                                    } catch (Exception e) {
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                }
+                                                            }); bthread.start();
+                                                            try {
+                                                                bthread.join();
+                                                                //리스트뷰에 추가
+                                                                item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                        review, redate_2, isbn, rate, bname, nname, finalTags, 0);
+                                                                items.add(item);
+                                                                initView();
+                                                            } catch (InterruptedException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
+
                                                     }
 
                                                     @Override
@@ -277,11 +403,71 @@ public class HomeFragment extends Fragment{
                                                         Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
                                                         String tags = "";
 
-                                                        //리스트뷰에 추가
-                                                        item = new HomeReviewItem(bitmap_profile, uid, ruid,
-                                                                review, redate_2, isbn, rate, bname, nname, tags, ubid);
-                                                        items.add(item);
-                                                        initView();
+
+                                                        if(url == null){
+                                                            //기본 이미지 비트맵으로 변환
+                                                            Bitmap bmm = BitmapFactory.decodeResource(context.getApplicationContext().getResources(), R.drawable.default_img);
+                                                            int height = bmm.getHeight();
+                                                            int width = bmm.getWidth();
+
+                                                            Bitmap resized = null;
+                                                            while(height>70){
+                                                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                                height = resized.getHeight();
+                                                                width = resized.getWidth();
+                                                            }
+                                                            bm = resized;
+
+                                                            //리스트뷰에 추가
+                                                            item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                    review, redate_2, isbn, rate, bname, nname, tags, ubid);
+                                                            items.add(item);
+                                                            initView();
+                                                        } else {
+                                                            Thread bthread = new Thread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    try {
+                                                                        URL urll = new URL(url);
+                                                                        HttpURLConnection conn = (HttpURLConnection) urll.openConnection();
+                                                                        conn.connect();
+                                                                        InputStream bis = conn.getInputStream();
+                                                                        Bitmap bmm = BitmapFactory.decodeStream(bis);
+                                                                        int height = bmm.getHeight();
+                                                                        int width = bmm.getWidth();
+
+                                                                        Bitmap resized = null;
+                                                                        if(height>width){
+                                                                            while(height>70){
+                                                                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                                                height = resized.getHeight();
+                                                                                width = resized.getWidth();
+                                                                            }
+                                                                        } else {
+                                                                            while(width>70){
+                                                                                resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                                                                height = resized.getHeight();
+                                                                                width = resized.getWidth();
+                                                                            }
+                                                                        }
+
+                                                                        bm = resized;
+                                                                    } catch (Exception e) {
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                }
+                                                            }); bthread.start();
+                                                            try {
+                                                                bthread.join();
+                                                                //리스트뷰에 추가
+                                                                item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                        review, redate_2, isbn, rate, bname, nname, tags, ubid);
+                                                                items.add(item);
+                                                                initView();
+                                                            } catch (InterruptedException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
                                                     }
 
                                                     @Override
@@ -311,11 +497,71 @@ public class HomeFragment extends Fragment{
                                                         Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
                                                         String tags = "";
 
-                                                        //리스트뷰에 추가
-                                                        item = new HomeReviewItem(bitmap_profile, uid, ruid,
-                                                                review, redate_2, isbn, rate, bname, nname, tags, 0);
-                                                        items.add(item);
-                                                        initView();
+
+                                                        if(url == null){
+                                                            //기본 이미지 비트맵으로 변환
+                                                            Bitmap bmm = BitmapFactory.decodeResource(context.getApplicationContext().getResources(), R.drawable.default_img);
+                                                            int height = bmm.getHeight();
+                                                            int width = bmm.getWidth();
+
+                                                            Bitmap resized = null;
+                                                            while(height>70){
+                                                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                                height = resized.getHeight();
+                                                                width = resized.getWidth();
+                                                            }
+                                                            bm = resized;
+
+                                                            //리스트뷰에 추가
+                                                            item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                    review, redate_2, isbn, rate, bname, nname, tags, 0);
+                                                            items.add(item);
+                                                            initView();
+                                                        } else {
+                                                            Thread bthread = new Thread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    try {
+                                                                        URL urll = new URL(url);
+                                                                        HttpURLConnection conn = (HttpURLConnection) urll.openConnection();
+                                                                        conn.connect();
+                                                                        InputStream bis = conn.getInputStream();
+                                                                        Bitmap bmm = BitmapFactory.decodeStream(bis);
+                                                                        int height = bmm.getHeight();
+                                                                        int width = bmm.getWidth();
+
+                                                                        Bitmap resized = null;
+                                                                        if(height>width){
+                                                                            while(height>70){
+                                                                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                                                height = resized.getHeight();
+                                                                                width = resized.getWidth();
+                                                                            }
+                                                                        } else {
+                                                                            while(width>70){
+                                                                                resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                                                                height = resized.getHeight();
+                                                                                width = resized.getWidth();
+                                                                            }
+                                                                        }
+
+                                                                        bm = resized;
+                                                                    } catch (Exception e) {
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                }
+                                                            }); bthread.start();
+                                                            try {
+                                                                bthread.join();
+                                                                //리스트뷰에 추가
+                                                                item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                        review, redate_2, isbn, rate, bname, nname, tags, 0);
+                                                                items.add(item);
+                                                                initView();
+                                                            } catch (InterruptedException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
                                                     }
 
                                                     @Override
@@ -365,6 +611,7 @@ public class HomeFragment extends Fragment{
                             /**리뷰 정보에 ReviewUID 정보 추가해서 가져옴*/
                             int uid = homeDataList.get(l).getUserUID();
                             int ruid = homeDataList.get(l).getReviewUID();
+                            String url = homeDataList.get(l).getBookImageUrl();
                             String review = homeDataList.get(l).getReview();
                             String redate = homeDataList.get(l).getReviewDate();
                             String isbn = homeDataList.get(l).getISBN13();
@@ -430,11 +677,71 @@ public class HomeFragment extends Fragment{
                                                     InputStream is = response.body().byteStream();
                                                     Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
 
-                                                    //리스트뷰에 추가
-                                                    item = new HomeReviewItem(bitmap_profile, uid, ruid,
-                                                            review, redate_2, isbn, rate, bname, nname, finalTags, bid);
-                                                    items.add(item);
-                                                    initView();
+
+                                                    if(url == null){
+                                                        //기본 이미지 비트맵으로 변환
+                                                        Bitmap bmm = BitmapFactory.decodeResource(context.getApplicationContext().getResources(), R.drawable.default_img);
+                                                        int height = bmm.getHeight();
+                                                        int width = bmm.getWidth();
+
+                                                        Bitmap resized = null;
+                                                        while(height>70){
+                                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                            height = resized.getHeight();
+                                                            width = resized.getWidth();
+                                                        }
+                                                        bm = resized;
+
+                                                        //리스트뷰에 추가
+                                                        item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                review, redate_2, isbn, rate, bname, nname, finalTags, bid);
+                                                        items.add(item);
+                                                        initView();
+                                                    } else {
+                                                        Thread bthread = new Thread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                try {
+                                                                    URL urll = new URL(url);
+                                                                    HttpURLConnection conn = (HttpURLConnection) urll.openConnection();
+                                                                    conn.connect();
+                                                                    InputStream bis = conn.getInputStream();
+                                                                    Bitmap bmm = BitmapFactory.decodeStream(bis);
+                                                                    int height = bmm.getHeight();
+                                                                    int width = bmm.getWidth();
+
+                                                                    Bitmap resized = null;
+                                                                    if(height>width){
+                                                                        while(height>70){
+                                                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                                            height = resized.getHeight();
+                                                                            width = resized.getWidth();
+                                                                        }
+                                                                    } else {
+                                                                        while(width>70){
+                                                                            resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                                                            height = resized.getHeight();
+                                                                            width = resized.getWidth();
+                                                                        }
+                                                                    }
+
+                                                                    bm = resized;
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        }); bthread.start();
+                                                        try {
+                                                            bthread.join();
+                                                            //리스트뷰에 추가
+                                                            item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                    review, redate_2, isbn, rate, bname, nname, finalTags, bid);
+                                                            items.add(item);
+                                                            initView();
+                                                        } catch (InterruptedException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
                                                 }
 
                                                 @Override
@@ -464,11 +771,71 @@ public class HomeFragment extends Fragment{
                                                     InputStream is = response.body().byteStream();
                                                     Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
 
-                                                    //리스트뷰에 추가
-                                                    item = new HomeReviewItem(bitmap_profile, uid, ruid,
-                                                            review, redate_2, isbn, rate, bname, nname, finalTags, 0);
-                                                    items.add(item);
-                                                    initView();
+
+                                                    if(url == null){
+                                                        //기본 이미지 비트맵으로 변환
+                                                        Bitmap bmm = BitmapFactory.decodeResource(context.getApplicationContext().getResources(), R.drawable.default_img);
+                                                        int height = bmm.getHeight();
+                                                        int width = bmm.getWidth();
+
+                                                        Bitmap resized = null;
+                                                        while(height>70){
+                                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                            height = resized.getHeight();
+                                                            width = resized.getWidth();
+                                                        }
+                                                        bm = resized;
+
+                                                        //리스트뷰에 추가
+                                                        item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                review, redate_2, isbn, rate, bname, nname, finalTags, 0);
+                                                        items.add(item);
+                                                        initView();
+                                                    } else {
+                                                        Thread bthread = new Thread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                try {
+                                                                    URL urll = new URL(url);
+                                                                    HttpURLConnection conn = (HttpURLConnection) urll.openConnection();
+                                                                    conn.connect();
+                                                                    InputStream bis = conn.getInputStream();
+                                                                    Bitmap bmm = BitmapFactory.decodeStream(bis);
+                                                                    int height = bmm.getHeight();
+                                                                    int width = bmm.getWidth();
+
+                                                                    Bitmap resized = null;
+                                                                    if(height>width){
+                                                                        while(height>70){
+                                                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                                            height = resized.getHeight();
+                                                                            width = resized.getWidth();
+                                                                        }
+                                                                    } else {
+                                                                        while(width>70){
+                                                                            resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                                                            height = resized.getHeight();
+                                                                            width = resized.getWidth();
+                                                                        }
+                                                                    }
+
+                                                                    bm = resized;
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        }); bthread.start();
+                                                        try {
+                                                            bthread.join();
+                                                            //리스트뷰에 추가
+                                                            item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                    review, redate_2, isbn, rate, bname, nname, finalTags, 0);
+                                                            items.add(item);
+                                                            initView();
+                                                        } catch (InterruptedException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
                                                 }
 
                                                 @Override
@@ -512,11 +879,70 @@ public class HomeFragment extends Fragment{
                                                     Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
                                                     String tags = "";
 
-                                                    //리스트뷰에 추가
-                                                    item = new HomeReviewItem(bitmap_profile, uid, ruid,
-                                                            review, redate_2, isbn, rate, bname, nname, tags, bid);
-                                                    items.add(item);
-                                                    initView();
+                                                    if(url == null){
+                                                        //기본 이미지 비트맵으로 변환
+                                                        Bitmap bmm = BitmapFactory.decodeResource(context.getApplicationContext().getResources(), R.drawable.default_img);
+                                                        int height = bmm.getHeight();
+                                                        int width = bmm.getWidth();
+
+                                                        Bitmap resized = null;
+                                                        while(height>70){
+                                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                            height = resized.getHeight();
+                                                            width = resized.getWidth();
+                                                        }
+                                                        bm = resized;
+
+                                                        //리스트뷰에 추가
+                                                        item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                review, redate_2, isbn, rate, bname, nname, tags, bid);
+                                                        items.add(item);
+                                                        initView();
+                                                    } else {
+                                                        Thread bthread = new Thread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                try {
+                                                                    URL urll = new URL(url);
+                                                                    HttpURLConnection conn = (HttpURLConnection) urll.openConnection();
+                                                                    conn.connect();
+                                                                    InputStream bis = conn.getInputStream();
+                                                                    Bitmap bmm = BitmapFactory.decodeStream(bis);
+                                                                    int height = bmm.getHeight();
+                                                                    int width = bmm.getWidth();
+
+                                                                    Bitmap resized = null;
+                                                                    if(height>width){
+                                                                        while(height>70){
+                                                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                                            height = resized.getHeight();
+                                                                            width = resized.getWidth();
+                                                                        }
+                                                                    } else {
+                                                                        while(width>70){
+                                                                            resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                                                            height = resized.getHeight();
+                                                                            width = resized.getWidth();
+                                                                        }
+                                                                    }
+
+                                                                    bm = resized;
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        }); bthread.start();
+                                                        try {
+                                                            bthread.join();
+                                                            //리스트뷰에 추가
+                                                            item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                    review, redate_2, isbn, rate, bname, nname, tags, bid);
+                                                            items.add(item);
+                                                            initView();
+                                                        } catch (InterruptedException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
                                                 }
 
                                                 @Override
@@ -545,11 +971,71 @@ public class HomeFragment extends Fragment{
                                                     Bitmap bitmap_profile = BitmapFactory.decodeStream(is);
                                                     String tags = "";
 
-                                                    //리스트뷰에 추가
-                                                    item = new HomeReviewItem(bitmap_profile, uid, ruid,
-                                                            review, redate_2, isbn, rate, bname, nname, tags, 0);
-                                                    items.add(item);
-                                                    initView();
+
+                                                    if(url == null){
+                                                        //기본 이미지 비트맵으로 변환
+                                                        Bitmap bmm = BitmapFactory.decodeResource(context.getApplicationContext().getResources(), R.drawable.default_img);
+                                                        int height = bmm.getHeight();
+                                                        int width = bmm.getWidth();
+
+                                                        Bitmap resized = null;
+                                                        while(height>70){
+                                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                            height = resized.getHeight();
+                                                            width = resized.getWidth();
+                                                        }
+                                                        bm = resized;
+
+                                                        //리스트뷰에 추가
+                                                        item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                review, redate_2, isbn, rate, bname, nname, tags, 0);
+                                                        items.add(item);
+                                                        initView();
+                                                    } else {
+                                                        Thread bthread = new Thread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                try {
+                                                                    URL urll = new URL(url);
+                                                                    HttpURLConnection conn = (HttpURLConnection) urll.openConnection();
+                                                                    conn.connect();
+                                                                    InputStream bis = conn.getInputStream();
+                                                                    Bitmap bmm = BitmapFactory.decodeStream(bis);
+                                                                    int height = bmm.getHeight();
+                                                                    int width = bmm.getWidth();
+
+                                                                    Bitmap resized = null;
+                                                                    if(height>width){
+                                                                        while(height>70){
+                                                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                                            height = resized.getHeight();
+                                                                            width = resized.getWidth();
+                                                                        }
+                                                                    } else {
+                                                                        while(width>70){
+                                                                            resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                                                            height = resized.getHeight();
+                                                                            width = resized.getWidth();
+                                                                        }
+                                                                    }
+
+                                                                    bm = resized;
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        }); bthread.start();
+                                                        try {
+                                                            bthread.join();
+                                                            //리스트뷰에 추가
+                                                            item = new HomeReviewItem(bitmap_profile, uid, ruid, url, bm,
+                                                                    review, redate_2, isbn, rate, bname, nname, tags, 0);
+                                                            items.add(item);
+                                                            initView();
+                                                        } catch (InterruptedException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
                                                 }
 
                                                 @Override

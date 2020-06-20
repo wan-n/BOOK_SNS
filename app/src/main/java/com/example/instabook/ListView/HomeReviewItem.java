@@ -10,15 +10,19 @@ public class HomeReviewItem {
     public String review;
     public String reDate;
     public String isbn13;
+    public String url;
+    public Bitmap bitmap;
     public int rate;
     public String bName;
     public String nName;
     public String tags;
 
-    public HomeReviewItem(Bitmap iconDrawable, int uid, int ruid, String review, String redate, String isbn, int rate, String bname, String nName, String tags, int ubuid) {
+    public HomeReviewItem(Bitmap iconDrawable, int uid, int ruid, String url, Bitmap bitmap, String review, String redate, String isbn, int rate, String bname, String nName, String tags, int ubuid) {
         this.iconDrawable = iconDrawable;
         this.uId = uid;
         this.ruid = ruid;
+        this.url = url;
+        this.bitmap = bitmap;
         this.review = review;
         this.reDate = redate;
         this.isbn13 = isbn;
@@ -53,6 +57,14 @@ public class HomeReviewItem {
 
     public int getRuid() {
         return ruid;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
     }
 
     public String getReview() {

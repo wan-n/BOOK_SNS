@@ -3,6 +3,7 @@ package com.example.instabook.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
@@ -209,17 +210,18 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
         final int uuid = item.getuId();
         final int rrid = item.getRuid();
         final String iisbn = item.getIsbn13();
-        final Bitmap uurl = item.getIconDrawable();
+        Bitmap bitmap = item.getBitmap();
         final int rrate = item.getRate();
         final String rreview = item.getReview();
         final String bbname = item.getbName();
         final String tags = item.getTags();
         Log.d(TAG,"intent 전 : "+rrid+", "+tags);
 
-        //비트맵 이미지 바이트로 변환
+        //비트맵 이미지 byte로 변환
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        uurl.compress(Bitmap.CompressFormat.JPEG,100,stream);
+        bitmap.compress(CompressFormat.JPEG,100,stream);
         byte[] b = stream.toByteArray();
+
 
         //xml파일에 메뉴 정의한것을 가져오기위해서 전개자 선언
         MenuInflater inflater = popup.getMenuInflater();
