@@ -34,6 +34,8 @@ import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.ListView.HomeReviewItem;
 import com.example.instabook.R;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -213,6 +215,12 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
         final String bbname = item.getbName();
         final String tags = item.getTags();
         Log.d(TAG,"intent 전 : "+rrid+", "+tags);
+
+        //비트맵 이미지 바이트로 변환
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        uurl.compress(Bitmap.CompressFormat.JPEG,100,stream);
+        byte[] b = stream.toByteArray();
+
         //xml파일에 메뉴 정의한것을 가져오기위해서 전개자 선언
         MenuInflater inflater = popup.getMenuInflater();
         Menu menu = popup.getMenu();
@@ -234,7 +242,7 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
                             in.putExtra("rate", rrate);
                             in.putExtra("review", rreview);
                             in.putExtra("title", bbname);
-                            in.putExtra("url",uurl);
+                            in.putExtra("url",b);
                             in.putExtra("tags",tags);
                             Log.d(TAG,"intent 후 수정 : "+rrid+", "+tags);
                             context.startActivity(in);

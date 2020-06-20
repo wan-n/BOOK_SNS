@@ -28,7 +28,10 @@ import com.example.instabook.ListView.HomeReviewItem;
 import com.example.instabook.ListView.TagBookItem;
 import com.example.instabook.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -127,11 +130,12 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
         public void onClick(View v) {
             int position = Integer.parseInt((v.getTag().toString()));
             TagBookItem tagitem = items.get(position);
+            String pubdate2 = tagitem.getPub();
 
             Bitmap bm = tagitem.getBp();
             String title = tagitem.getBname();
             String author = "저자 <"+tagitem.getAuthor()+">";
-            String pub = "출판사 <"+tagitem.getPub()+">";
+            String pub = "출판사 <"+pubdate2+">";
             String pubdate = "출판일 <"+tagitem.getPubdate()+">";
             String tag = tagitem.getTag();
             int ubuid = tagitem.getUbuid();
