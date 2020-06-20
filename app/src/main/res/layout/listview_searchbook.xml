@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:padding="5dp"
@@ -9,58 +10,53 @@
     android:layout_height="wrap_content">
     <!-- TODO: LAYOUT 꾸미기 -->
 
+    <ImageView
+        android:id="@+id/img_book"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="1dp" />
+
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/ppp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:orientation="horizontal">
+        android:layout_weight="4"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/img_book"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_alignParentLeft="true"
-            android:layout_weight="1"
-            android:layout_marginLeft="1dp" />
-
-        <LinearLayout
-            android:id="@+id/ppp"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/text_title"
+            android:textColor="@color/colorText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:orientation="vertical">
+            android:textSize="13dp" />
 
-            <TextView
-                android:id="@+id/text_title"
-                android:textColor="@color/colorText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="13dp" />
-
-            <TextView
-                android:id="@+id/text_author"
-                android:textColor="@color/colorText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="8dp" />
-
-            <TextView
-                android:id="@+id/text_pub"
-                android:textColor="@color/colorText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="13dp" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/pick_btn"
-            android:layout_width="0dp"
-            android:background="@color/colorButton"
+        <TextView
+            android:id="@+id/text_author"
+            android:textColor="@color/colorText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="선택"
-            android:textColor="#FFFFFF" />
+            android:textSize="8dp" />
 
+        <TextView
+            android:id="@+id/text_pub"
+            android:textColor="@color/colorText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13dp" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/pick_btn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
+        android:background="@color/colorButton"
+        android:text="선택"
+        android:textColor="#FFFFFF" />
+
+
 
 </RelativeLayout>

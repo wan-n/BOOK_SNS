@@ -148,14 +148,8 @@ public class RecmdAdapter extends BaseAdapter {
                 retroBaseApiService.delUBook(ubuid).enqueue(new Callback<UserBookData>() {
                     @Override
                     public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                        ((MainActivity)context).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                notifyDataSetChanged();
-                            }
-                        });
-
                         Toast.makeText(context.getApplicationContext(), reitem.getRbname()+"찜 도서 제거 성공", Toast.LENGTH_SHORT).show();
+                        notifyDataSetChanged();
                     }
                     @Override
                     public void onFailure(Call<UserBookData> call, Throwable t) {
@@ -172,13 +166,8 @@ public class RecmdAdapter extends BaseAdapter {
                 retroBaseApiService.postUBook(map).enqueue(new Callback<UserBookData>() {
                     @Override
                     public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                        ((MainActivity)context).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                notifyDataSetChanged();
-                            }
-                        });
                         Toast.makeText(context.getApplicationContext(), reitem.getRbname()+"찜 도서 추가 성공", Toast.LENGTH_SHORT).show();
+                        notifyDataSetChanged();
                     }
                     @Override
                     public void onFailure(Call<UserBookData> call, Throwable t) {

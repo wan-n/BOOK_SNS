@@ -102,8 +102,8 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final int uid = sp.getUserUid(context.getApplicationContext());
-        useruid = uid;
+        final int userUid = sp.getUserUid(context.getApplicationContext());
+        useruid = userUid;
         ViewHolder hodler;
         final int pos = position;
 
@@ -150,6 +150,7 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
         hodler.ReviewTextView.setText(homeReviewItem.getReview());
         hodler.ReviewTextView.setMovementMethod(new ScrollingMovementMethod());
         hodler.ratingBar.setNumStars(homeReviewItem.getRate());
+        hodler.favButton.setImageResource(himg);
 
 
         hodler.MemuImageButton.setTag(pos);
@@ -196,8 +197,10 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
     public void menuOnClick(View v) {
         //버튼이 눌렸을때 여기로옴
         PopupMenu popup = new PopupMenu(context, v);
+
         //유저 UID 가져오기
-        final int useruid = sp.getUserUid(context.getApplicationContext());
+        //final int useruid = sp.getUserUid(context.getApplicationContext());
+
         int position = Integer.parseInt((v.getTag().toString()));
         HomeReviewItem item = items.get(position);
 
@@ -258,8 +261,9 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
             int position = Integer.parseInt((v.getTag().toString()));
             HomeReviewItem reitem = items.get(position);
 
+            int thisuid = reitem.getuId();
             String isbn =reitem.getIsbn13();
-            int ubuid = reitem.getUserBookUID();
+            int ubuid = reitem.getUbuid();
 
             HashMap<String, Object> map = new HashMap<>();
             map.put("uid",useruid);
@@ -274,14 +278,8 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
                 retroBaseApiService.delUBook(ubuid).enqueue(new Callback<UserBookData>() {
                     @Override
                     public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                        ((MainActivity)context).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                notifyDataSetChanged();
-                            }
-                        });
-
                         Toast.makeText(context.getApplicationContext(), reitem.getbName()+"찜 도서 제거 성공", Toast.LENGTH_SHORT).show();
+                        notifyDataSetChanged();
                     }
                     @Override
                     public void onFailure(Call<UserBookData> call, Throwable t) {
@@ -298,13 +296,8 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
                 retroBaseApiService.postUBook(map).enqueue(new Callback<UserBookData>() {
                     @Override
                     public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                        ((MainActivity)context).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                notifyDataSetChanged();
-                            }
-                        });
                         Toast.makeText(context.getApplicationContext(), reitem.getbName()+"찜 도서 추가 성공", Toast.LENGTH_SHORT).show();
+                        notifyDataSetChanged();
                     }
                     @Override
                     public void onFailure(Call<UserBookData> call, Throwable t) {
@@ -319,15 +312,11 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
 
     private int setheart(HomeReviewItem item){
         int himg;
-        if(useruid == item.getuId()){
-            int bid = item.getUserBookUID();
-            if(bid == 0){
-                himg = R.drawable.favorite_border_black;
-            } else {
-                himg = R.drawable.favorite_black;
-            }
+        int ubid = item.getUbuid();
+        if(ubid == 0){
+            himg = R.drawable.favorite_border_black;
         } else {
-            himg = R.drawable.ripple_effect;
+            himg = R.drawable.favorite_black;
         }
         return himg;
     }

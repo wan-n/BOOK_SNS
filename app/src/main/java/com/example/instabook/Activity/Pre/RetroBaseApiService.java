@@ -135,7 +135,7 @@ public interface RetroBaseApiService {
     Call<ResponseGet> putName(@Query("userid") String userid, @Query("username") String username);
 
     @PUT("/instabook/reviews/modify")
-    Call<ReviewData> putMoRe(@Body HashMap<String, Object> parameters, @Query("ruid") int reviewuid);
+    Call<ReviewData> putMoRe(@Body HashMap<String, Object> parameters, @Query("rid") int reviewuid);
 
     @PUT("/instabook/reviews/delete")
     Call<ReviewData> putDel(@Query("ruid") int reviewuid);

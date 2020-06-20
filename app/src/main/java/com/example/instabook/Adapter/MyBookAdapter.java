@@ -128,6 +128,7 @@ public class MyBookAdapter extends BaseAdapter {
                 @Override
                 public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
                     Toast.makeText(context.getApplicationContext(), ubitem.getBookName() + " 찜 목록에서 삭제하였습니다.", Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
                 }
 
                 @Override

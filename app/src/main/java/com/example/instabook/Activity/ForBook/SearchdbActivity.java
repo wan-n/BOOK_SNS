@@ -61,7 +61,7 @@ public class SearchdbActivity extends AppCompatActivity {
     ArrayList<SearchBookItem> items;
     RetroBaseApiService retroBaseApiService;
 
-    Bitmap bm;
+    Bitmap bm = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -460,6 +460,7 @@ public class SearchdbActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<NaverData> call, Response<NaverData> response) {
                     Log.d(TAG, "DB 저장 성공");
+
                     if(burl == null){
                         //기본 이미지 비트맵으로 변환
                         Bitmap bmm = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.default_img);
@@ -474,13 +475,13 @@ public class SearchdbActivity extends AppCompatActivity {
                         }
                         bm = resized;
 
-                        Log.d(TAG,"getNaverBook 함수 기본 이미지 : "+bname+", "+author+", "+null+", "+bm);
-                        sb = new SearchBookItem(bname, author, pub, null, isbn , bm);
+                        Log.d(TAG,"getNaverBook 함수 기본 이미지 : "+bname+", "+author+", "+burl+", "+bm);
+                        sb = new SearchBookItem(bname, author, pub, burl, isbn , bm);
                         books.add(sb);
                         Log.d(TAG,"setNaverBook 함수 기본 이미지 books 추가");
                         initView();
                     } else {
-                        Log.d(TAG,"setNaverBook 함수 for문 안 이미지 있음");
+                        Log.d(TAG,"setNaverBook 함수 for문 안 이미지 있음 burl : "+burl);
                         Thread bthread = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -492,14 +493,25 @@ public class SearchdbActivity extends AppCompatActivity {
                                     Bitmap bmm = BitmapFactory.decodeStream(bis);
                                     int height = bmm.getHeight();
                                     int width = bmm.getWidth();
+                                    Log.d(TAG,"도서 이미지 변환 Thread burl : "+burl+", bmm"+bmm+", height : "+height+", width : "+width+", "+bname);
 
                                     Bitmap resized = null;
-                                    while(height>70){
-                                        resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
-                                        height = resized.getHeight();
-                                        width = resized.getWidth();
+                                    if(height>width){
+                                        while(height>70){
+                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                            height = resized.getHeight();
+                                            width = resized.getWidth();
+                                        }
+                                    } else {
+                                        while(width>70){
+                                            resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                            height = resized.getHeight();
+                                            width = resized.getWidth();
+                                        }
                                     }
+
                                     bm = resized;
+                                    Log.d(TAG,"도서 이미지 변환 Thread bm : "+burl+", "+bm+", "+bname);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -507,12 +519,11 @@ public class SearchdbActivity extends AppCompatActivity {
                         }); bthread.start();
                         try {
                             bthread.join();
-                            Log.d(TAG,"setNaverBook 함수 도서 이미지 추가 : "+bname+", "+author+", "+burl+", "+bm);
+                            Log.d(TAG,"setNaverBook 함수 도서 이미지 추가 : "+burl+", "+bm+", "+bname);
                             sb = new SearchBookItem(bname, author, pub, burl, isbn ,bm);
                             books.add(sb);
                             Log.d(TAG,"setNaverBook 함수 도서 이미지 books 추가");
                             initView();
-
 
                         } catch (InterruptedException e) {
                             e.printStackTrace();

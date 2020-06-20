@@ -87,9 +87,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:isIndicator="false"
-            android:numStars="0"
-            android:rating="5"
             android:stepSize="1"
+            android:max="5"
             android:theme="@style/RatingBar"
             tools:layout_editor_absoluteX="85dp"
             tools:layout_editor_absoluteY="80dp" />

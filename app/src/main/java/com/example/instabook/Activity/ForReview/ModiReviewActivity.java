@@ -64,7 +64,8 @@ public class ModiReviewActivity extends AppCompatActivity {
         uid = intent.getIntExtra("uid", 0);
         rid = intent.getIntExtra("rid",0);
         rate = intent.getIntExtra("rate", 0);
-        Log.d(TAG,"intent 받고 수정 전 : "+rid+", "+tags);
+
+
         binfo_back = findViewById(R.id.binfo_back);
         binfo_fr_back = findViewById(R.id.binfo_fr_back);
         tvTitle = findViewById(R.id.text_title);
@@ -92,7 +93,7 @@ public class ModiReviewActivity extends AppCompatActivity {
 
         tvTitle.setText(title);
         edReview.setText(review);
-        ratingBar.setNumStars(rate);
+        ratingBar.setRating(rate);
         edTag.setText(tags);
 
         //별점 점수 변화주기
@@ -118,11 +119,6 @@ public class ModiReviewActivity extends AppCompatActivity {
                     reView = edReview.getText().toString();
                     new_review = reView.trim();
                     int new_rate = (int) ratingBar.getRating();
-
-                    //태그 받아오기
-                    String str = edTag.getText().toString();
-                    String delstr = "\\#";
-                    String[] tags = str.split(delstr);
 
                     HashMap<String, Object> map = new HashMap<>();
 

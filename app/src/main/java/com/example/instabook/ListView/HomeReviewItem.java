@@ -6,17 +6,16 @@ public class HomeReviewItem {
     public Bitmap iconDrawable;
     public int uId;
     public int ruid;
+    public int ubuid;
     public String review;
     public String reDate;
     public String isbn13;
     public int rate;
     public String bName;
     public String nName;
-    public int UserBookUID;
     public String tags;
 
-    public HomeReviewItem(Bitmap iconDrawable, int uid, int ruid,String review, String redate,
-                          String isbn, int rate, String bname, String nName, String tags) {
+    public HomeReviewItem(Bitmap iconDrawable, int uid, int ruid, String review, String redate, String isbn, int rate, String bname, String nName, String tags, int ubuid) {
         this.iconDrawable = iconDrawable;
         this.uId = uid;
         this.ruid = ruid;
@@ -26,6 +25,20 @@ public class HomeReviewItem {
         this.rate = rate;
         this.bName = bname;
         this.nName = nName;
+        this.tags = tags;
+        this.ubuid = ubuid;
+    }
+
+    public HomeReviewItem(Bitmap img_bit, int uid, int ruid, String review, String redate_2, String isbn, int rate, String bname, String nname, String tags) {
+        this.iconDrawable = img_bit;
+        this.uId = uid;
+        this.ruid = ruid;
+        this.review = review;
+        this.reDate = redate_2;
+        this.isbn13 = isbn;
+        this.rate = rate;
+        this.bName = bname;
+        this.nName = nname;
         this.tags = tags;
     }
 
@@ -70,5 +83,7 @@ public class HomeReviewItem {
         return nName;
     }
 
-    public int getUserBookUID() { return UserBookUID; }
+    public int getUbuid() {
+        return ubuid;
+    }
 }

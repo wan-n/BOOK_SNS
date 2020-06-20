@@ -90,9 +90,9 @@ public class RecmdFragment extends Fragment {
                         @Override
                         public void onResponse(Call<UserBookUIDData> call, Response<UserBookUIDData> response) {
                             userbookUID = response.body();
+                            int bid = userbookUID.getUserBookUID();
 
                             //이미지 url 비트맵으로 변환
-                            int bid = userbookUID.getUserBookUID();
                             int idx = url.indexOf("?");
                             String imgurl = url.substring(0, idx);
                             Thread uthread = new Thread(new Runnable() {

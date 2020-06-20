@@ -52,6 +52,7 @@ public class InfoReviewAdapter extends BaseAdapter {
         this.context = activity;
         this.items = items;
         this.layout = layout;
+
         inflater = LayoutInflater.from(this.context);
     }
 
