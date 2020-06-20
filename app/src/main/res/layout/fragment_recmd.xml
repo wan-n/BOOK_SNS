@@ -21,19 +21,19 @@
             android:padding="5dp">
 
             <EditText
-                android:id="@+id/searchBook"
+                android:id="@+id/searchtag"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="태그를 입력해주세요" />
 
             <Button
+                android:id="@+id/searchtagBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/colorButton"
                 android:textColor="#FFFFFF"
                 android:padding="1dp"
-                android:text="검색"
-                android:id="@+id/searchBookBtn" />
+                android:text="검색" />
 
         </LinearLayout>
 

@@ -2,6 +2,8 @@ package com.example.instabook.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.instabook.Activity.CircularImageView;
+import com.example.instabook.Activity.ForHashTag.Hashtag;
 import com.example.instabook.Activity.ForHome.UserBookUIDData;
 import com.example.instabook.Activity.ForReview.ModiReviewActivity;
 import com.example.instabook.Activity.ForReview.ReviewDelActivity;
@@ -26,6 +29,8 @@ import com.example.instabook.ListView.HomeReviewItem;
 import com.example.instabook.R;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InfoReviewAdapter extends BaseAdapter {
     private static final String TAG = "InfoListAdapter";
@@ -113,6 +118,14 @@ public class InfoReviewAdapter extends BaseAdapter {
         bbname = homeReviewItem.getbName();
         btag = homeReviewItem.getTags();
 
+
+        //태그
+        ArrayList<int[]> hashtagSpan = getSpans(btag,'#');
+        SpannableString commentsContent = new SpannableString(btag);
+        setSpanComment(commentsContent,hashtagSpan) ;
+        TagTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        TagTextView.setText(commentsContent);
+
         return convertView;
     }
 
@@ -154,5 +167,35 @@ public class InfoReviewAdapter extends BaseAdapter {
             }
         });
         popup.show();
+    }
+
+    public ArrayList<int[]> getSpans(String body, char prefix) {
+        ArrayList<int[]> spans = new ArrayList<int[]>();
+
+        Pattern pattern = Pattern.compile(prefix + "\\w+");
+        Matcher matcher = pattern.matcher(body);
+
+        // Check all occurrences
+        while (matcher.find()) {
+            int[] currentSpan = new int[2];
+            currentSpan[0] = matcher.start();
+            currentSpan[1] = matcher.end();
+            spans.add(currentSpan);
+        }
+
+        return  spans;
+    }
+
+
+    private void setSpanComment(SpannableString commentsContent, ArrayList<int[]> hashtagSpans) {
+        for(int i = 0; i < hashtagSpans.size(); i++) {
+            int[] span = hashtagSpans.get(i);
+            int hashTagStart = span[0];
+            int hashTagEnd = span[1];
+
+            commentsContent.setSpan(new Hashtag(context), hashTagStart, hashTagEnd, 0);
+
+        }
+
     }
 }
