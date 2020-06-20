@@ -87,7 +87,7 @@
             android:textSize="15dp"
             android:textStyle="bold" />
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/mnickname_Fr_id"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -104,8 +104,29 @@
                 android:textColor="#000"
                 android:textSize="15dp" />
 
-        </FrameLayout>
+            <FrameLayout
+                android:id="@+id/edit_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#C63C56"
+                    android:textSize="15sp"
+                    android:text="변경"/>
+            </FrameLayout>
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textView17"
@@ -118,7 +139,9 @@
             android:textSize="15dp"
             android:textStyle="bold" />
 
-        <FrameLayout
+
+    </LinearLayout>
+        <RelativeLayout
             android:id="@+id/minfo_fr_email"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -133,8 +156,25 @@
                 android:layout_height="wrap_content"
                 android:hint="user email"
                 android:textColor="#000"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
+
+
+            <FrameLayout
+                android:id="@+id/edit_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#C63C56"
+                android:textSize="15sp"
+                android:text="변경"/>
         </FrameLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 

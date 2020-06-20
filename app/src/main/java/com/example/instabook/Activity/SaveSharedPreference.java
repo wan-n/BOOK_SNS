@@ -32,7 +32,11 @@ public class SaveSharedPreference {
         editor.commit();
     }
 
-
+    public static void setUserEmail(Context ctx, String userEmail){
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.putString(USER_EMAIL, userEmail);
+        editor.commit();
+    }
 
     // 저장된 정보 가져오기
     public static String getUserName(Context ctx) {

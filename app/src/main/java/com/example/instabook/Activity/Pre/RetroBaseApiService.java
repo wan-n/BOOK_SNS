@@ -140,6 +140,9 @@ public interface RetroBaseApiService {
 
 
 
+    @PUT("/instabook/user/userinfo/email")
+    Call<ResponseGet> putEmail(@Query("useruid") int useruid, @Query("email") String email);
+
     @PUT("/instabook/users/userpwd")
     Call<ResponseGet> putPwd(@Body HashMap<String, Object> parameters);
 
