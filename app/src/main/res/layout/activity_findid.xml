@@ -45,7 +45,7 @@
         android:text="메일 받기"
         android:textColor="#DFDFDF"
         android:textSize="14sp"
-        android:background="@drawable/custum_button_pre"/>
+        android:background="@drawable/custom_button_pre"/>
 
 
     <TextView

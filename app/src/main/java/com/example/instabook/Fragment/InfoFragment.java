@@ -1,11 +1,9 @@
 package com.example.instabook.Fragment;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,7 +23,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +35,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.instabook.Activity.Dialog.NicknameDialog;
+import com.example.instabook.Activity.Dialog.ProfileDialog;
 import com.example.instabook.Activity.ForHome.HomeData;
 import com.example.instabook.Activity.ForMyBook.MyBookActivity;
 import com.example.instabook.Activity.Pre.ResponseGet;
@@ -47,7 +46,7 @@ import com.example.instabook.Adapter.InfoReviewAdapter;
 import com.example.instabook.ListView.HomeReviewItem;
 import com.example.instabook.R;
 import com.soundcloud.android.crop.Crop;
-import java.io.ByteArrayOutputStream;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,11 +66,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
+import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
 
 
-public class InfoFragment extends Fragment {
+public class InfoFragment extends Fragment implements View.OnClickListener {
 
     RetroBaseApiService retroBaseApiService;
     private ImageView info_pimg, info_editname;
@@ -82,6 +81,7 @@ public class InfoFragment extends Fragment {
     private String absoultePath;
     Button mybook;
     View rootView;
+    private ProfileDialog profileDialog;
 
     private static final int PICK_FROM_ALBUM = 0;
 
@@ -117,6 +117,10 @@ public class InfoFragment extends Fragment {
         info_fr_editname = getView().findViewById(R.id.info_fr_editname);
         info_count = getView().findViewById(R.id.info_count);
         mybook = getView().findViewById(R.id.mybook);
+
+        //커스텀다이얼로그 온클릭 연결
+        info_fr_pimg.setOnClickListener(this);
+        info_fr_editname.setOnClickListener(this);
 
 
         //리뷰수 표시하기
@@ -172,123 +176,8 @@ public class InfoFragment extends Fragment {
         info_nickname.setText(usernickname);
 
 
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    //찜리스트 화면으로 이동
-                    case R.id.mybook:
-                        Intent Success = new Intent(getActivity(), MyBookActivity.class);
-                        startActivity(Success);
-                        break;
-                    case R.id.info_fr_editname:
-                        EditText et = new EditText(getContext());  //닉네임 변경 시 사용
-                        DialogInterface.OnClickListener edit = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String edit_name = et.getText().toString().trim();   //변경할 닉네임
 
-                                if(edit_name.length() <= 0){
-                                    Toast.makeText(getActivity(), "변경할 닉네임을 입력해주세요.", Toast.LENGTH_SHORT).show();
-                                } else if(edit_name.length() > 10){
-                                    Toast.makeText(getActivity(), "10글자 이내로만 변경 가능합니다.", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    conNickName(edit_name, userid);
-                                    dialog.dismiss();
-                                }
-                            }
-                        };
-                        DialogInterface.OnClickListener cancel = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        };
-
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle("변경할 닉네임 입력")
-                                .setView(et)
-                                .setNeutralButton("변경", edit)
-                                .setNegativeButton("취소", cancel)
-                                .show();
-
-                        break;
-                    //프로필이미지 변경
-                    case R.id.info_fr_pimg:
-                        //앨범 선택
-                        DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //앨범에서 이미지 선택
-
-                                int permission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA);
-                                if(permission == PackageManager.PERMISSION_DENIED){
-                                    // 권한 없어서 요청
-                                    checkSelfPermission();
-                                }else{
-                                    // 권한 있음
-                                    doTakeAlbumAction();
-                                }
-
-
-                            }
-                        };
-
-                        //취소
-                        DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        };
-
-                        //기본 이미지
-                        DialogInterface.OnClickListener basicListener = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Retrofit retro_delimg = new Retrofit.Builder()
-                                        .baseUrl(retroBaseApiService.Base_URL)
-                                        .addConverterFactory(GsonConverterFactory.create()).build();
-                                retroBaseApiService = retro_delimg.create(RetroBaseApiService.class);
-
-                                retroBaseApiService.delImage(useruid).enqueue(new Callback<ResponseBody>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                                        //서버에서 받아온 기본 이미지 비트맵으로 변환
-                                        assert response.body() != null;
-                                        InputStream is = response.body().byteStream();
-                                        Bitmap bitmap = BitmapFactory.decodeStream(is);
-
-                                        //기본 이미지로 변경
-                                        info_pimg.setImageBitmap(bitmap);
-
-                                        //프래그먼트 새로고침
-                                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                        ft.detach(InfoFragment.this).attach(InfoFragment.this).commit();
-                                    }
-                                    @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        Toast.makeText(getActivity(), "페이지를 다시 로드해주세요.", Toast.LENGTH_SHORT).show();
-
-                                    }
-                                });
-
-                            }
-                        };
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle("프로필 이미지 변경")
-                                .setPositiveButton("앨범선택", albumListener)
-                                .setNeutralButton("기본 이미지", basicListener)
-                                .setNegativeButton("취소", cancelListener)
-                                .show();
-                        break;
-                }
-            }
-        };
-
-        info_fr_pimg.setOnClickListener(listener);
-        info_fr_editname.setOnClickListener(listener);
+        //찜리스트 화면으로 이동
         mybook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,9 +185,6 @@ public class InfoFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-
-
 
 
         //유저 UID로 유저 정보, 리뷰 정보, 도서 정보 가져오기
@@ -319,7 +205,6 @@ public class InfoFragment extends Fragment {
                     int rate = infoDataList.get(l).getRate();
                     String bname = infoDataList.get(l).getBookName();
                     String nname = infoDataList.get(l).getNickName();
-                    String tags = infoDataList.get(l).getTag();
 
                     Date date = null;
                     try {
@@ -337,18 +222,50 @@ public class InfoFragment extends Fragment {
                             InputStream is = response.body().byteStream();
                             Bitmap img_bit = BitmapFactory.decodeStream(is);
 
-
                             //Toast.makeText(getActivity(), "이미지 불러오기 성공", Toast.LENGTH_SHORT).show();
 
-                            //리스트뷰에 추가
-                            item = new HomeReviewItem(img_bit, uid, ruid, review, redate_2, isbn, rate, bname, nname, tags);
-                            items.add(item);
-                            //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
+                            //ReviewUID로 Tag리스트 가져오기
+                            retroBaseApiService.getReviewtag(ruid).enqueue(new Callback<List<HomeData>>() {
+                                @Override
+                                public void onResponse(Call<List<HomeData>> call, Response<List<HomeData>> response) {
+                                    Log.d(TAG, "친구 있고 리뷰 있고 태그 있다!");
+                                    List<HomeData> taglist = response.body();
+
+                                    String tags = "";
+                                    for (int w = 0; w < taglist.size(); w++) {
+                                        tags += "#" + taglist.get(w).getTag() + " ";
+                                    }
+                                    Log.d(TAG, "태그 리스트 : " + tags);
 
 
-                            InfoReviewAdapter infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
-                            ListView listView = (ListView) getView().findViewById(R.id.info_listview);
-                            listView.setAdapter(infoAdapter);
+                                    //리스트뷰에 추가
+                                    item = new HomeReviewItem(img_bit, uid, ruid, review, redate_2, isbn, rate, bname, nname, tags);
+                                    items.add(item);
+                                    //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
+
+
+                                    InfoReviewAdapter infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
+                                    ListView listView = (ListView) getView().findViewById(R.id.info_listview);
+                                    listView.setAdapter(infoAdapter);
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<List<HomeData>> call, Throwable t) {
+                                    String tags = "";
+                                    //리스트뷰에 추가, 태그가 없을경우
+                                    Log.d(TAG, "태그 리스트 : " + "태그 없음");
+                                    item = new HomeReviewItem(img_bit, uid, ruid, review, redate_2, isbn, rate, bname, nname, tags);
+                                    items.add(item);
+                                    //Toast.makeText(getActivity(), response.code() + "", Toast.LENGTH_SHORT).show();
+
+
+                                    InfoReviewAdapter infoAdapter = new InfoReviewAdapter(getActivity(), R.layout.listview_inforeview, items);
+                                    ListView listView = (ListView) getView().findViewById(R.id.info_listview);
+                                    listView.setAdapter(infoAdapter);
+                                }
+                            });
+
                         }
 
                         @Override
@@ -653,6 +570,105 @@ public class InfoFragment extends Fragment {
         // Inflate the layout for this fragment
         return rootView;
 
+
+    }
+
+
+    //클릭 이벤트
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+
+            //닉네임 변경
+            case R.id.info_fr_editname:
+                NicknameDialog ndialog = new NicknameDialog(getContext());
+                ndialog.setDialogListener(new NicknameDialog.NicknameDialogListener() {
+
+                    @Override
+                    public void onPositiveClicked(String nickname) {
+                        Log.d("NICKNAME", "닉네임 : "+nickname);
+                        String userid = SaveSharedPreference.getUserName(getActivity());
+
+                        if(nickname.length() <= 0){
+                            Toast.makeText(getActivity(), "변경할 닉네임을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                        } else if(nickname.length() > 10){
+                            Toast.makeText(getActivity(), "10글자 이내로만 변경 가능합니다.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            conNickName(nickname, userid);
+                        }
+                    }
+
+                    @Override
+                    public void onNegativeClicked() {
+
+                    }
+                });
+
+                ndialog.show();
+                break;
+
+            //프로필 사진 변경
+            case R.id.info_fr_pimg:
+
+                ProfileDialog pdialog = new ProfileDialog(getContext());
+                pdialog.setDialogListener(new ProfileDialog.ProfileDialogListener() {
+                    @Override
+                    public void onPositiveClicked() {  //앨범
+                        int permission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA);
+                        if(permission == PackageManager.PERMISSION_DENIED){
+                            // 권한 없어서 요청
+                            checkSelfPermission();
+                        }else {
+                            // 권한 있음
+                            doTakeAlbumAction();
+                        }
+                    }
+
+                    @Override
+                    public void onNegativeClicked() {  //취소
+
+                    }
+
+                    @Override
+                    public void onNeutralClicked() {   //기본
+
+                        int useruid = SaveSharedPreference.getUserUid(getActivity());
+
+
+                        Retrofit retro_delimg = new Retrofit.Builder()
+                                .baseUrl(retroBaseApiService.Base_URL)
+                                .addConverterFactory(GsonConverterFactory.create()).build();
+                        retroBaseApiService = retro_delimg.create(RetroBaseApiService.class);
+
+                        retroBaseApiService.delImage(useruid).enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                                //서버에서 받아온 기본 이미지 비트맵으로 변환
+                                assert response.body() != null;
+                                InputStream is = response.body().byteStream();
+                                Bitmap bitmap = BitmapFactory.decodeStream(is);
+
+                                //기본 이미지로 변경
+                                info_pimg.setImageBitmap(bitmap);
+
+                                //프래그먼트 새로고침
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.detach(InfoFragment.this).attach(InfoFragment.this).commit();
+                            }
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Toast.makeText(getActivity(), "페이지를 다시 로드해주세요.", Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+
+
+                    }
+                });
+                pdialog.show();
+                break;
+        }
 
     }
 }

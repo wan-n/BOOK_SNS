@@ -4,6 +4,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.instabook.Activity.Dialog.LogoutDialog;
+import com.example.instabook.Activity.Dialog.ProfileDialog;
+import com.example.instabook.Activity.Dialog.WithdrawalDialog;
 import com.example.instabook.Activity.Pre.FindIdActivity;
 import com.example.instabook.Activity.Pre.LoginActivity;
 import com.example.instabook.Activity.Pre.ResponseGet;
@@ -30,7 +33,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SettingMenuActivity extends AppCompatActivity {
+public class SettingMenuActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView set_back;
     private TextView set_info, set_friends, set_logout, set_withdrawal;
     private Switch set_pub;
@@ -59,6 +62,10 @@ public class SettingMenuActivity extends AppCompatActivity {
         set_fr_logout = findViewById(R.id.set_fr_logout);
         set_fr_withdrawal = findViewById(R.id.set_fr_withdrawal);
         set_fr_back = findViewById(R.id.set_fr_back);
+
+        //커스텀 다이얼로그 이벤트 연결
+        set_fr_logout.setOnClickListener(this);
+        set_fr_withdrawal.setOnClickListener(this);
 
 
         //유저 아이디, UID 가져오기
@@ -156,77 +163,6 @@ public class SettingMenuActivity extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(), FriendsActivity.class);
                         startActivity(intent);
                         break;
-                    //로그아웃
-                    case R.id.set_fr_logout:
-                        AlertDialog.Builder logout = new AlertDialog.Builder(SettingMenuActivity.this);
-                        logout.setTitle("알림");
-                        logout.setMessage("정말 로그아웃 하시겠습니까?");
-                        logout.setNegativeButton("뒤로가기", null);
-                        logout.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //로그아웃시 쉐어드 프리퍼런스에서 유저 정보 지움
-                                sp.clearUserName(SettingMenuActivity.this);
-                                Toast.makeText(getApplicationContext(), "로그아웃 완료", Toast.LENGTH_SHORT).show();
-
-
-                                //로그인 화면으로 되돌아감
-                                intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                        logout.create().show();
-                        break;
-                    //회원탈퇴
-                    case R.id.set_fr_withdrawal:
-                        AlertDialog.Builder withdrawal = new AlertDialog.Builder(SettingMenuActivity.this);
-                        withdrawal.setTitle("회원 탈퇴");
-                        withdrawal.setMessage("계정을 비활성화 하시겠습니까?");
-                        withdrawal.setNegativeButton("뒤로가기", null);
-                        withdrawal.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                Retrofit retro_del = new Retrofit.Builder()
-                                        .baseUrl(retroBaseApiService.Base_URL)
-                                        .addConverterFactory(GsonConverterFactory.create()).build();
-                                retroBaseApiService = retro_del.create(RetroBaseApiService.class);
-
-                                retroBaseApiService.putInfo(userid).enqueue(new Callback<ResponseGet>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseGet> call, Response<ResponseGet> response) {
-
-                                        //서버에 저장된 프로필 이미지 제거
-                                        retroBaseApiService.delImage(useruid).enqueue(new Callback<ResponseBody>() {
-                                            @Override
-                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                                                Toast.makeText(getApplicationContext(), "회원탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show();
-
-                                            }
-                                            @Override
-                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(SettingMenuActivity.this, "다시 시도해주세요", Toast.LENGTH_SHORT).show();
-
-                                            }
-                                        });
-
-                                        //sharedpreference 회원정보 제거
-                                        sp.clearUserName(SettingMenuActivity.this);
-                                        //로그인 화면으로 되돌아감
-                                        intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                        startActivity(intent);
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<ResponseGet> call, Throwable t) {
-                                        Toast.makeText(getApplicationContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        });
-                        withdrawal.create().show();
-                        break;
                 }
             }
         };
@@ -234,13 +170,96 @@ public class SettingMenuActivity extends AppCompatActivity {
         set_fr_back.setOnClickListener(listener);
         set_fr_info.setOnClickListener(listener);
         set_fr_friends.setOnClickListener(listener);
-        set_fr_logout.setOnClickListener(listener);
-        set_fr_withdrawal.setOnClickListener(listener);
+
     }
 
     //뒤로가기
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            //로그아웃
+            case R.id.set_fr_logout:
+                LogoutDialog ldialog = new LogoutDialog(SettingMenuActivity.this);
+                ldialog.setDialogListener(new LogoutDialog.LogoutDialogListener() {
+                    @Override
+                    public void onPositiveClicked() {
+                        //로그아웃시 쉐어드 프리퍼런스에서 유저 정보 지움
+                        SaveSharedPreference.clearUserName(SettingMenuActivity.this);
+                        Toast.makeText(getApplicationContext(), "로그아웃 완료", Toast.LENGTH_SHORT).show();
+
+                        //로그인 화면으로 되돌아감
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onNegativeClicked() {
+                    }
+                });
+                ldialog.show();
+                break;
+             //회원탈퇴
+            case R.id.set_fr_withdrawal:
+                String userid = SaveSharedPreference.getUserName(SettingMenuActivity.this);
+                int useruid = SaveSharedPreference.getUserUid(SettingMenuActivity.this);
+
+                WithdrawalDialog wdialog = new WithdrawalDialog(SettingMenuActivity.this);
+                wdialog.setDialogListener(new WithdrawalDialog.WithdrawalDialogListener() {
+                    @Override
+                    public void onPositiveClicked() {
+                        Retrofit retro_del = new Retrofit.Builder()
+                                .baseUrl(retroBaseApiService.Base_URL)
+                                .addConverterFactory(GsonConverterFactory.create()).build();
+                        retroBaseApiService = retro_del.create(RetroBaseApiService.class);
+
+                        retroBaseApiService.putInfo(userid).enqueue(new Callback<ResponseGet>() {
+                            @Override
+                            public void onResponse(Call<ResponseGet> call, Response<ResponseGet> response) {
+
+                                //서버에 저장된 프로필 이미지 제거
+                                retroBaseApiService.delImage(useruid).enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                                        Toast.makeText(getApplicationContext(), "회원탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        Toast.makeText(SettingMenuActivity.this, "다시 시도해주세요", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+
+                                //sharedpreference 회원정보 제거
+                                SaveSharedPreference.clearUserName(SettingMenuActivity.this);
+                                //로그인 화면으로 되돌아감
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseGet> call, Throwable t) {
+                                Toast.makeText(getApplicationContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onNegativeClicked() {
+
+                    }
+                });
+                wdialog.show();
+                break;
+        }
+
     }
 }

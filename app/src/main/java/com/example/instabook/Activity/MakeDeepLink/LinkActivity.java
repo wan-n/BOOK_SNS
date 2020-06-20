@@ -7,16 +7,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.instabook.Activity.ForHashTag.HashTagHelper;
 import com.example.instabook.Activity.ForHome.HomeData;
 import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.ResponseGet;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
+import com.example.instabook.ListView.HomeReviewItem;
 import com.example.instabook.R;
 
 import java.io.InputStream;
@@ -32,7 +35,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class LinkActivity extends AppCompatActivity {
+import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
+
+public class LinkActivity extends AppCompatActivity implements HashTagHelper.OnHashTagClickListener {
 
     RetroBaseApiService retroBaseApiService;
     private FrameLayout share_fr_back;
@@ -91,9 +96,9 @@ public class LinkActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<HomeData>> call, Response<List<HomeData>> response) {
                 List<HomeData> get_rv = response.body();
-                boolean del;
+                boolean del = get_rv.get(0).getIsDeleted();
                 //삭제된 리뷰일 시 화면처리
-                if(get_rv.get(0).isDeleted){
+                if(del){
                     Intent Success = new Intent(getApplicationContext(), DelLinkActivity.class);
                     startActivity(Success);
 
@@ -113,9 +118,28 @@ public class LinkActivity extends AppCompatActivity {
                     String newdate = sdf.format(date);
 
                     txt_date.setText(newdate); //날짜
+
+
                     //태그 추가
+                    retroBaseApiService.getReviewtag(ruid).enqueue(new Callback<List<HomeData>>() {
+                        @Override
+                        public void onResponse(Call<List<HomeData>> call, Response<List<HomeData>> response) {
 
+                            List<HomeData> taglist = response.body();
 
+                            String tags = new String();
+                            for (int w = 0; w < taglist.size(); w++) {
+                                tags += "#" + taglist.get(w).getTag() + " ";
+                            }
+                            txt_tag.setText(tags);
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<HomeData>> call, Throwable t) {
+
+                        }
+
+                    });
 
                 }
 
@@ -179,5 +203,9 @@ public class LinkActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onHashTagClicked(String hashTag) {
+
+    }
 }
 

@@ -59,7 +59,7 @@
         android:layout_width="80dp"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/custum_button_pre"
+        android:background="@drawable/custom_button_pre"
         android:layout_marginTop="30dp"
         android:textSize="14sp"
         android:textColor="#DFDFDF"
