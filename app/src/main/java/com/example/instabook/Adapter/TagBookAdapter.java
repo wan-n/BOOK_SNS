@@ -146,14 +146,14 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
         public void onClick(View v) {
             int position = Integer.parseInt((v.getTag().toString()));
             TagBookItem tagitem = items.get(position);
-            String pubdate2 = tagitem.getPub();
+            //String pubdate2 = tagitem.getPub();
 
             Bitmap bm = tagitem.getBp();
             String title = tagitem.getBname();
-            String author = "저자 <"+tagitem.getAuthor()+">";
+            String author = tagitem.getAuthor();
             String isbn = tagitem.getIsbn();
-            String pub = "출판사 <"+pubdate2+">";
-            String pubdate = "출판일 <"+tagitem.getPubdate()+">";
+            String pub = tagitem.getPub();
+            String pubdate = tagitem.getPubdate();
             String tag = tagitem.getTag();
             int ubuid = tagitem.getUbuid();
 

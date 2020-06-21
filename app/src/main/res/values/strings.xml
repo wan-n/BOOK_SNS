@@ -19,6 +19,19 @@
     <string name="You_can_search_for_books_by_tag">태그로 리뷰를 검색할 수 있습니다.</string>
     <string name="search">검색</string>
     <string name="this_month_recmd">이달의 추천 도서</string>
+    <string name="title_bookinfo">책 정보</string>
+    <string name="title_newreview">새 리뷰 작성</string>
+    <string name="thisbooktag">이 책에 등록된 태그</string>
+    <string name="do_jjim">찜하기</string>
+    <string name="w_review">후기 작성</string>
+    <string name="add_tag">태그추가</string>
+    <string name="w_content">내용을 입력하세요</string>
+    <string name="add_tag_hint">#...</string>
+    <string name="review_up">게시하기</string>
+    <string name="book_title">제목</string>
+    <string name="book_author">저자</string>
+    <string name="book_pub">출판사</string>
+    <string name="book_pubdate">출판일</string>
 
 
 </resources>
