@@ -10,10 +10,15 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
+    <string name="book_select_btn">선택</string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="jjim">찜</string>
+    <string name="book_img">도서이미지</string>
+    <string name="You_can_search_for_books_by_tag">태그로 리뷰를 검색할 수 있습니다.</string>
+    <string name="search">검색</string>
+    <string name="this_month_recmd">이달의 추천 도서</string>
 
 
 </resources>

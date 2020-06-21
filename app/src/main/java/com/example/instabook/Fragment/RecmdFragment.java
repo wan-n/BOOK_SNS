@@ -26,6 +26,7 @@ import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.Adapter.RecmdAdapter;
 import com.example.instabook.ListView.RecmdBookItem;
+import com.example.instabook.ListView.SearchBookItem;
 import com.example.instabook.R;
 
 import java.io.InputStream;
@@ -101,90 +102,127 @@ public class RecmdFragment extends Fragment {
                             userbookUID = response.body();
                             int bid = userbookUID.getUserBookUID();
 
-                            //이미지 url 비트맵으로 변환
-                            int idx = url.indexOf("?");
-                            String imgurl = url.substring(0, idx);
-                            Thread uthread = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        URL url = new URL(imgurl);
-                                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                                        conn.connect();
-                                        InputStream bis = conn.getInputStream();
-                                        Bitmap bmm = BitmapFactory.decodeStream(bis);
+                            if(url == null){
+                                //기본 이미지 비트맵으로 변환
+                                Bitmap bmm = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_img);
+                                int height = bmm.getHeight();
+                                int width = bmm.getWidth();
 
-                                        int height = bmm.getHeight();
-                                        int width = bmm.getWidth();
-
-                                        Bitmap resized = null;
-                                        while(height>70){
-                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
-                                            height = resized.getHeight();
-                                            width = resized.getWidth();
-                                        }
-                                        bp = resized;
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                                Bitmap resized = null;
+                                while(height>70){
+                                    resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                    height = resized.getHeight();
+                                    width = resized.getWidth();
                                 }
-                            }); uthread.start();
+                                bp = resized;
 
-                            try {
-                                uthread.join();
                                 rb = new RecmdBookItem(b, isbn, bp, p, bid);
                                 items.add(rb);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                                Log.d(TAG,"setNaverBook 함수 기본 이미지 books 추가");
+                                initView();
+                            } else {
+                                //이미지 url 비트맵으로 변환
+                                int idx = url.indexOf("?");
+                                String imgurl = url.substring(0, idx);
+                                Thread uthread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            URL url = new URL(imgurl);
+                                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                            conn.connect();
+                                            InputStream bis = conn.getInputStream();
+                                            Bitmap bmm = BitmapFactory.decodeStream(bis);
 
-                            initView();
+                                            int height = bmm.getHeight();
+                                            int width = bmm.getWidth();
+
+                                            Bitmap resized = null;
+                                            while(height>70){
+                                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                                height = resized.getHeight();
+                                                width = resized.getWidth();
+                                            }
+                                            bp = resized;
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }); uthread.start();
+
+                                try {
+                                    uthread.join();
+                                    rb = new RecmdBookItem(b, isbn, bp, p, bid);
+                                    items.add(rb);
+                                    initView();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                         @Override
                         public void onFailure(Call<UserBookUIDData> call, Throwable t) {
-                            //이미지 url 비트맵으로 변환
-                            int idx = url.indexOf("?");
-                            String imgurl = url.substring(0, idx);
-                            Thread uthread = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        URL url = new URL(imgurl);
-                                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                                        conn.connect();
-                                        InputStream bis = conn.getInputStream();
-                                        Bitmap bmm = BitmapFactory.decodeStream(bis);
+                            if (url == null) {
+                                //기본 이미지 비트맵으로 변환
+                                Bitmap bmm = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_img);
+                                int height = bmm.getHeight();
+                                int width = bmm.getWidth();
 
-                                        int height = bmm.getHeight();
-                                        int width = bmm.getWidth();
-
-                                        Bitmap resized = null;
-                                        while(height>70){
-                                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
-                                            height = resized.getHeight();
-                                            width = resized.getWidth();
-                                        }
-                                        bp = resized;
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                                Bitmap resized = null;
+                                while (height > 70) {
+                                    resized = Bitmap.createScaledBitmap(bmm, (width * 70) / height, 70, true);
+                                    height = resized.getHeight();
+                                    width = resized.getWidth();
                                 }
-                            }); uthread.start();
+                                bp = resized;
 
-                            try {
-                                uthread.join();
                                 rb = new RecmdBookItem(b, isbn, bp, p, 0);
                                 items.add(rb);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                                Log.d(TAG, "setNaverBook 함수 기본 이미지 books 추가");
+                                initView();
+                            } else {
+                                //이미지 url 비트맵으로 변환
+                                int idx = url.indexOf("?");
+                                String imgurl = url.substring(0, idx);
+                                Thread uthread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            URL url = new URL(imgurl);
+                                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                            conn.connect();
+                                            InputStream bis = conn.getInputStream();
+                                            Bitmap bmm = BitmapFactory.decodeStream(bis);
 
-                            initView();
+                                            int height = bmm.getHeight();
+                                            int width = bmm.getWidth();
+
+                                            Bitmap resized = null;
+                                            while (height > 70) {
+                                                resized = Bitmap.createScaledBitmap(bmm, (width * 70) / height, 70, true);
+                                                height = resized.getHeight();
+                                                width = resized.getWidth();
+                                            }
+                                            bp = resized;
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                uthread.start();
+
+                                try {
+                                    uthread.join();
+                                    rb = new RecmdBookItem(b, isbn, bp, p, 0);
+                                    items.add(rb);
+                                    initView();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     });
-
                 }
-                initView();
             }
             @Override
             public void onFailure(Call<List<RecmdBookItem>> call, Throwable t) {

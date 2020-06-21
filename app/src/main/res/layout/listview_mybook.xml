@@ -1,63 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/corner_shape_friend2"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/corner_shape_friend"
     android:orientation="horizontal"
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
 
-    <ImageView
-        android:id="@+id/mb_icon"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_centerVertical="true"/>
-
     <LinearLayout
-        android:id="@+id/mb_box"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_toEndOf="@id/mb_icon"
-        android:orientation="vertical">
+        android:layout_marginVertical="10dp"
+        android:orientation="horizontal"
+        android:padding="2dp">
 
-        <TextView
-            android:id="@+id/mb_title"
+        <ImageView
+            android:id="@+id/mb_icon"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="1dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/book_img" />
+
+        <LinearLayout
+            android:id="@+id/mb_box"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:paddingStart="5dp"
+            tools:ignore="RtlSymmetry">
+
+            <TextView
+                android:id="@+id/mb_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginBottom="2dp"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/mb_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:textSize="10sp"
+                tools:ignore="SmallSp"/>
+
+            <TextView
+                android:id="@+id/mb_pub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"/>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/mb_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textColor="#FFF"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/mb_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="3dp"
-            android:layout_marginStart="10dp"
-            android:textColor="#DCDCDC"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/mb_pub"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textColor="#DCDCDC"
-            android:textSize="14sp" />
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/del_icon"/>
 
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/mb_clear"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/del_icon" />
 
 </RelativeLayout>

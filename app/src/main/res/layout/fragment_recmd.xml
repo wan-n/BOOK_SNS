@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal"
             android:paddingHorizontal="5dp"
@@ -27,9 +27,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
+                android:layout_marginStart="5dp"
                 android:layout_gravity="center_vertical"
                 android:backgroundTint="@color/colorPrimary"
-                android:hint="태그로 리뷰를 검색할 수 있습니다."
+                android:hint="@string/You_can_search_for_books_by_tag"
                 android:textColorHint="#666" />
 
             <Button
@@ -41,7 +42,7 @@
                 android:layout_marginStart="10dp"
                 android:background="@drawable/custom_button_pre"
                 android:padding="1dp"
-                android:text="검색"
+                android:text="@string/search"
                 android:textColor="#FFFFFF" />
 
         </LinearLayout>
@@ -49,7 +50,7 @@
 
         <TextView
             android:id="@+id/tv_recnd"
-            android:text="이달의 추천 도서"
+            android:text="@string/this_month_recmd"
             android:textSize="16sp"
             android:gravity="center"
             android:background="#a3bccc"
