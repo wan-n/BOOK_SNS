@@ -8,7 +8,8 @@
     <color name="colorBaseDark">#CCE7FB</color>
     <color name="colorText">#133E6C</color>
     <color name="lightGrey">#19000000</color>
-    <color name="duskYellow">#E6BF49</color>
+    <color name="darkYellow">#B19F66</color>
+    <color name="duskYellow">#FFC107</color>
     <color name="colorHint">#BD5217</color>
     <color name="colortxtBase">#A6BCCD</color>
     <color name="colortxtBaseDark">#8FB2CD</color>
