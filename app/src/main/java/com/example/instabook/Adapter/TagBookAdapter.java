@@ -20,6 +20,7 @@ import com.example.instabook.Activity.ForHashTag.HashTagHelper;
 import com.example.instabook.Activity.ForHashTag.Hashtag;
 import com.example.instabook.Activity.ForTag.SearchTagActivity;
 import com.example.instabook.Activity.ForUser.UserBookData;
+import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.ListView.RecmdBookItem;
@@ -198,8 +199,8 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
                 retroBaseApiService.delUBook(ubuid).enqueue(new Callback<UserBookData>() {
                     @Override
                     public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                        Toast.makeText(context.getApplicationContext(), tagitem.getBname()+"찜 도서 제거 성공", Toast.LENGTH_SHORT).show();
                         notifyDataSetChanged();
+                        Toast.makeText(context.getApplicationContext(), tagitem.getBname()+"찜 도서 제거 성공", Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onFailure(Call<UserBookData> call, Throwable t) {
@@ -216,8 +217,8 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
                 retroBaseApiService.postUBook(map).enqueue(new Callback<UserBookData>() {
                     @Override
                     public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                        Toast.makeText(context.getApplicationContext(), tagitem.getBname()+"찜 도서 추가 성공", Toast.LENGTH_SHORT).show();
                         notifyDataSetChanged();
+                        Toast.makeText(context.getApplicationContext(), tagitem.getBname()+"찜 도서 추가 성공", Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onFailure(Call<UserBookData> call, Throwable t) {

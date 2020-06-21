@@ -270,7 +270,6 @@ public class MyBookActivity extends AppCompatActivity {
         ListView listview = (ListView) findViewById(R.id.mb_list);
         Log.d(TAG,"검색 도서 정보 어댑터 선언");
 
-        listview.setAdapter(myAdapter);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -282,5 +281,6 @@ public class MyBookActivity extends AppCompatActivity {
                 });
             }
         });
+        listview.setAdapter(myAdapter);
     }
 }

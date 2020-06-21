@@ -149,7 +149,6 @@ public class RecmdAdapter extends BaseAdapter {
                     @Override
                     public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
                         Toast.makeText(context.getApplicationContext(), reitem.getRbname()+"찜 도서 제거 성공", Toast.LENGTH_SHORT).show();
-                        notifyDataSetChanged();
                     }
                     @Override
                     public void onFailure(Call<UserBookData> call, Throwable t) {
@@ -167,7 +166,6 @@ public class RecmdAdapter extends BaseAdapter {
                     @Override
                     public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
                         Toast.makeText(context.getApplicationContext(), reitem.getRbname()+"찜 도서 추가 성공", Toast.LENGTH_SHORT).show();
-                        notifyDataSetChanged();
                     }
                     @Override
                     public void onFailure(Call<UserBookData> call, Throwable t) {

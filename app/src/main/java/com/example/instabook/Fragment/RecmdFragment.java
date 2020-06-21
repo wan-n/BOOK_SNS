@@ -256,7 +256,6 @@ public class RecmdFragment extends Fragment {
                 R.layout.listview_recmd, items);
         ListView listview = (ListView) getActivity().findViewById(R.id.recom_listview);
 
-        listview.setAdapter(rAdapter);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -268,6 +267,7 @@ public class RecmdFragment extends Fragment {
                 });
             }
         });
+        listview.setAdapter(rAdapter);
     }
 
 

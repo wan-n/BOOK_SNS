@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="3dp">
+            android:layout_marginStart="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -71,7 +71,7 @@
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
                     android:text="@string/book_title"
                     android:textColor="@color/colorText"
                     android:layout_marginHorizontal="15dp"/>
@@ -80,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
                     android:textColor="@color/colorText"
                     android:layout_marginHorizontal="15dp"/>
             </LinearLayout>
@@ -93,7 +93,7 @@
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
                     android:text="@string/book_author"
                     android:textColor="@color/colorText"
                     android:layout_marginHorizontal="15dp"/>
@@ -103,7 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
                     android:textColor="@color/colorText"
                     android:layout_marginHorizontal="15dp"/>
             </LinearLayout>
@@ -116,7 +116,7 @@
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
                     android:text="@string/book_pub"
                     android:textColor="@color/colorText"
                     android:layout_marginHorizontal="15dp"/>
@@ -126,7 +126,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
                     android:textColor="@color/colorText"
                     android:layout_marginHorizontal="15dp" />
             </LinearLayout>
@@ -139,7 +139,7 @@
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
                     android:text="@string/book_pubdate"
                     android:textColor="@color/colorText"
                     android:layout_marginHorizontal="15dp"/>
@@ -149,7 +149,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
                     android:textColor="@color/colorText"
                     android:layout_marginHorizontal="15dp"/>
             </LinearLayout>

@@ -48,10 +48,8 @@ public class BookInfoActivity extends AppCompatActivity implements HashTagHelper
     private TextView tvAuthor;
     private TextView tvPub;
     private TextView tvPubdate;
-    private TextView tvDescription;
     private TextView tvTag;
     private Button btnChoice;
-    private HashTagHelper mTextHashTagHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +77,19 @@ public class BookInfoActivity extends AppCompatActivity implements HashTagHelper
         tvPubdate = findViewById(R.id.txt_pubdate);
         tvTag = findViewById(R.id.txt_tag);
         btnChoice = findViewById(R.id.btn_choice);
+
+        //뒤로가기 버튼
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.bi_fr_back:
+                        onBackPressed();
+                        break;
+                }
+            }
+        };
+        bi_fr_back.setOnClickListener(listener);
 
         //유저 UID 가져오기
         useruid = sp.getUserUid(BookInfoActivity.this);

@@ -154,7 +154,9 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
         hodler.ReviewTextView.setMovementMethod(new ScrollingMovementMethod());
         hodler.ratingBar.setNumStars(homeReviewItem.getRate());
 
-        if(useruid != homeReviewItem.getuId()){
+        if(userUid == homeReviewItem.getuId()){
+            hodler.favButton.setImageResource(R.drawable.ripple_effect);
+        } else {
             hodler.favButton.setImageResource(himg);
             hodler.favButton.setTag(pos);
             hodler.favButton.setOnClickListener(jjimOnClickListener);
@@ -274,7 +276,6 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
             int position = Integer.parseInt((v.getTag().toString()));
             HomeReviewItem reitem = items.get(position);
 
-            int thisuid = reitem.getuId();
             String isbn =reitem.getIsbn13();
             int ubuid = reitem.getUbuid();
 
@@ -291,8 +292,8 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
                 retroBaseApiService.delUBook(ubuid).enqueue(new Callback<UserBookData>() {
                     @Override
                     public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                        Toast.makeText(context.getApplicationContext(), reitem.getbName()+"찜 도서 제거 성공", Toast.LENGTH_SHORT).show();
                         notifyDataSetChanged();
+                        Toast.makeText(context.getApplicationContext(), reitem.getbName()+"찜 도서 제거 성공", Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onFailure(Call<UserBookData> call, Throwable t) {
@@ -309,8 +310,8 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
                 retroBaseApiService.postUBook(map).enqueue(new Callback<UserBookData>() {
                     @Override
                     public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
-                        Toast.makeText(context.getApplicationContext(), reitem.getbName()+"찜 도서 추가 성공", Toast.LENGTH_SHORT).show();
                         notifyDataSetChanged();
+                        Toast.makeText(context.getApplicationContext(), reitem.getbName()+"찜 도서 추가 성공", Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onFailure(Call<UserBookData> call, Throwable t) {

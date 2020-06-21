@@ -397,8 +397,6 @@ public class SearchTagActivity extends AppCompatActivity {
         ListView listview = (ListView) findViewById(R.id.st_list);
         Log.d(TAG,"태그 도서 정보 어댑터 선언");
 
-        listview.setAdapter(tbAdapter);
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -410,5 +408,6 @@ public class SearchTagActivity extends AppCompatActivity {
                 });
             }
         });
+        listview.setAdapter(tbAdapter);
     }
 }

@@ -1070,9 +1070,6 @@ public class HomeFragment extends Fragment{
     private void initView(){
         HomeReviewAdapter hrAdapter = new HomeReviewAdapter(getActivity(), R.layout.listview_homereview, items);
         ListView listview = (ListView) getView().findViewById(R.id.home_listview);
-        listview.setAdapter(hrAdapter);
-
-        listview.setAdapter(hrAdapter);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -1084,5 +1081,6 @@ public class HomeFragment extends Fragment{
                 });
             }
         });
+        listview.setAdapter(hrAdapter);
     }
 }
