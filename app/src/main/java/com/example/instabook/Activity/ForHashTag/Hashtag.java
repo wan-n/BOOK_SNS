@@ -26,6 +26,7 @@ public class Hashtag extends ClickableSpan {
         ds.setARGB(255, 30, 144, 255);
     }
 
+
     @Override
     public void onClick(View widget) {
         TextView tv = (TextView) widget;

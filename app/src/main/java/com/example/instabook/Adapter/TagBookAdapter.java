@@ -51,7 +51,7 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
         TextView authorTextView;
         TextView pubTextView;
         TextView tagTextView;
-        ImageButton moreImageButton;
+        //ImageButton moreImageButton;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
             hodler.authorTextView = (TextView) convertView.findViewById(R.id.text_author);
             hodler.pubTextView = (TextView) convertView.findViewById(R.id.text_pub);
             hodler.tagTextView = (TextView) convertView.findViewById(R.id.text_tag);
-            hodler.moreImageButton = (ImageButton) convertView.findViewById(R.id.pick_btn);
+            //hodler.moreImageButton = (ImageButton) convertView.findViewById(R.id.pick_btn);
 
             convertView.setTag(hodler);
         } else {
@@ -107,11 +107,12 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
         hodler.bookImageView.setImageBitmap(tagBookItem.getBp());
         hodler.titleTextView.setText(tagBookItem.getBname());
         hodler.authorTextView.setText(tagBookItem.getAuthor());
-        hodler.moreImageButton.setImageResource(R.drawable.more_black);
+        //hodler.moreImageButton.setImageResource(R.drawable.more_black);
 
-        hodler.moreImageButton.setTag(pos);
-        hodler.moreImageButton.setOnClickListener(moreOnClickListener);
-
+        //hodler.moreImageButton.setTag(pos);
+        //hodler.moreImageButton.setOnClickListener(moreOnClickListener);
+        hodler.bookImageView.setTag(pos);
+        hodler.bookImageView.setOnClickListener(moreOnClickListener);
 
         return convertView;
     }

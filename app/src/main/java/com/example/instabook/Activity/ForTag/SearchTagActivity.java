@@ -8,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,6 +21,7 @@ import com.example.instabook.ListView.TagBookItem;
 import com.example.instabook.ListView.UserBookItem;
 import com.example.instabook.R;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -396,6 +399,79 @@ public class SearchTagActivity extends AppCompatActivity {
         Log.d(TAG,"태그 도서 정보 어댑터 선언");
 
         listview.setAdapter(tbAdapter);
+
+        /*
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ListView listView = (ListView) parent;
+                TagBookItem tagBookItem = (TagBookItem) listView.getItemAtPosition(position);
+                //TagBookItem tagBookItem = items.get(position);
+
+                Bitmap bm = tagBookItem.getBp();
+                String title = tagBookItem.getBname();
+                String author = tagBookItem.getAuthor();
+                String isbn = tagBookItem.getIsbn();
+                String pub = tagBookItem.getPub();
+                String pubdate = tagBookItem.getPubdate();
+                String tag = tagBookItem.getTag();
+                int ubuid = tagBookItem.getUbuid();
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG,100,stream);
+                byte[] b = stream.toByteArray();
+
+                Intent intent = new Intent(SearchTagActivity.this, BookInfoActivity.class);
+                intent.putExtra("bm",b);
+                intent.putExtra("title",title);
+                intent.putExtra("author",author);
+                intent.putExtra("isbn",isbn);
+                intent.putExtra("pub",pub);
+                intent.putExtra("pubdate",pubdate);
+                intent.putExtra("tag",tag);
+                intent.putExtra("ubuid",ubuid);
+                startActivity(intent);
+            }
+        });
+
+        listview.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ListView listView = (ListView) parent;
+                TagBookItem tagBookItem = (TagBookItem) listView.getItemAtPosition(position);
+                //TagBookItem tagBookItem = items.get(position);
+
+                Bitmap bm = tagBookItem.getBp();
+                String title = tagBookItem.getBname();
+                String author = tagBookItem.getAuthor();
+                String isbn = tagBookItem.getIsbn();
+                String pub = tagBookItem.getPub();
+                String pubdate = tagBookItem.getPubdate();
+                String tag = tagBookItem.getTag();
+                int ubuid = tagBookItem.getUbuid();
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG,100,stream);
+                byte[] b = stream.toByteArray();
+
+                Intent intent = new Intent(SearchTagActivity.this, BookInfoActivity.class);
+                intent.putExtra("bm",b);
+                intent.putExtra("title",title);
+                intent.putExtra("author",author);
+                intent.putExtra("isbn",isbn);
+                intent.putExtra("pub",pub);
+                intent.putExtra("pubdate",pubdate);
+                intent.putExtra("tag",tag);
+                intent.putExtra("ubuid",ubuid);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        */
         new Thread(new Runnable() {
             @Override
             public void run() {
