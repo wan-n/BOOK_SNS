@@ -153,14 +153,15 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
         hodler.ReviewTextView.setText(homeReviewItem.getReview());
         hodler.ReviewTextView.setMovementMethod(new ScrollingMovementMethod());
         hodler.ratingBar.setNumStars(homeReviewItem.getRate());
-        hodler.favButton.setImageResource(himg);
 
+        if(useruid != homeReviewItem.getuId()){
+            hodler.favButton.setImageResource(himg);
+            hodler.favButton.setTag(pos);
+            hodler.favButton.setOnClickListener(jjimOnClickListener);
+        }
 
         hodler.MemuImageButton.setTag(pos);
         hodler.MemuImageButton.setOnClickListener(this::menuOnClick);
-
-        hodler.favButton.setTag(pos);
-        hodler.favButton.setOnClickListener(jjimOnClickListener);
 
         return convertView;
     }
