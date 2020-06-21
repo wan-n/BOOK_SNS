@@ -98,11 +98,11 @@ public class RecmdAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.listview_recmd, parent, false);
             hodler = new ViewHolder();
             // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-            hodler.iconImageView = (ImageView) convertView.findViewById(R.id.img_book);
-            hodler.titleTextView = (TextView) convertView.findViewById(R.id.text_title);
-            hodler.isbnTextView = (TextView) convertView.findViewById(R.id.text_isbn);
-            hodler.pubTextView = (TextView) convertView.findViewById(R.id.text_pub);
-            hodler.jjimbtn = (ImageButton) convertView.findViewById(R.id.imgbtn_favorite);
+            hodler.iconImageView = convertView.findViewById(R.id.img_book);
+            hodler.titleTextView = convertView.findViewById(R.id.text_title);
+            hodler.isbnTextView = convertView.findViewById(R.id.text_isbn);
+            hodler.pubTextView = convertView.findViewById(R.id.text_pub);
+            hodler.jjimbtn = convertView.findViewById(R.id.imgbtn_favorite);
 
             convertView.setTag(hodler);
         } else{

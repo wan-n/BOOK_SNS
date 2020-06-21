@@ -58,6 +58,16 @@
 
         </LinearLayout>
 
+        <ImageButton
+            android:id="@+id/imgbtn_favorite"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:tint="#E91E63"
+            android:contentDescription="@string/jjim" />
+
     </LinearLayout>
 
 </RelativeLayout>

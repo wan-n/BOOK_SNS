@@ -13,19 +13,32 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.instabook.Activity.ForTag.BookInfoActivity;
 import com.example.instabook.Activity.ForHashTag.HashTagHelper;
 import com.example.instabook.Activity.ForHashTag.Hashtag;
 import com.example.instabook.Activity.ForTag.SearchTagActivity;
+import com.example.instabook.Activity.ForUser.UserBookData;
+import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
+import com.example.instabook.ListView.RecmdBookItem;
 import com.example.instabook.ListView.TagBookItem;
 import com.example.instabook.R;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.example.instabook.Activity.ForReview.ReviewActivity.retroBaseApiService;
 
 public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashTagClickListener{
     private static final String TAG = "TagBookAdapter";
@@ -35,6 +48,8 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
     SaveSharedPreference sp;
     TagBookItem tagBookItem;
     ArrayList<TagBookItem> items = new ArrayList<>();
+    int useruid;
+    int himge;
     String str;
 
     public TagBookAdapter(SearchTagActivity activity, int layout, ArrayList<TagBookItem> items) {
@@ -51,7 +66,7 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
         TextView authorTextView;
         TextView pubTextView;
         TextView tagTextView;
-        //ImageButton moreImageButton;
+        ImageButton jjimImageButton;
     }
 
     @Override
@@ -71,7 +86,8 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
+        final int uid = sp.getUserUid(context.getApplicationContext());
+        useruid = uid;
         ViewHolder hodler;
         final int pos = position;
 
@@ -80,12 +96,12 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
             convertView = inflater.inflate(R.layout.listview_tagbook, parent, false);
             hodler = new ViewHolder();
 
-            hodler.bookImageView = (ImageView) convertView.findViewById(R.id.img_book);
-            hodler.titleTextView = (TextView) convertView.findViewById(R.id.text_title);
-            hodler.authorTextView = (TextView) convertView.findViewById(R.id.text_author);
-            hodler.pubTextView = (TextView) convertView.findViewById(R.id.text_pub);
-            hodler.tagTextView = (TextView) convertView.findViewById(R.id.text_tag);
-            //hodler.moreImageButton = (ImageButton) convertView.findViewById(R.id.pick_btn);
+            hodler.bookImageView = convertView.findViewById(R.id.img_book);
+            hodler.titleTextView = convertView.findViewById(R.id.text_title);
+            hodler.authorTextView = convertView.findViewById(R.id.text_author);
+            hodler.pubTextView = convertView.findViewById(R.id.text_pub);
+            hodler.tagTextView = convertView.findViewById(R.id.text_tag);
+            hodler.jjimImageButton = convertView.findViewById(R.id.imgbtn_favorite);
 
             convertView.setTag(hodler);
         } else {
@@ -94,6 +110,8 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
 
         //item 가져오기
         tagBookItem = getItem(pos);
+
+        himge = setheart(tagBookItem);
 
         //태그
         str = tagBookItem.getTag();
@@ -107,12 +125,18 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
         hodler.bookImageView.setImageBitmap(tagBookItem.getBp());
         hodler.titleTextView.setText(tagBookItem.getBname());
         hodler.authorTextView.setText(tagBookItem.getAuthor());
-        //hodler.moreImageButton.setImageResource(R.drawable.more_black);
+        hodler.jjimImageButton.setImageResource(himge);
 
-        //hodler.moreImageButton.setTag(pos);
-        //hodler.moreImageButton.setOnClickListener(moreOnClickListener);
+
+        //도서 정보 화면으로 이동 온클릭 이벤트
         hodler.bookImageView.setTag(pos);
         hodler.bookImageView.setOnClickListener(moreOnClickListener);
+
+
+        //찜 버튼 클릭
+        hodler.jjimImageButton.setTag(pos);
+        hodler.jjimImageButton.setOnClickListener(jjimOnClickListener);
+
 
         return convertView;
     }
@@ -150,6 +174,72 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
             context.startActivity(intent);
         }
     };
+
+
+    final Button.OnClickListener jjimOnClickListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int position = Integer.parseInt((v.getTag().toString()));
+            TagBookItem tagitem = items.get(position);
+
+            String isbn =tagitem.getIsbn();
+            int ubuid = tagitem.getUbuid();
+
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("uid",useruid);
+            map.put("isbn",isbn);
+
+            if (ubuid > 0){ //찜 목록에서 없애기
+                Retrofit retro_djim = new Retrofit.Builder()
+                        .baseUrl(retroBaseApiService.Base_URL)
+                        .addConverterFactory(GsonConverterFactory.create()).build();
+                retroBaseApiService = retro_djim.create(RetroBaseApiService.class);
+
+                retroBaseApiService.delUBook(ubuid).enqueue(new Callback<UserBookData>() {
+                    @Override
+                    public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
+                        Toast.makeText(context.getApplicationContext(), tagitem.getBname()+"찜 도서 제거 성공", Toast.LENGTH_SHORT).show();
+                        notifyDataSetChanged();
+                    }
+                    @Override
+                    public void onFailure(Call<UserBookData> call, Throwable t) {
+                        Toast.makeText(context.getApplicationContext(), "찜 도서 제거 실패", Toast.LENGTH_SHORT).show();
+                    }
+
+                });
+            } else { //찜목록에 넣기
+                Retrofit retro_jjim = new Retrofit.Builder()
+                        .baseUrl(retroBaseApiService.Base_URL)
+                        .addConverterFactory(GsonConverterFactory.create()).build();
+                retroBaseApiService = retro_jjim.create(RetroBaseApiService.class);
+
+                retroBaseApiService.postUBook(map).enqueue(new Callback<UserBookData>() {
+                    @Override
+                    public void onResponse(Call<UserBookData> call, Response<UserBookData> response) {
+                        Toast.makeText(context.getApplicationContext(), tagitem.getBname()+"찜 도서 추가 성공", Toast.LENGTH_SHORT).show();
+                        notifyDataSetChanged();
+                    }
+                    @Override
+                    public void onFailure(Call<UserBookData> call, Throwable t) {
+                        Toast.makeText(context.getApplicationContext(), "찜 도서 추가 실패", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        }
+    };
+
+    private int setheart(TagBookItem item){
+        int himg;
+        int bid = item.getUbuid();
+        if(bid == 0){
+            himg = R.drawable.favorite_border_black;
+        } else {
+            himg = R.drawable.favorite_black;
+        }
+        return himg;
+    }
+
 
     @Override
     public void onHashTagClicked(String hashTag) {

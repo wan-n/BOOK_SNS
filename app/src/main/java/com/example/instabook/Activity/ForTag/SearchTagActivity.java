@@ -52,7 +52,6 @@ public class SearchTagActivity extends AppCompatActivity {
     List<TagData> authorlist = new ArrayList<TagData>();
     Bitmap bp;
     TagBookItem tb;
-    TagData tagdata = new TagData();
 
     ArrayList<TagBookItem> items = new ArrayList<TagBookItem>();
 
