@@ -204,9 +204,8 @@ public class InfoReviewAdapter extends BaseAdapter {
                         break;
                     case R.id.remove:
                         Intent intent = new Intent(context, ReviewDelActivity.class);
-                        intent.putExtra("isbn", iisbn);
+                        intent.putExtra("rrid",rrid);
                         intent.putExtra("bname", bbname);
-                        intent.putExtra("uid", uuid);
                         context.startActivity(intent);
 
                         break;

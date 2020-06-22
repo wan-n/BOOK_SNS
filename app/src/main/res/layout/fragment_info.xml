@@ -52,7 +52,7 @@
         <LinearLayout
             android:id="@+id/info_sort"
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
+            android:layout_height="30dp"
             android:orientation="horizontal"
             android:layout_marginTop="40dp"
             android:layout_marginStart="20dp"

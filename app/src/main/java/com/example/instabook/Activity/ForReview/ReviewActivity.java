@@ -190,7 +190,7 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
                                         Log.d(TAG,"태그 올리기 성공");
                                         Toast.makeText(getBaseContext(), "리뷰 올리기 성공", Toast.LENGTH_SHORT).show();
 
-                                        Intent in = new Intent(getBaseContext(), MainActivity.class);
+                                        Intent in = new Intent(ReviewActivity.this, MainActivity.class);
                                         startActivity(in);
                                     }
                                     @Override

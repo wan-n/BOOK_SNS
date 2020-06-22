@@ -258,7 +258,6 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
                             Intent inten = new Intent(context.getApplicationContext(), ReviewDelActivity.class);
                             inten.putExtra("rrid",rrid);
                             inten.putExtra("bname",bbname);
-                            Log.d(TAG,"intent 후 삭제 : "+rrid);
                             context.startActivity(inten);
                         }
                         break;
