@@ -131,7 +131,7 @@
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:onClick="onClick"
-            android:tint="#E91E63" />
+            android:tint="#e8667a" />
 
     </RelativeLayout>
 

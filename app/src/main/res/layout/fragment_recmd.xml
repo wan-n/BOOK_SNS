@@ -30,7 +30,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_gravity="center_vertical"
                 android:backgroundTint="@color/colorPrimary"
-                android:hint="@string/You_can_search_for_books_by_tag"
+                android:hint="#태그 검색을 통해 도서 찾기"
                 android:textColorHint="#666" />
 
             <Button

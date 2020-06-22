@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -527,7 +528,7 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
 
             Log.d(TAG, "빈파일 경로 : " + tempFile);
             //크롭 후 저장할 Uri
-            Uri savingUri = Uri.fromFile(tempFile);
+            Uri savingUri = FileProvider.getUriForFile(getContext(), "com.example.instabook.provider", tempFile);
 
             Crop.of(photoUri, savingUri).asSquare().start(getContext(), InfoFragment.this, Crop.REQUEST_CROP);
         }catch (IOException e){
