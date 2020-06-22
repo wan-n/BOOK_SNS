@@ -122,8 +122,7 @@ public class RecmdFragment extends Fragment {
                                 initView();
                             } else {
                                 //이미지 url 비트맵으로 변환
-                                int idx = url.indexOf("?");
-                                String imgurl = url.substring(0, idx);
+                                String imgurl = url;
                                 Thread uthread = new Thread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -182,8 +181,7 @@ public class RecmdFragment extends Fragment {
                                 initView();
                             } else {
                                 //이미지 url 비트맵으로 변환
-                                int idx = url.indexOf("?");
-                                String imgurl = url.substring(0, idx);
+                                String imgurl = url;
                                 Thread uthread = new Thread(new Runnable() {
                                     @Override
                                     public void run() {
