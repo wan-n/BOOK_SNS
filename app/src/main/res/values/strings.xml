@@ -16,7 +16,7 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="jjim">찜</string>
     <string name="book_img">도서이미지</string>
-    <string name="You_can_search_for_books_by_tag">태그로 리뷰를 검색할 수 있습니다.</string>
+    <string name="You_can_search_for_books_by_tag">#태그로 도서 검색하기</string>
     <string name="search">검색</string>
     <string name="this_month_recmd">이달의 추천 도서</string>
     <string name="title_bookinfo">책 정보</string>
