@@ -44,7 +44,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.8.0'
 
     //crop
-    implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
+    implementation 'com.github.yalantis:ucrop:2.2.5'
 
     implementation 'com.github.danylovolokh:hashtag-helper:1.1.0'
     implementation group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION
