@@ -167,6 +167,7 @@
                         android:background="@null"
                         android:maxLength="500"
                         android:textColorHint="#666"
+                        android:gravity="top|left"
                         android:scrollHorizontally="false"
                         android:scrollbarStyle="insideInset"
                         android:scrollbars="vertical"
