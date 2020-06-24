@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.instabook.Activity.ForMyBook.MyBookActivity;
 import com.example.instabook.Activity.ForUser.UserBookData;
 import com.example.instabook.Activity.MainActivity;
@@ -97,8 +98,15 @@ public class MyBookAdapter extends BaseAdapter {
 
         //item 가져오기
         userBookItem = getItem(pos);
+        String url = userBookItem.getBookImageUrl();
 
-        hodler.iconImageView.setImageBitmap(userBookItem.getBitmap());
+        Glide.with(convertView)
+                .load(url)
+                .error(R.drawable.default_img)
+                .override(70,70)
+                .into(hodler.iconImageView);
+
+       // hodler.iconImageView.setImageBitmap(userBookItem.getBitmap());
         hodler.titleTextView.setText(userBookItem.getBookName());
         hodler.authorTextView.setText(userBookItem.getAuthor());
         hodler.pubTextView.setText(userBookItem.getPublisher());

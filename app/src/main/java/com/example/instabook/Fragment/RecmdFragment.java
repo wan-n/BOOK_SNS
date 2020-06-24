@@ -105,6 +105,7 @@ public class RecmdFragment extends Fragment {
                             if(url == null){
                                 //기본 이미지 비트맵으로 변환
                                 Bitmap bmm = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_img);
+                                /*
                                 int height = bmm.getHeight();
                                 int width = bmm.getWidth();
 
@@ -114,9 +115,9 @@ public class RecmdFragment extends Fragment {
                                     height = resized.getHeight();
                                     width = resized.getWidth();
                                 }
-                                bp = resized;
+                                bp = resized;*/
 
-                                rb = new RecmdBookItem(b, isbn, bp, p, bid);
+                                rb = new RecmdBookItem(b, isbn, bp, p, bid,url);
                                 items.add(rb);
                                 Log.d(TAG,"setNaverBook 함수 기본 이미지 books 추가");
                                 initView();
@@ -132,7 +133,7 @@ public class RecmdFragment extends Fragment {
                                             conn.connect();
                                             InputStream bis = conn.getInputStream();
                                             Bitmap bmm = BitmapFactory.decodeStream(bis);
-
+                                            /*
                                             int height = bmm.getHeight();
                                             int width = bmm.getWidth();
 
@@ -142,7 +143,7 @@ public class RecmdFragment extends Fragment {
                                                 height = resized.getHeight();
                                                 width = resized.getWidth();
                                             }
-                                            bp = resized;
+                                            bp = resized;*/
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
@@ -151,7 +152,7 @@ public class RecmdFragment extends Fragment {
 
                                 try {
                                     uthread.join();
-                                    rb = new RecmdBookItem(b, isbn, bp, p, bid);
+                                    rb = new RecmdBookItem(b, isbn, bp, p, bid,url);
                                     items.add(rb);
                                     initView();
                                 } catch (InterruptedException e) {
@@ -164,6 +165,7 @@ public class RecmdFragment extends Fragment {
                             if (url == null) {
                                 //기본 이미지 비트맵으로 변환
                                 Bitmap bmm = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_img);
+                                /*
                                 int height = bmm.getHeight();
                                 int width = bmm.getWidth();
 
@@ -173,9 +175,9 @@ public class RecmdFragment extends Fragment {
                                     height = resized.getHeight();
                                     width = resized.getWidth();
                                 }
-                                bp = resized;
+                                bp = resized;*/
 
-                                rb = new RecmdBookItem(b, isbn, bp, p, 0);
+                                rb = new RecmdBookItem(b, isbn, bp, p, 0,url);
                                 items.add(rb);
                                 Log.d(TAG, "setNaverBook 함수 기본 이미지 books 추가");
                                 initView();
@@ -191,7 +193,7 @@ public class RecmdFragment extends Fragment {
                                             conn.connect();
                                             InputStream bis = conn.getInputStream();
                                             Bitmap bmm = BitmapFactory.decodeStream(bis);
-
+                                            /*
                                             int height = bmm.getHeight();
                                             int width = bmm.getWidth();
 
@@ -201,7 +203,7 @@ public class RecmdFragment extends Fragment {
                                                 height = resized.getHeight();
                                                 width = resized.getWidth();
                                             }
-                                            bp = resized;
+                                            bp = resized;*/
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
@@ -211,7 +213,7 @@ public class RecmdFragment extends Fragment {
 
                                 try {
                                     uthread.join();
-                                    rb = new RecmdBookItem(b, isbn, bp, p, 0);
+                                    rb = new RecmdBookItem(b, isbn, bp, p, 0,url);
                                     items.add(rb);
                                     initView();
                                 } catch (InterruptedException e) {

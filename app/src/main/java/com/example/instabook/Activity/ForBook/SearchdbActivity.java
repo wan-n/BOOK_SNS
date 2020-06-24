@@ -123,9 +123,10 @@ public class SearchdbActivity extends AppCompatActivity {
                             if(url == null){
                                 //기본 이미지 비트맵으로 변환
                                 Bitmap bmm = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_img);
+                                /*
                                 int height = bmm.getHeight();
                                 int width = bmm.getWidth();
-                                /*
+
                                 Bitmap resized = null;
                                 if(height>width){
                                     while(height>70){
@@ -513,6 +514,7 @@ public class SearchdbActivity extends AppCompatActivity {
                     if(burl == null){
                         //기본 이미지 비트맵으로 변환
                         Bitmap bmm = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_img);
+                        /*
                         int height = bmm.getHeight();
                         int width = bmm.getWidth();
 
@@ -531,7 +533,7 @@ public class SearchdbActivity extends AppCompatActivity {
                             }
                         }
 
-                        bm = resized;
+                        bm = resized;*/
 
                         sb = new SearchBookItem(bname, author, pub, burl, isbn , bm);
                         books.add(sb);
@@ -547,6 +549,7 @@ public class SearchdbActivity extends AppCompatActivity {
                                     conn.connect();
                                     InputStream bis = conn.getInputStream();
                                     Bitmap bmm = BitmapFactory.decodeStream(bis);
+                                    /*
                                     int height = bmm.getHeight();
                                     int width = bmm.getWidth();
 
@@ -565,7 +568,7 @@ public class SearchdbActivity extends AppCompatActivity {
                                         }
                                     }
 
-                                    bm = resized;
+                                    bm = resized;*/
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

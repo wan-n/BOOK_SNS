@@ -115,7 +115,11 @@ public class RecmdAdapter extends BaseAdapter {
         himge = setheart(recmdBookItem);
         String url =  recmdBookItem.getRimguri();
 
-        Glide.with(convertView).load(url).override(70,70).error(R.drawable.default_img).into(hodler.iconImageView);
+        Glide.with(convertView)
+                .load(url)
+                .error(R.drawable.default_img)
+                .override(70,70)
+                .into(hodler.iconImageView);
         //hodler.iconImageView.setImageBitmap(recmdBookItem.getRImgbm());
         hodler.titleTextView.setText(recmdBookItem.getRbname());
         hodler.isbnTextView.setText(recmdBookItem.getRisbn());

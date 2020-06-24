@@ -111,7 +111,11 @@ public class BookListAdapter extends BaseAdapter {
         searchBookItem = getItem(pos);
         String url = searchBookItem.getImg();
 
-        Glide.with(convertView).load(url).override(70,70).error(R.drawable.default_img).into(holder.bookImageView);
+        Glide.with(convertView)
+                .load(url)
+                .error(R.drawable.default_img)
+                .override(70,70)
+                .into(holder.bookImageView);
         //holder.bookImageView.setImageBitmap(searchBookItem.getImgbm());
         holder.titleTextView.setText(searchBookItem.getTitle());
         holder.authorTextView.setText(searchBookItem.getAuthor());
@@ -132,14 +136,14 @@ public class BookListAdapter extends BaseAdapter {
 
             String t = sbitem.getTitle();
             String is = sbitem.getIsbn();
-            Bitmap img  = sbitem.getImgbm();
-            img.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] bytes = stream.toByteArray();
+            String url = sbitem.getImg();
+            //img.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            //byte[] bytes = stream.toByteArray();
 
             Intent intent = new Intent(context, ReviewActivity.class);
             intent.putExtra("title", t);  //Intent는 데이터를 extras 키-값 쌍으로 전달
             intent.putExtra("isbn", is);
-            intent.putExtra("img", bytes);
+            intent.putExtra("img", url);
             context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     };

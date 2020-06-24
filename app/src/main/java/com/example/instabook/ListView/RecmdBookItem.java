@@ -10,12 +10,13 @@ public class RecmdBookItem {
     String ISBN13;
     int UserBookUID = 0;
 
-    public RecmdBookItem(String b, String isbn, Bitmap img, String p, int bid) {
+    public RecmdBookItem(String b, String isbn, Bitmap img, String p, int bid, String url) {
         this.BookName = b;
         this.ISBN13 = isbn;
         this.Imgbm = img;
         this.Publisher = p;
         this.UserBookUID = bid;
+        this.BookImageUrl = url;
     }
 
     public void setUserBookUID(int userBookUID) {

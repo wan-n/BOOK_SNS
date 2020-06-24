@@ -213,7 +213,8 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
         final int uuid = item.getuId();
         final int rrid = item.getRuid();
         final String iisbn = item.getIsbn13();
-        Bitmap bitmap = item.getBitmap();
+        //Bitmap bitmap = item.getBitmap();
+        String uurl = item.getUrl();
         final int rrate = item.getRate();
         final String rreview = item.getReview();
         final String bbname = item.getbName();
@@ -221,9 +222,9 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
         Log.d(TAG,"intent 전 : "+rrid+", "+tags);
 
         //비트맵 이미지 byte로 변환
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(CompressFormat.JPEG,100,stream);
-        byte[] b = stream.toByteArray();
+        //ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        //bitmap.compress(CompressFormat.JPEG,100,stream);
+        //byte[] b = stream.toByteArray();
 
 
         //xml파일에 메뉴 정의한것을 가져오기위해서 전개자 선언
@@ -248,7 +249,7 @@ public class HomeReviewAdapter extends BaseAdapter implements HashTagHelper.OnHa
                             in.putExtra("review", rreview);
                             in.putExtra("title", bbname);
                             in.putExtra("tags",tags);
-                            in.putExtra("url",b);
+                            in.putExtra("url",uurl);
                             Log.d(TAG,"intent 후 수정 : "+rrid+", "+tags);
                             context.startActivity(in);
                         }

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.instabook.Activity.ForHashTag.HashTagHelper;
 import com.example.instabook.Activity.ForHashTag.Hashtag;
 import com.example.instabook.Activity.ForUser.UserBookData;
@@ -57,7 +58,7 @@ public class BookInfoActivity extends AppCompatActivity implements HashTagHelper
         setContentView(R.layout.activity_book_info);
 
         Intent intent = getIntent();
-        byte[] b = intent.getByteArrayExtra("bm");
+        //byte[] b = intent.getByteArrayExtra("bm");
         title = intent.getStringExtra("title");
         String author = intent.getStringExtra("author");
         isbn = intent.getStringExtra("isbn");
@@ -65,8 +66,9 @@ public class BookInfoActivity extends AppCompatActivity implements HashTagHelper
         String pubdate = intent.getStringExtra("pubdate");
         String tag = intent.getStringExtra("tag");
         ubuid = intent.getIntExtra("ubuid",0);
+        String url = intent.getStringExtra("img");
 
-        Bitmap bp = BitmapFactory.decodeByteArray(b,0,b.length);
+        //Bitmap bp = BitmapFactory.decodeByteArray(b,0,b.length);
 
         bi_fr_back = findViewById(R.id.bi_fr_back);
         bi_back = findViewById(R.id.bi_back);
@@ -94,7 +96,12 @@ public class BookInfoActivity extends AppCompatActivity implements HashTagHelper
         //유저 UID 가져오기
         useruid = sp.getUserUid(BookInfoActivity.this);
 
-        imBook.setImageBitmap(bp);
+        Glide.with(this)
+                .load(url)
+                .error(R.drawable.default_img)
+                .override(70,70)
+                .into(imBook);
+        //imBook.setImageBitmap(bp);
         tvTitle.setText(title);
         tvAuthor.setText(author);
         tvPub.setText(pub);

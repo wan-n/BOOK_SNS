@@ -19,6 +19,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
 import com.example.instabook.Activity.SaveSharedPreference;
@@ -67,12 +68,12 @@ public class ModiReviewActivity extends AppCompatActivity {
         String tags = intent.getStringExtra("tags");
         String review = intent.getStringExtra("review");
         String title = intent.getStringExtra("title");
-        byte[]  b = intent.getByteArrayExtra("url");
+        String url = intent.getStringExtra("url");
         uid = intent.getIntExtra("uid", 0);
         rid = intent.getIntExtra("rid",0);
         rate = intent.getIntExtra("rate", 0);
 
-        Bitmap bp = BitmapFactory.decodeByteArray(b,0,b.length);
+        //Bitmap bp = BitmapFactory.decodeByteArray(b,0,b.length);
 
         binfo_back = findViewById(R.id.binfo_back);
         binfo_fr_back = findViewById(R.id.binfo_fr_back);
@@ -99,7 +100,12 @@ public class ModiReviewActivity extends AppCompatActivity {
         };
         binfo_fr_back.setOnClickListener(listener);
 
-        imBook.setImageBitmap(bp);
+        Glide.with(this)
+                .load(url)
+                .error(R.drawable.default_img)
+                .override(70,70)
+                .into(imBook);
+        //imBook.setImageBitmap(bp);
         tvTitle.setText(title);
         edReview.setText(review);
         ratingBar.setRating(rate);

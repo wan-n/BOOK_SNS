@@ -126,7 +126,11 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
         //item 내용 setting
         String url = tagBookItem.getUrl();
 
-        Glide.with(convertView).load(url).override(70,70).error(R.drawable.default_img).into(hodler.bookImageView);
+        Glide.with(convertView)
+                .load(url)
+                .error(R.drawable.default_img)
+                .override(70,70)
+                .into(hodler.bookImageView);
         //hodler.bookImageView.setImageBitmap(tagBookItem.getBp());
         hodler.titleTextView.setText(tagBookItem.getBname());
         hodler.authorTextView.setText(tagBookItem.getAuthor());
@@ -153,7 +157,7 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
             TagBookItem tagitem = items.get(position);
             //String pubdate2 = tagitem.getPub();
 
-            Bitmap bm = tagitem.getBp();
+            //Bitmap bm = tagitem.getBp();
             String title = tagitem.getBname();
             String author = tagitem.getAuthor();
             String isbn = tagitem.getIsbn();
@@ -161,14 +165,15 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
             String pubdate = tagitem.getPubdate();
             String tag = tagitem.getTag();
             int ubuid = tagitem.getUbuid();
+            String uurl =  tagitem.getUrl();
 
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG,100,stream);
-            byte[] b = stream.toByteArray();
+            //ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            //bm.compress(Bitmap.CompressFormat.JPEG,100,stream);
+            //byte[] b = stream.toByteArray();
 
 
             Intent intent = new Intent(context.getApplicationContext(), BookInfoActivity.class);
-            intent.putExtra("bm",b);
+            intent.putExtra("img",uurl);
             intent.putExtra("title",title);
             intent.putExtra("author",author);
             intent.putExtra("isbn",isbn);

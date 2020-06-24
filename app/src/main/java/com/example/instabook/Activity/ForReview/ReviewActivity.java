@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.instabook.Activity.Dialog.LogoutDialog;
 import com.example.instabook.Activity.Dialog.ShareDialog;
 import com.example.instabook.Activity.ForHashTag.HashTagHelper;
@@ -105,15 +106,26 @@ public class ReviewActivity extends AppCompatActivity implements HashTagHelper.O
 
 
         //책 제목과 isbn 받아오기
-        Bundle extras = getIntent().getExtras();
+        //Bundle extras = getIntent().getExtras();
 
-        isbn = extras.getString("isbn");
-        byte[] byteArray = getIntent().getByteArrayExtra("img");
-        Bitmap mp = BitmapFactory.decodeByteArray(byteArray, 0 , byteArray.length);
+        //isbn = extras.getString("isbn");
+        //byte[] byteArray = getIntent().getByteArrayExtra("img");
+        //Bitmap mp = BitmapFactory.decodeByteArray(byteArray, 0 , byteArray.length);
+        //imBook.setImageBitmap(mp);
 
-        imBook.setImageBitmap(mp);
-        tvTitle.setText(extras.getString("title"));
+        Intent intent =  getIntent();
+        String t = intent.getStringExtra("title");
+        String is = intent.getStringExtra("isbn");
+        String url  = intent.getStringExtra("img");
+        isbn = is;
 
+        tvTitle.setText(t);
+
+        Glide.with(this)
+                .load(url)
+                .error(R.drawable.default_img)
+                .override(70,70)
+                .into(imBook);
 
         //별점 점수 변화주기
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {

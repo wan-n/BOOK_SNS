@@ -11,13 +11,14 @@ public class UserBookItem {
     String Author;
     Bitmap bitmap;
 
-    public UserBookItem(String bn, String bpub, Bitmap bm, String ba, String bisbn, int buid){
+    public UserBookItem(String bn, String bpub, Bitmap bm, String ba, String bisbn, int buid, String url){
         this.ISBN13 = bisbn;
         this.UserBookUID = buid;
         this.bitmap = bm;
         this.BookName = bn;
         this.Publisher = bpub;
         this.Author = ba;
+        this.BookImageUrl = url;
     }
 
     public Bitmap getBitmap(){
@@ -42,5 +43,9 @@ public class UserBookItem {
 
     public int getUserBookUID() {
         return UserBookUID;
+    }
+
+    public String getBookImageUrl() {
+        return BookImageUrl;
     }
 }

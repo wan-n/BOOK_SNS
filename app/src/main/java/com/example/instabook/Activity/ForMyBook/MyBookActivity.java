@@ -127,6 +127,7 @@ public class MyBookActivity extends AppCompatActivity {
                             if(ubimg == null){
                                 //기본 이미지 비트맵으로 변환
                                 Bitmap bmm = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.default_img);
+                                /*
                                 int height = bmm.getHeight();
                                 int width = bmm.getWidth();
 
@@ -136,10 +137,10 @@ public class MyBookActivity extends AppCompatActivity {
                                     height = resized.getHeight();
                                     width = resized.getWidth();
                                 }
-                                bp = resized;
+                                bp = resized;*/
 
                                 //items listview 넣기
-                                ub = new UserBookItem(ubname, ubpub, bp, author, ubisbn, ubookuid);
+                                ub = new UserBookItem(ubname, ubpub, bp, author, ubisbn, ubookuid, ubimg);
                                 items.add(ub);
                                 initView();
                             } else {
@@ -153,7 +154,7 @@ public class MyBookActivity extends AppCompatActivity {
                                             conn.connect();
                                             InputStream bis = conn.getInputStream();
                                             Bitmap bmm = BitmapFactory.decodeStream(bis);
-
+                                            /*
                                             int height = bmm.getHeight();
                                             int width = bmm.getWidth();
 
@@ -163,7 +164,7 @@ public class MyBookActivity extends AppCompatActivity {
                                                 height = resized.getHeight();
                                                 width = resized.getWidth();
                                             }
-                                            bp = resized;
+                                            bp = resized;*/
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
@@ -173,7 +174,7 @@ public class MyBookActivity extends AppCompatActivity {
                                     thread.join();
 
                                     //items listview 넣기
-                                    ub = new UserBookItem(ubname, ubpub, bp, author, ubisbn, ubookuid);
+                                    ub = new UserBookItem(ubname, ubpub, bp, author, ubisbn, ubookuid,ubimg);
                                     items.add(ub);
                                     initView();
                                 } catch (InterruptedException e) {
@@ -188,6 +189,7 @@ public class MyBookActivity extends AppCompatActivity {
                             if(ubimg == null){
                                 //기본 이미지 비트맵으로 변환
                                 Bitmap bmm = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.default_img);
+                                /*
                                 int height = bmm.getHeight();
                                 int width = bmm.getWidth();
 
@@ -197,10 +199,10 @@ public class MyBookActivity extends AppCompatActivity {
                                     height = resized.getHeight();
                                     width = resized.getWidth();
                                 }
-                                bp = resized;
+                                bp = resized;*/
                                 Log.d(TAG,"저자 정보 없음, 기본 이미지 : "+bp);
                                 //items listview 넣기
-                                ub = new UserBookItem(ubname, ubpub, bp, " ",ubisbn, ubookuid);
+                                ub = new UserBookItem(ubname, ubpub, bp, " ",ubisbn, ubookuid,ubimg);
                                 items.add(ub);
                                 initView();
                             } else {
@@ -214,7 +216,7 @@ public class MyBookActivity extends AppCompatActivity {
                                             conn.connect();
                                             InputStream bis = conn.getInputStream();
                                             Bitmap bmm = BitmapFactory.decodeStream(bis);
-
+                                            /*
                                             int height = bmm.getHeight();
                                             int width = bmm.getWidth();
 
@@ -224,7 +226,7 @@ public class MyBookActivity extends AppCompatActivity {
                                                 height = resized.getHeight();
                                                 width = resized.getWidth();
                                             }
-                                            bp = resized;
+                                            bp = resized;*/
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
@@ -234,7 +236,7 @@ public class MyBookActivity extends AppCompatActivity {
                                     thread.join();
                                     Log.d(TAG,"저자 정보 없음, 도서 이미지 : "+bp);
                                     //items listview 넣기
-                                    ub = new UserBookItem(ubname, ubpub, bp, " ",ubisbn, ubookuid);
+                                    ub = new UserBookItem(ubname, ubpub, bp, " ",ubisbn, ubookuid,ubimg);
                                     items.add(ub);
                                     initView();
                                 } catch (InterruptedException e) {
