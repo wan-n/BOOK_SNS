@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.instabook.Activity.ForTag.BookInfoActivity;
 import com.example.instabook.Activity.ForHashTag.HashTagHelper;
 import com.example.instabook.Activity.ForHashTag.Hashtag;
@@ -123,7 +124,10 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
         hodler.tagTextView.setText(commentsContent);
 
         //item 내용 setting
-        hodler.bookImageView.setImageBitmap(tagBookItem.getBp());
+        String url = tagBookItem.getUrl();
+
+        Glide.with(convertView).load(url).override(70,70).into(hodler.bookImageView);
+        //hodler.bookImageView.setImageBitmap(tagBookItem.getBp());
         hodler.titleTextView.setText(tagBookItem.getBname());
         hodler.authorTextView.setText(tagBookItem.getAuthor());
         hodler.jjimImageButton.setImageResource(himge);

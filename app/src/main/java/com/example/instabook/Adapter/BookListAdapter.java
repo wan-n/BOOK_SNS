@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.instabook.Activity.ForBook.BookData;
 import com.example.instabook.Activity.ForBook.SearchdbActivity;
 import com.example.instabook.Activity.ForReview.ReviewActivity;
@@ -36,6 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Url;
 
 import static com.example.instabook.Activity.ForReview.ModiReviewActivity.retroBaseApiService;
 
@@ -107,8 +109,10 @@ public class BookListAdapter extends BaseAdapter {
 
         //item 가져오기
         searchBookItem = getItem(pos);
+        String url = searchBookItem.getImg();
 
-        holder.bookImageView.setImageBitmap(searchBookItem.getImgbm());
+        Glide.with(convertView).load(url).override(70,70).into(holder.bookImageView);
+        //holder.bookImageView.setImageBitmap(searchBookItem.getImgbm());
         holder.titleTextView.setText(searchBookItem.getTitle());
         holder.authorTextView.setText(searchBookItem.getAuthor());
         holder.pubTextView.setText(searchBookItem.getPublisher());

@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.instabook.Activity.ForUser.UserBookData;
 import com.example.instabook.Activity.MainActivity;
 import com.example.instabook.Activity.Pre.RetroBaseApiService;
@@ -112,8 +113,10 @@ public class RecmdAdapter extends BaseAdapter {
         //item 가져오기
         recmdBookItem = getItem(pos);
         himge = setheart(recmdBookItem);
+        String url =  recmdBookItem.getRimguri();
 
-        hodler.iconImageView.setImageBitmap(recmdBookItem.getRImgbm());
+        Glide.with(convertView).load(url).override(70,70).into(hodler.iconImageView);
+        //hodler.iconImageView.setImageBitmap(recmdBookItem.getRImgbm());
         hodler.titleTextView.setText(recmdBookItem.getRbname());
         hodler.isbnTextView.setText(recmdBookItem.getRisbn());
         hodler.pubTextView.setText(recmdBookItem.getRpub());
