@@ -126,7 +126,7 @@ public class TagBookAdapter extends BaseAdapter implements HashTagHelper.OnHashT
         //item 내용 setting
         String url = tagBookItem.getUrl();
 
-        Glide.with(convertView).load(url).override(70,70).into(hodler.bookImageView);
+        Glide.with(convertView).load(url).override(70,70).error(R.drawable.default_img).into(hodler.bookImageView);
         //hodler.bookImageView.setImageBitmap(tagBookItem.getBp());
         hodler.titleTextView.setText(tagBookItem.getBname());
         hodler.authorTextView.setText(tagBookItem.getAuthor());

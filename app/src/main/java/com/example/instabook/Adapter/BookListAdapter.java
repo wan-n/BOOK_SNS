@@ -111,7 +111,7 @@ public class BookListAdapter extends BaseAdapter {
         searchBookItem = getItem(pos);
         String url = searchBookItem.getImg();
 
-        Glide.with(convertView).load(url).override(70,70).into(holder.bookImageView);
+        Glide.with(convertView).load(url).override(70,70).error(R.drawable.default_img).into(holder.bookImageView);
         //holder.bookImageView.setImageBitmap(searchBookItem.getImgbm());
         holder.titleTextView.setText(searchBookItem.getTitle());
         holder.authorTextView.setText(searchBookItem.getAuthor());
