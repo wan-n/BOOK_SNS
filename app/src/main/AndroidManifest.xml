@@ -15,6 +15,7 @@
 
     <application
         android:allowBackup="true"
+        android:requestLegacyExternalStorage="true"
         android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -71,9 +72,9 @@
 
         <!-- crop activity -->
         <activity
-            android:name="com.soundcloud.android.crop.CropImageActivity"
+            android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
 
         <!-- 사진 촬영을 위한 provide -->

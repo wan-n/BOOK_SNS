@@ -46,7 +46,7 @@ import com.example.instabook.Activity.SaveSharedPreference;
 import com.example.instabook.Adapter.InfoReviewAdapter;
 import com.example.instabook.ListView.HomeReviewItem;
 import com.example.instabook.R;
-import com.soundcloud.android.crop.Crop;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
@@ -93,6 +93,7 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
     private InfoReviewAdapter infoAdapter;
 
     private static final int PICK_FROM_ALBUM = 0;
+    private static final int CROP_IMG = 1;
 
     List<HomeData> infoDataList;
     ArrayList<HomeReviewItem> items;
@@ -470,54 +471,40 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
                     break;
                 }
                 mImageCaptureUri = data.getData();
+
                 assert mImageCaptureUri != null;
 
 
-
-                Cursor cursor = null;
-
-                try{
-
-                    String[] proj = {MediaStore.Images.Media.DATA};
-
-                    assert mImageCaptureUri != null;
-                    cursor = getActivity().getContentResolver().query(mImageCaptureUri, proj, null, null, null);
-
-                    assert cursor != null;
-                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-
-                    cursor.moveToFirst();
-
-                    tempFile = new File(cursor.getString(column_index));
-
-
-                }finally {
-                    if(cursor != null){
-                        cursor.close();
-                    }
-                }
                 Log.d("InstaBook", "이미지경로 : "+mImageCaptureUri);
                 cropImage(mImageCaptureUri);
-                Log.d("CODE", "REQUESTCODE : "+ requestCode+", crop code : "+ Crop.REQUEST_CROP);
-
                 break;
             }
 
-            case Crop.REQUEST_CROP: {
+            case UCrop.REQUEST_CROP: {
                 //크롭된 이미지 받기
+                Uri resultUri = UCrop.getOutput(data);
+                Log.d("cropfile", "resultUri : " + UCrop.getOutput(data));
+                if(resultUri == null){  //크롭 도중 뒤로가기시 종료
 
-                if(tempFile.length() <=0){  //크롭 도중 뒤로가기시 종료
                     Log.d("cropfile", "crop : " + "크롭 취소");
+                    Toast.makeText(getActivity(), "사진 편집 취소", Toast.LENGTH_SHORT).show();
                     break;
-                }
+                }else{
 
+                tempFile = new File(resultUri.getPath());
                 Log.d("cropfile", "cropfile 경로 : " + tempFile);
 
                 //서버, 이미지뷰에 업로드
                 storeCropImage(tempFile);
+
+                }
+
+
             }
         }
     }
+
+
 
 
     private void cropImage(Uri photoUri){
@@ -528,9 +515,13 @@ public class InfoFragment extends Fragment implements View.OnClickListener {
 
             Log.d(TAG, "빈파일 경로 : " + tempFile);
             //크롭 후 저장할 Uri
-            Uri savingUri = FileProvider.getUriForFile(getContext(), "com.example.instabook.provider", tempFile);
+           // Uri savingUri = FileProvider.getUriForFile(getContext(), "com.example.instabook.provider", tempFile);
+            Uri savingUri = Uri.fromFile(tempFile);
+            Log.d(TAG, "저장될 경로 : " + savingUri);
 
-            Crop.of(photoUri, savingUri).asSquare().start(getContext(), InfoFragment.this, Crop.REQUEST_CROP);
+            UCrop.of(photoUri, savingUri).withAspectRatio(1, 1)
+                    .start(getContext(), InfoFragment.this, UCrop.REQUEST_CROP);
+
         }catch (IOException e){
             Log.e(TAG, "이미지 처리 오류! 다시 시도해주세요.");
             Toast.makeText(getActivity(), "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
