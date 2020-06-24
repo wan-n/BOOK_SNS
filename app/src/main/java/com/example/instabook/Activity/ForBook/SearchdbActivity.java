@@ -1,8 +1,11 @@
 package com.example.instabook.Activity.ForBook;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -62,6 +65,7 @@ public class SearchdbActivity extends AppCompatActivity {
     RetroBaseApiService retroBaseApiService;
 
     Bitmap bm = null;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,7 @@ public class SearchdbActivity extends AppCompatActivity {
 
     //DB에서 도서 정보 가져오기
     public void getBook(String keyword){
+        context = getApplicationContext();
 
         Retrofit retro_book = new Retrofit.Builder()
                 .baseUrl(retroBaseApiService.Base_URL)
@@ -116,15 +121,23 @@ public class SearchdbActivity extends AppCompatActivity {
 
                             if(url == null){
                                 //기본 이미지 비트맵으로 변환
-                                Bitmap bmm = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.default_img);
+                                Bitmap bmm = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_img);
                                 int height = bmm.getHeight();
                                 int width = bmm.getWidth();
 
                                 Bitmap resized = null;
-                                while(height>70){
-                                    resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
-                                    height = resized.getHeight();
-                                    width = resized.getWidth();
+                                if(height>width){
+                                    while(height>70){
+                                        resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
+                                        height = resized.getHeight();
+                                        width = resized.getWidth();
+                                    }
+                                }else {
+                                    while(width>70){
+                                        resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                        height = resized.getHeight();
+                                        width = resized.getWidth();
+                                    }
                                 }
                                 bm = resized;
                                 mb = new SearchBookItem(b, author, p, url, is, bm);
@@ -147,10 +160,18 @@ public class SearchdbActivity extends AppCompatActivity {
                                             int width = bmm.getWidth();
 
                                             Bitmap resized = null;
-                                            while(height>70){
-                                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
-                                                height = resized.getHeight();
-                                                width = resized.getWidth();
+                                            if(height>width) {
+                                                while (height > 70) {
+                                                    resized = Bitmap.createScaledBitmap(bmm, (width * 70) / height, 70, true);
+                                                    height = resized.getHeight();
+                                                    width = resized.getWidth();
+                                                }
+                                            } else {
+                                                while(width>70){
+                                                    resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                                    height = resized.getHeight();
+                                                    width = resized.getWidth();
+                                                }
                                             }
                                             bm = resized;
                                         } catch (Exception e) {
@@ -162,10 +183,10 @@ public class SearchdbActivity extends AppCompatActivity {
                                     bthread.join();
                                     mb = new SearchBookItem(b, author, p, url, is, bm);
                                     books.add(mb);
+                                    initView();
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-                                initView();
                             }
                         }
 
@@ -174,15 +195,24 @@ public class SearchdbActivity extends AppCompatActivity {
                             //저자 정보 없음
                             if(url == null){
                                 //기본 이미지 비트맵으로 변환
-                                Bitmap bmm = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.default_img);
+                                Bitmap bmm = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_img);
+
                                 int height = bmm.getHeight();
                                 int width = bmm.getWidth();
 
                                 Bitmap resized = null;
-                                while(height>70){
-                                    resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
-                                    height = resized.getHeight();
-                                    width = resized.getWidth();
+                                if(height>width) {
+                                    while (height > 70) {
+                                        resized = Bitmap.createScaledBitmap(bmm, (width * 70) / height, 70, true);
+                                        height = resized.getHeight();
+                                        width = resized.getWidth();
+                                    }
+                                } else {
+                                    while(width>70){
+                                        resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                        height = resized.getHeight();
+                                        width = resized.getWidth();
+                                    }
                                 }
                                 bm = resized;
                                 mb = new SearchBookItem(b, " ", p, url, is, bm);
@@ -205,10 +235,19 @@ public class SearchdbActivity extends AppCompatActivity {
                                             int width = bmm.getWidth();
 
                                             Bitmap resized = null;
-                                            while(height>70){
-                                                resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
-                                                height = resized.getHeight();
-                                                width = resized.getWidth();
+                                            if(height>width) {
+                                                while (height > 70) {
+                                                    resized = Bitmap.createScaledBitmap(bmm, (width * 70) / height, 70, true);
+                                                    height = resized.getHeight();
+                                                    width = resized.getWidth();
+                                                }
+                                            }
+                                            else {
+                                                while(width>70){
+                                                    resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                                    height = resized.getHeight();
+                                                    width = resized.getWidth();
+                                                }
                                             }
                                             bm = resized;
                                         } catch (Exception e) {
@@ -220,10 +259,11 @@ public class SearchdbActivity extends AppCompatActivity {
                                     bthread.join();
                                     mb = new SearchBookItem(b, " ", p, url, is, bm);
                                     books.add(mb);
+                                    initView();
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-                                initView();
+
                             }
                         }
                     });
@@ -470,16 +510,25 @@ public class SearchdbActivity extends AppCompatActivity {
 
                     if(burl == null){
                         //기본 이미지 비트맵으로 변환
-                        Bitmap bmm = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.default_img);
+                        Bitmap bmm = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_img);
                         int height = bmm.getHeight();
                         int width = bmm.getWidth();
 
                         Bitmap resized = null;
-                        while(height>70){
-                            resized = Bitmap.createScaledBitmap(bmm,(width*70)/height,70,true);
-                            height = resized.getHeight();
-                            width = resized.getWidth();
+                        if(height>width) {
+                            while (height > 70) {
+                                resized = Bitmap.createScaledBitmap(bmm, (width * 70) / height, 70, true);
+                                height = resized.getHeight();
+                                width = resized.getWidth();
+                            }
+                        } else {
+                            while(width>70){
+                                resized = Bitmap.createScaledBitmap(bmm,70,(height*70)/width,true);
+                                height = resized.getHeight();
+                                width = resized.getWidth();
+                            }
                         }
+
                         bm = resized;
 
                         sb = new SearchBookItem(bname, author, pub, burl, isbn , bm);
